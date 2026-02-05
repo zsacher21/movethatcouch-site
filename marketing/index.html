@@ -155,7 +155,7 @@
   </div>
 </main>
 
-<script src="/movethatcouch-site/assets/qrcode.min.js"></script>
+<script src="../assets/qrcode.min.js"></script>
 <script>
   // ====== Simple QR generator (no libraries) ======
   // We’ll use a tiny, dependable approach: generate QR via an online-compatible algorithm would normally require a lib,
@@ -395,16 +395,10 @@
   const ctx = qrCanvas.getContext('2d');
   ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
 
-  // Use a real QR generator library
-  // Higher error correction makes scanning more reliable on printed flyers
-  QRCode.toCanvas(qrCanvas, text, {
-    errorCorrectionLevel: "M",
-    margin: 2,
-    width: 220
-  }, function (error) {
-    if (error) {
+  QRCode.toCanvas(qrCanvas, text, { width: 220, margin: 2 }, function(err){
+    if(err){
       showError("Could not generate QR code. Please try again.");
-      console.error(error);
+      console.error(err);
     }
   });
 }
