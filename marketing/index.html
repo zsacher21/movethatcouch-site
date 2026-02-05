@@ -155,7 +155,7 @@
   </div>
 </main>
 
-<script src="../assets/qrcode.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   // ====== Simple QR generator (no libraries) ======
   // We’ll use a tiny, dependable approach: generate QR via an online-compatible algorithm would normally require a lib,
@@ -392,15 +392,40 @@
   }
 
   function drawQr(text){
-  const ctx = qrCanvas.getContext('2d');
-  ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+  // Clear any previous errors
+  clearMessages();
 
-  QRCode.toCanvas(qrCanvas, text, { width: 220, margin: 2 }, function(err){
-    if(err){
-      showError("Could not generate QR code. Please try again.");
-      console.error(err);
-    }
-  });
+  // Replace the canvas with a div-based QR (QRCode.js renders into an element)
+  const qrBox = document.querySelector(".qrBox");
+
+  // Remove old QR images/canvases that QRCode.js adds
+  const existing = document.getElementById("qrRender");
+  if (existing) existing.remove();
+
+  // Create a container for the QR
+  const div = document.createElement("div");
+  div.id = "qrRender";
+  div.style.display = "flex";
+  div.style.justifyContent = "center";
+  div.style.marginTop = "6px";
+  qrBox.insertBefore(div, finalLinkText);
+
+  // Build QR
+  try {
+    // Error correction "M" is a good balance for printing
+    new QRCode(div, {
+      text,
+      width: 220,
+      height: 220,
+      correctLevel: QRCode.CorrectLevel.M
+    });
+
+    // Hide the old canvas (we don't need it anymore)
+    qrCanvas.style.display = "none";
+  } catch (err) {
+    showError("Could not generate QR code. Please try again.");
+    console.error(err);
+  }
 }
 
   function generate(){
@@ -431,13 +456,17 @@
 
   generateBtn.addEventListener('click', generate);
 
-  downloadQrPngBtn.addEventListener('click', () => {
-    if(!currentFinalLink) return;
-    const link = document.createElement('a');
-    link.download = 'movethatcouch-referral-qr.png';
-    link.href = qrCanvas.toDataURL('image/png');
-    link.click();
-  });
+downloadQrPngBtn.addEventListener('click', () => {
+  if(!currentFinalLink) return;
+
+  const img = document.querySelector("#qrRender img");
+  if (!img) return;
+
+  const link = document.createElement('a');
+  link.download = 'movethatcouch-referral-qr.png';
+  link.href = img.src;
+  link.click();
+});
 
   copyLinkBtn.addEventListener('click', async () => {
     if(!currentFinalLink) return;
