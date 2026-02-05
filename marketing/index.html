@@ -155,6 +155,7 @@
   </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script>
   // ====== Simple QR generator (no libraries) ======
   // We’ll use a tiny, dependable approach: generate QR via an online-compatible algorithm would normally require a lib,
@@ -391,29 +392,22 @@
   }
 
   function drawQr(text){
-    // Build modules and render to canvas
-    const { modules, count } = window.__makeQrModules(text);
-    const ctx = qrCanvas.getContext('2d');
-    ctx.clearRect(0,0,qrCanvas.width, qrCanvas.height);
+  const ctx = qrCanvas.getContext('2d');
+  ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
 
-    // Draw white background
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0,0,qrCanvas.width, qrCanvas.height);
-
-    const padding = 10;
-    const size = qrCanvas.width - padding*2;
-    const cell = Math.floor(size / count);
-    const offset = Math.floor((qrCanvas.width - cell*count)/2);
-
-    ctx.fillStyle = "#000";
-    for(let r=0;r<count;r++){
-      for(let c=0;c<count;c++){
-        if(modules[r][c]){
-          ctx.fillRect(offset + c*cell, offset + r*cell, cell, cell);
-        }
-      }
+  // Use a real QR generator library
+  // Higher error correction makes scanning more reliable on printed flyers
+  QRCode.toCanvas(qrCanvas, text, {
+    errorCorrectionLevel: "M",
+    margin: 2,
+    width: 220
+  }, function (error) {
+    if (error) {
+      showError("Could not generate QR code. Please try again.");
+      console.error(error);
     }
-  }
+  });
+}
 
   function generate(){
     clearMessages();
