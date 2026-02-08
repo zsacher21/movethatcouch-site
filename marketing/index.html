@@ -94,13 +94,23 @@
       padding: 12px;
       text-align:center;
     }
-    canvas{
+
+    /* QR target box stays the same size as before */
+    .qrTarget {
       width: 240px;
       height: 240px;
-      image-rendering: pixelated;
-      display:block;
       margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
+    /* qrcodejs typically injects an <img> or <canvas> */
+    .qrTarget img, .qrTarget canvas {
+      width: 240px !important;
+      height: 240px !important;
+      display:block;
+    }
+
     .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
     .divider { height:1px; background:#e2e8f0; margin:16px 0; }
 
@@ -132,7 +142,8 @@
 
     <div class="qrWrap">
       <div class="qrBox">
-        <canvas id="qrCanvas" width="240" height="240"></canvas>
+        <!-- Switched from canvas to div for qrcodejs reliability -->
+        <div id="qrTarget" class="qrTarget" aria-label="QR code"></div>
         <div class="small" id="finalLinkText"></div>
       </div>
 
@@ -188,7 +199,7 @@
   const errorMsg = document.getElementById('errorMsg');
   const successMsg = document.getElementById('successMsg');
   const greetingMsg = document.getElementById('greetingMsg');
-  const qrCanvas = document.getElementById('qrCanvas');
+  const qrTarget = document.getElementById('qrTarget');
   const finalLinkText = document.getElementById('finalLinkText');
 
   // Generic (no-ref) destination
@@ -253,50 +264,27 @@
     }
   }
 
+  function clearQrTarget(){
+    // qrcodejs appends child nodes; clear before re-render
+    while(qrTarget.firstChild) qrTarget.removeChild(qrTarget.firstChild);
+  }
+
   function drawQr(text){
-    const ctx = qrCanvas.getContext('2d');
-    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+    clearQrTarget();
 
     if(typeof QRCode === "undefined"){
       showError("QR library failed to load. Confirm /assets/qrcode.min.js exists and is reachable.");
       return false;
     }
 
-    // Support either API style:
-    // 1) QRCode.toCanvas(canvas, text, opts, cb)
-    // 2) new QRCode(element, { text, width, height, ... })
     try {
-      if(typeof QRCode.toCanvas === "function"){
-        QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
-          if(err){
-            showError("Could not generate QR code. Please try again.");
-            console.error(err);
-          }
-        });
-        return true;
-      }
-
-      // Fallback for qrcodejs-style libs:
-      // Replace the canvas with a div-based QR (keeps layout stable)
-      const parent = qrCanvas.parentElement;
-      const existing = document.getElementById("qrFallback");
-      if(existing) existing.remove();
-
-      qrCanvas.style.display = "none";
-      const div = document.createElement("div");
-      div.id = "qrFallback";
-      div.style.width = "240px";
-      div.style.height = "240px";
-      div.style.margin = "0 auto";
-      parent.insertBefore(div, finalLinkText);
-
-      new QRCode(div, {
-        text,
+      // Always use qrcodejs constructor style.
+      new QRCode(qrTarget, {
+        text: text,
         width: 240,
         height: 240,
-        correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : undefined
+        correctLevel: (QRCode.CorrectLevel ? QRCode.CorrectLevel.M : undefined)
       });
-
       return true;
     } catch (e) {
       console.error(e);
@@ -308,9 +296,13 @@
   function setCurrentLink(link){
     currentFinalLink = link;
     finalLinkText.textContent = link;
-    // buttons always enabled (generic OR personalized)
-    downloadQrPngBtn.disabled = false;
+
+    // Copy always works
     copyLinkBtn.disabled = false;
+
+    // PNG download depends on whether the library rendered a canvas/img.
+    // We'll attempt it, but if not possible we will message the user.
+    downloadQrPngBtn.disabled = false;
   }
 
   async function tryLoadReferrerName(code){
@@ -343,11 +335,6 @@
     clearMessages();
     setCurrentLink(GENERIC_LINK);
 
-    // Ensure canvas is visible if we previously used fallback
-    qrCanvas.style.display = "block";
-    const fallback = document.getElementById("qrFallback");
-    if(fallback) fallback.remove();
-
     const ok = drawQr(GENERIC_LINK);
     if(ok) showSuccess("Showing generic MOVE THAT COUCH! QR.");
   }
@@ -369,15 +356,9 @@
     const finalLink = APP_REF_BASE + encodeURIComponent(code);
     setCurrentLink(finalLink);
 
-    // Ensure canvas is visible if we previously used fallback
-    qrCanvas.style.display = "block";
-    const fallback = document.getElementById("qrFallback");
-    if(fallback) fallback.remove();
-
     const ok = drawQr(finalLink);
     if(ok){
       showSuccess("Personalized QR generated!");
-      // Try to show "Hi Mike S!" label (won't break if endpoint doesn't exist)
       await tryLoadReferrerName(code);
     }
   }
@@ -387,16 +368,27 @@
   downloadQrPngBtn.addEventListener('click', () => {
     if(!currentFinalLink) return;
 
-    // If we used the div fallback, we can’t export a canvas PNG.
-    if(qrCanvas.style.display === "none"){
-      showError("PNG download isn't available in fallback QR mode. Use Copy QR Link for now.");
+    // qrcodejs may render a canvas or an img. Try both.
+    const canvas = qrTarget.querySelector("canvas");
+    const img = qrTarget.querySelector("img");
+
+    if(canvas){
+      const link = document.createElement('a');
+      link.download = 'movethatcouch-qr.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
       return;
     }
 
-    const link = document.createElement('a');
-    link.download = 'movethatcouch-qr.png';
-    link.href = qrCanvas.toDataURL('image/png');
-    link.click();
+    if(img && img.src && img.src.startsWith("data:image/")){
+      const link = document.createElement('a');
+      link.download = 'movethatcouch-qr.png';
+      link.href = img.src;
+      link.click();
+      return;
+    }
+
+    showError("PNG download isn’t available from this QR render mode in your browser. Use “Copy QR Link” for now.");
   });
 
   copyLinkBtn.addEventListener('click', async () => {
