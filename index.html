@@ -12,25 +12,25 @@
       color: #111;
       text-align: center;
     }
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 24px 16px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-    header p {
-      margin-top: 8px;
-      font-size: 16px;
-      opacity: 0.9;
-    }
+
     main {
-      padding: 40px 16px;
+      padding: 48px 16px 40px;
       max-width: 640px;
       margin: 0 auto;
     }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      max-width: 280px;
+      width: 85%;
+      height: auto;
+    }
+
     .button {
       display: block;
       width: 100%;
@@ -44,17 +44,21 @@
       color: white;
       background: #22c55e;
     }
+
     .button.secondary {
       background: #2563eb;
     }
+
     .button.gray {
       background: #475569;
     }
+
     footer {
       margin-top: 48px;
       font-size: 14px;
       color: #555;
     }
+
     footer a {
       color: #2563eb;
       text-decoration: none;
@@ -64,12 +68,15 @@
 </head>
 <body>
 
-  <header>
-    <h1>MOVE THAT COUCH!</h1>
-    <p>Furniture delivery, made easy.</p>
-  </header>
-
   <main>
+    <div class="logo-container">
+      <img
+        src="/logo.png"
+        alt="MOVE THAT COUCH!"
+        class="logo"
+      />
+    </div>
+
     <a class="button" href="#" target="_blank">
       Download on the App Store
     </a>
