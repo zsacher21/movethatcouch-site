@@ -25,6 +25,7 @@
       margin-bottom: 32px;
     }
 
+    .logo-link { display: inline-block; }
     .logo {
       max-width: 280px;
       width: 85%;
@@ -45,13 +46,8 @@
       background: #22c55e;
     }
 
-    .button.secondary {
-      background: #2563eb;
-    }
-
-    .button.gray {
-      background: #475569;
-    }
+    .button.secondary { background: #2563eb; }
+    .button.gray { background: #475569; }
 
     footer {
       margin-top: 48px;
@@ -70,18 +66,16 @@
 
   <main>
     <div class="logo-container">
-      <img
-        src="/logo.png"
-        alt="MOVE THAT COUCH!"
-        class="logo"
-      />
+      <a class="logo-link" href="/about" aria-label="About MOVE THAT COUCH!">
+        <img src="/logo.png" alt="MOVE THAT COUCH!" class="logo" />
+      </a>
     </div>
 
-    <a class="button" href="#" target="_blank">
+    <a class="button" href="#" target="_blank" rel="noopener">
       Download on the App Store
     </a>
 
-    <a class="button secondary" href="#" target="_blank">
+    <a class="button secondary" href="#" target="_blank" rel="noopener">
       Get it on Google Play
     </a>
 
@@ -90,9 +84,11 @@
     </a>
 
     <footer>
-      <a href="https://legal.movethatcouch.com/privacy.html" target="_blank">Privacy Policy</a>
+      <a href="/about">About</a>
       |
-      <a href="https://legal.movethatcouch.com/tos.html" target="_blank">Terms of Service</a>
+      <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+      |
+      <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
     </footer>
   </main>
 
