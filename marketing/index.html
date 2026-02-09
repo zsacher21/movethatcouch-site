@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marketing Materials • MOVE THAT COUCH!</title>
+
   <style>
     body {
       margin: 0;
@@ -11,26 +12,31 @@
       background: #f7f7f7;
       color: #111;
     }
+
     header {
       background: #0f172a;
       color: white;
       padding: 18px 16px;
     }
+
     header a {
       color: white;
       text-decoration: none;
-      opacity: 0.9;
       font-weight: 600;
+      opacity: 0.9;
     }
+
     header h1 {
       margin: 8px 0 0 0;
       font-size: 20px;
     }
+
     main {
       max-width: 900px;
       margin: 0 auto;
       padding: 18px 16px 40px;
     }
+
     .card {
       background: white;
       border-radius: 12px;
@@ -38,89 +44,108 @@
       padding: 16px;
       margin-top: 14px;
     }
-    label { display:block; font-weight:700; margin-bottom:8px; }
+
+    label {
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
     input {
       width: 100%;
-      box-sizing: border-box;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #cbd5e1;
       font-size: 15px;
+      box-sizing: border-box;
     }
+
     .row {
       display:flex;
       gap:12px;
       flex-wrap:wrap;
       margin-top:12px;
-      align-items:center;
     }
+
     button {
       border: 0;
       padding: 12px 14px;
       border-radius: 10px;
       font-weight: 800;
-      cursor: pointer;
       font-size: 14px;
+      cursor: pointer;
     }
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
+
     .btn-green { background:#22c55e; color:white; }
     .btn-blue { background:#2563eb; color:white; }
     .btn-gray { background:#475569; color:white; }
 
-    .note { color:#475569; font-size:14px; margin-top:10px; line-height:1.35; }
-    .error { color:#b91c1c; font-weight:700; margin-top:10px; display:none; }
-    .success { color:#166534; font-weight:700; margin-top:10px; display:none; }
-    .greeting {
-      margin-top: 10px;
-      font-weight: 800;
-      color: #0f172a;
+    .error {
+      color:#b91c1c;
+      font-weight:700;
+      margin-top:10px;
       display:none;
     }
 
-    .qrWrap{
+    .success {
+      color:#166534;
+      font-weight:700;
+      margin-top:10px;
+      display:none;
+    }
+
+    .greeting {
+      margin-top:10px;
+      font-weight:800;
+      color:#0f172a;
+      display:none;
+    }
+
+    .qrWrap {
       display:flex;
       gap:18px;
-      align-items:flex-start;
       flex-wrap:wrap;
       margin-top:12px;
+      align-items:flex-start;
     }
-    .qrBox{
+
+    .qrBox {
       width: 280px;
-      background:#fff;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
       padding: 12px;
       text-align:center;
     }
 
-    /* The library will inject an <img> or <canvas> inside qrTarget */
-    #qrTarget {
+    canvas {
       width: 240px;
       height: 240px;
+      display:block;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
+      background: white;
     }
 
-    /* Make whatever it injects fit nicely */
-    #qrTarget img, #qrTarget canvas {
-      width: 240px !important;
-      height: 240px !important;
-      display: block;
+    .small {
+      font-size:12px;
+      color:#475569;
+      margin-top:8px;
+      word-break:break-all;
     }
 
-    .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
-    .divider { height:1px; background:#e2e8f0; margin:16px 0; }
+    .note {
+      font-size:14px;
+      color:#475569;
+      line-height:1.35;
+    }
 
-    .sectionTitle { font-weight: 800; margin-top: 6px; }
-    .flyers button { margin-right:10px; margin-top:10px; }
+    .divider {
+      height:1px;
+      background:#e2e8f0;
+      margin:16px 0;
+    }
   </style>
 </head>
+
 <body>
 
 <header>
@@ -130,13 +155,12 @@
 
 <main>
   <div class="card">
-    <label for="refInput">Paste your referral link (or just the code)</label>
-    <input id="refInput" placeholder="Example: V2Z9JE  OR  https://app.movethatcouch.com/?ref=V2Z9JE" />
+    <label>Paste your referral link (or just the code)</label>
+    <input id="refInput" placeholder="Example: V2Z9JE or https://app.movethatcouch.com/?ref=V2Z9JE">
 
     <div class="row">
       <button class="btn-green" id="generateBtn">Generate QR</button>
-      <button class="btn-blue" id="downloadQrPngBtn">Download QR (PNG)</button>
-      <button class="btn-gray" id="copyLinkBtn">Copy QR Link</button>
+      <button class="btn-blue" id="copyBtn">Copy QR Link</button>
     </div>
 
     <div class="error" id="errorMsg"></div>
@@ -145,246 +169,109 @@
 
     <div class="qrWrap">
       <div class="qrBox">
-        <div id="qrTarget"></div>
-        <div class="small" id="finalLinkText"></div>
+        <canvas id="qrCanvas" width="240" height="240"></canvas>
+        <div class="small" id="finalLink"></div>
       </div>
 
-      <div style="flex:1; min-width: 260px;">
+      <div style="flex:1;min-width:260px;">
         <div class="note">
           <b>How it works:</b> This page generates a QR code that points to your referral link.
           <div class="divider"></div>
-          <b>Tip:</b> If no referral is entered, a generic MOVE THAT COUCH! QR is shown.
-          <div class="divider"></div>
-          <b>Flyer QR format:</b>
-          <div style="margin-top:6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
-            https://movethatcouch.com/r/&lt;YOURCODE&gt;
-          </div>
-          <div class="divider"></div>
-          <b>Auto-fill:</b> If you arrived here from the app, your code can be pre-filled via
-          <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">?ref=CODE</span>.
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="flyers">
-          <div class="sectionTitle">Flyers (coming next)</div>
-          <div class="note" style="margin-top:6px;">
-            We’ll embed your personalized QR directly into printable flyers.
-          </div>
-          <button class="btn-gray" disabled>Download Flyer 1</button>
-          <button class="btn-gray" disabled>Download Flyer 2</button>
-          <button class="btn-gray" disabled>Download Flyer 3</button>
-          <button class="btn-gray" disabled>Download Flyer 4</button>
+          <b>Flyer format:</b><br>
+          https://movethatcouch.com/r/&lt;CODE&gt;
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="sectionTitle">Legal</div>
-    <div class="note" style="margin-top:8px;">
-      <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-      &nbsp;•&nbsp;
-      <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
     </div>
   </div>
 </main>
 
-<!-- Must exist in your repo at /assets/qrcode.min.js -->
+<!-- EXACT library you already have -->
 <script src="/assets/qrcode.min.js"></script>
 
 <script>
-  const refInput = document.getElementById('refInput');
-  const generateBtn = document.getElementById('generateBtn');
-  const downloadQrPngBtn = document.getElementById('downloadQrPngBtn');
-  const copyLinkBtn = document.getElementById('copyLinkBtn');
-  const errorMsg = document.getElementById('errorMsg');
-  const successMsg = document.getElementById('successMsg');
-  const greetingMsg = document.getElementById('greetingMsg');
-  const finalLinkText = document.getElementById('finalLinkText');
-  const qrTarget = document.getElementById('qrTarget');
+  const canvas = document.getElementById("qrCanvas");
+  const ctx = canvas.getContext("2d");
+  const refInput = document.getElementById("refInput");
+  const errorMsg = document.getElementById("errorMsg");
+  const successMsg = document.getElementById("successMsg");
+  const greetingMsg = document.getElementById("greetingMsg");
+  const finalLink = document.getElementById("finalLink");
 
-  // Keep QR payload SHORT to avoid overflow issues
-  const GENERIC_LINK = "https://movethatcouch.com";
-  const SHORT_REF_BASE = "https://movethatcouch.com/r/";
+  const GENERIC = "https://movethatcouch.com";
+  const BASE = "https://movethatcouch.com/r/";
 
-  let currentFinalLink = GENERIC_LINK;
+  function showError(t){ errorMsg.textContent=t; errorMsg.style.display="block"; successMsg.style.display="none"; }
+  function showSuccess(t){ successMsg.textContent=t; successMsg.style.display="block"; errorMsg.style.display="none"; }
+  function clearMsgs(){ errorMsg.style.display="none"; successMsg.style.display="none"; greetingMsg.style.display="none"; }
 
-  function showError(text){
-    errorMsg.textContent = text;
-    errorMsg.style.display = 'block';
-    successMsg.style.display = 'none';
-  }
-  function showSuccess(text){
-    successMsg.textContent = text;
-    successMsg.style.display = 'block';
-    errorMsg.style.display = 'none';
-  }
-  function clearMessages(){
-    errorMsg.style.display = 'none';
-    successMsg.style.display = 'none';
-  }
-  function hideGreeting(){
-    greetingMsg.style.display = 'none';
-    greetingMsg.textContent = '';
-  }
-  function showGreeting(text){
-    greetingMsg.textContent = text;
-    greetingMsg.style.display = 'block';
+  function extractCode(val){
+    if(!val) return "";
+    val = val.trim();
+    if(/^[A-Za-z0-9]{4,20}$/.test(val)) return val;
+    try{
+      const u = new URL(val);
+      return u.searchParams.get("ref") || "";
+    }catch{ return ""; }
   }
 
-  function extractReferralCode(input){
-    const s = (input || "").trim();
-    if(!s) return "";
+  function drawQR(text){
+    ctx.clearRect(0,0,240,240);
 
-    // Just code like "V2Z9JE"
-    if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
-
-    // Full link: extract ?ref=CODE OR /r/CODE
-    try {
-      const u = new URL(s);
-      const hostOk = (
-        u.host === "app.movethatcouch.com" ||
-        u.host === "movethatcouch.com" ||
-        u.host === "www.movethatcouch.com" ||
-        u.host === "legal.movethatcouch.com"
-      );
-      if(!hostOk) return "";
-
-      const ref = u.searchParams.get("ref");
-      if(ref && /^[A-Za-z0-9]{4,20}$/.test(ref)) return ref;
-
-      const pathMatch = u.pathname.match(/^\/r\/([A-Za-z0-9]{4,20})\/?$/);
-      if(pathMatch) return pathMatch[1];
-
-      return "";
-    } catch (e) {
-      return "";
-    }
-  }
-
-  function setCurrentLink(link){
-    currentFinalLink = link;
-    finalLinkText.textContent = link;
-  }
-
-  function drawQr(text){
-    try {
-      clearMessages();
-
-      // Clear the target
-      qrTarget.innerHTML = "";
-
-      if (typeof QRCode !== "function") {
-        showError("QR library failed to load. QRCode constructor not found. Check /assets/qrcode.min.js");
-        return false;
-      }
-
-      // qrcodejs renders into the element you pass it
-      new QRCode(qrTarget, {
-        text: text,
-        width: 240,
-        height: 240,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : undefined
-      });
-
-      return true;
-    } catch (err) {
-      console.error(err);
-      showError("QR rendering failed. Check console for details.");
-      return false;
-    }
-  }
-
-  async function tryLoadReferrerName(code){
-    // Optional endpoint (safe if missing)
-    const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
-    try {
-      const res = await fetch(url, { method: "GET" });
-      if(!res.ok) return;
-      const data = await res.json();
-
-      const display =
-        (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
-        (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
-        (data && data.firstName) ? `${data.firstName}` : "";
-
-      if(display){
-        showGreeting(`Hi ${display}! The flyers on this page now contain your unique referral QR code.`);
-      }
-    } catch (_) {
-      // silent
-    }
-  }
-
-  function renderGeneric(){
-    hideGreeting();
-    clearMessages();
-    setCurrentLink(GENERIC_LINK);
-
-    const ok = drawQr(GENERIC_LINK);
-    if(ok) showSuccess("Showing generic MOVE THAT COUCH! QR.");
-  }
-
-  async function generate(){
-    hideGreeting();
-    clearMessages();
-
-    const raw = refInput.value;
-    const code = extractReferralCode(raw);
-
-    // Empty OR invalid -> generic (no hard error)
-    if(!raw.trim() || !code){
-      renderGeneric();
+    if(typeof qrcode !== "function"){
+      showError("QR library failed to load.");
       return;
     }
 
-    const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
-    setCurrentLink(shortLink);
+    const qr = qrcode(6, "L");
+    qr.addData(text);
+    qr.make();
 
-    const ok = drawQr(shortLink);
-    if(ok){
-      showSuccess("Personalized QR generated!");
-      await tryLoadReferrerName(code);
+    const cells = qr.getModuleCount();
+    const tile = 240 / cells;
+
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0,0,240,240);
+    ctx.fillStyle = "#000";
+
+    for(let r=0;r<cells;r++){
+      for(let c=0;c<cells;c++){
+        if(qr.isDark(r,c)){
+          ctx.fillRect(
+            Math.floor(c*tile),
+            Math.floor(r*tile),
+            Math.ceil(tile),
+            Math.ceil(tile)
+          );
+        }
+      }
     }
   }
 
-  generateBtn.addEventListener('click', generate);
+  function render(link){
+    clearMsgs();
+    finalLink.textContent = link;
+    drawQR(link);
+  }
 
-  // For now: no reliable PNG export from qrcodejs without extra work.
-  downloadQrPngBtn.addEventListener('click', () => {
-    showError("PNG download will be available soon. For now, use Copy QR Link.");
-  });
-
-  copyLinkBtn.addEventListener('click', async () => {
-    if(!currentFinalLink) return;
-    try {
-      await navigator.clipboard.writeText(currentFinalLink);
-      showSuccess("QR link copied!");
-    } catch(e){
-      const t = document.createElement('textarea');
-      t.value = currentFinalLink;
-      document.body.appendChild(t);
-      t.select();
-      document.execCommand('copy');
-      document.body.removeChild(t);
-      showSuccess("QR link copied!");
+  document.getElementById("generateBtn").onclick = () => {
+    const code = extractCode(refInput.value);
+    if(!code){
+      render(GENERIC);
+      showSuccess("Showing generic MOVE THAT COUCH! QR.");
+      return;
     }
-  });
+    const link = BASE + code;
+    render(link);
+    showSuccess("Personalized QR generated!");
+  };
 
-  // On load: always show generic immediately, then apply ?ref= if present
-  (function(){
-    renderGeneric();
+  document.getElementById("copyBtn").onclick = async () => {
+    await navigator.clipboard.writeText(finalLink.textContent);
+    showSuccess("QR link copied!");
+  };
 
-    const params = new URLSearchParams(window.location.search);
-    const refParam = params.get('ref');
-    if(refParam){
-      refInput.value = decodeURIComponent(refParam);
-      setTimeout(generate, 50);
-    }
-  })();
+  // initial render
+  render(GENERIC);
 </script>
 
 </body>
