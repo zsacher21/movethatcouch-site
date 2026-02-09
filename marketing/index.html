@@ -94,23 +94,14 @@
       padding: 12px;
       text-align:center;
     }
-
-    /* QR target box stays the same size as before */
-    .qrTarget {
+    canvas{
       width: 240px;
       height: 240px;
-      margin: 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    /* qrcodejs typically injects an <img> or <canvas> */
-    .qrTarget img, .qrTarget canvas {
-      width: 240px !important;
-      height: 240px !important;
+      image-rendering: pixelated;
       display:block;
+      margin: 0 auto;
+      background: white;
     }
-
     .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
     .divider { height:1px; background:#e2e8f0; margin:16px 0; }
 
@@ -142,8 +133,7 @@
 
     <div class="qrWrap">
       <div class="qrBox">
-        <!-- Switched from canvas to div for qrcodejs reliability -->
-        <div id="qrTarget" class="qrTarget" aria-label="QR code"></div>
+        <canvas id="qrCanvas" width="240" height="240"></canvas>
         <div class="small" id="finalLinkText"></div>
       </div>
 
@@ -155,7 +145,7 @@
           <div class="divider"></div>
           <b>Flyer QR format:</b>
           <div style="margin-top:6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
-            https://app.movethatcouch.com/r/&lt;YOURCODE&gt;
+            https://movethatcouch.com/r/&lt;YOURCODE&gt;
           </div>
           <div class="divider"></div>
           <b>Auto-fill:</b> If you arrived here from the app, your code can be pre-filled via
@@ -188,7 +178,6 @@
   </div>
 </main>
 
-<!-- Use an absolute path so it works from /marketing/ reliably -->
 <script src="/assets/qrcode.min.js"></script>
 
 <script>
@@ -199,15 +188,12 @@
   const errorMsg = document.getElementById('errorMsg');
   const successMsg = document.getElementById('successMsg');
   const greetingMsg = document.getElementById('greetingMsg');
-  const qrTarget = document.getElementById('qrTarget');
+  const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
-  // Generic (no-ref) destination
-  const GENERIC_LINK = "https://app.movethatcouch.com";
-
-  // Personalized destination encoded in flyers:
-  // QR -> https://app.movethatcouch.com/r/<CODE>
-  const APP_REF_BASE = "https://app.movethatcouch.com/r/";
+  // Keep QR payload SHORT so your qrcode.min.js (typeNumber=4) doesn't overflow.
+  const GENERIC_LINK = "https://movethatcouch.com";
+  const SHORT_REF_BASE = "https://movethatcouch.com/r/";
 
   let currentFinalLink = GENERIC_LINK;
 
@@ -238,10 +224,8 @@
     const s = (input || "").trim();
     if(!s) return "";
 
-    // Just code like "V2Z9JE"
     if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
 
-    // Full link: extract ?ref=CODE OR /r/CODE
     try {
       const u = new URL(s);
       const hostOk = (
@@ -264,31 +248,30 @@
     }
   }
 
-  function clearQrTarget(){
-    // qrcodejs appends child nodes; clear before re-render
-    while(qrTarget.firstChild) qrTarget.removeChild(qrTarget.firstChild);
+  function clearCanvas(){
+    const ctx = qrCanvas.getContext('2d');
+    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   }
 
   function drawQr(text){
-    clearQrTarget();
+    clearCanvas();
 
-    if(typeof QRCode === "undefined"){
+    if(typeof QRCode === "undefined" || typeof QRCode.toCanvas !== "function"){
       showError("QR library failed to load. Confirm /assets/qrcode.min.js exists and is reachable.");
       return false;
     }
 
     try {
-      // Always use qrcodejs constructor style.
-      new QRCode(qrTarget, {
-        text: text,
-        width: 240,
-        height: 240,
-        correctLevel: (QRCode.CorrectLevel ? QRCode.CorrectLevel.M : undefined)
+      QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
+        if(err){
+          console.error(err);
+          showError("Could not generate QR code. (If this is a long link, try again — this page uses a short /r/CODE format.)");
+        }
       });
       return true;
     } catch (e) {
       console.error(e);
-      showError("QR rendering failed (script loaded but errored). Check console for details.");
+      showError("QR rendering failed (script loaded but errored). This usually means the QR payload was too long. We use the short /r/CODE format to prevent that.");
       return false;
     }
   }
@@ -296,27 +279,18 @@
   function setCurrentLink(link){
     currentFinalLink = link;
     finalLinkText.textContent = link;
-
-    // Copy always works
-    copyLinkBtn.disabled = false;
-
-    // PNG download depends on whether the library rendered a canvas/img.
-    // We'll attempt it, but if not possible we will message the user.
     downloadQrPngBtn.disabled = false;
+    copyLinkBtn.disabled = false;
   }
 
   async function tryLoadReferrerName(code){
-    // Optional: only if your app exposes this endpoint.
-    // Expected response examples:
-    // { "firstName": "Mike", "lastInitial": "S" }
-    // { "display": "Mike S" }
+    // Optional endpoint (safe if missing)
     const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
-
     try {
       const res = await fetch(url, { method: "GET" });
       if(!res.ok) return;
-
       const data = await res.json();
+
       const display =
         (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
         (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
@@ -325,16 +299,13 @@
       if(display){
         showGreeting(`Hi ${display}! The flyers on this page now contain your unique referral QR code.`);
       }
-    } catch (_) {
-      // Silent fail — QR should still work even if name lookup isn't available.
-    }
+    } catch (_) {}
   }
 
   function renderGeneric(){
     hideGreeting();
     clearMessages();
     setCurrentLink(GENERIC_LINK);
-
     const ok = drawQr(GENERIC_LINK);
     if(ok) showSuccess("Showing generic MOVE THAT COUCH! QR.");
   }
@@ -346,17 +317,15 @@
     const raw = refInput.value;
     const code = extractReferralCode(raw);
 
-    // Empty OR invalid -> generic QR (no hard error)
     if(!raw.trim() || !code){
       renderGeneric();
       return;
     }
 
-    // Valid -> personalized
-    const finalLink = APP_REF_BASE + encodeURIComponent(code);
-    setCurrentLink(finalLink);
+    const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
+    setCurrentLink(shortLink);
 
-    const ok = drawQr(finalLink);
+    const ok = drawQr(shortLink);
     if(ok){
       showSuccess("Personalized QR generated!");
       await tryLoadReferrerName(code);
@@ -367,28 +336,10 @@
 
   downloadQrPngBtn.addEventListener('click', () => {
     if(!currentFinalLink) return;
-
-    // qrcodejs may render a canvas or an img. Try both.
-    const canvas = qrTarget.querySelector("canvas");
-    const img = qrTarget.querySelector("img");
-
-    if(canvas){
-      const link = document.createElement('a');
-      link.download = 'movethatcouch-qr.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      return;
-    }
-
-    if(img && img.src && img.src.startsWith("data:image/")){
-      const link = document.createElement('a');
-      link.download = 'movethatcouch-qr.png';
-      link.href = img.src;
-      link.click();
-      return;
-    }
-
-    showError("PNG download isn’t available from this QR render mode in your browser. Use “Copy QR Link” for now.");
+    const link = document.createElement('a');
+    link.download = 'movethatcouch-qr.png';
+    link.href = qrCanvas.toDataURL('image/png');
+    link.click();
   });
 
   copyLinkBtn.addEventListener('click', async () => {
@@ -407,16 +358,13 @@
     }
   });
 
-  // Auto-fill from ?ref=CODE on the marketing page URL
   (function(){
-    // Always show something immediately
     renderGeneric();
 
     const params = new URLSearchParams(window.location.search);
     const refParam = params.get('ref');
     if(refParam){
-      const decoded = decodeURIComponent(refParam);
-      refInput.value = decoded;
+      refInput.value = decodeURIComponent(refParam);
       setTimeout(generate, 50);
     }
   })();
