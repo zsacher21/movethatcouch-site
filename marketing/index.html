@@ -15,11 +15,35 @@
       background: #f7f7f7;
       color: #111;
     }
+
     header {
       background: #0f172a;
       color: white;
       padding: 18px 16px;
     }
+
+    /* NEW: header layout */
+    .headerInner{
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .headerLeft{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+    .headerLogo{
+      height: 38px;          /* adjust as you like */
+      width: auto;
+      display: block;
+      border-radius: 10px;   /* subtle rounding */
+    }
+
     header a {
       color: white;
       text-decoration: none;
@@ -27,9 +51,10 @@
       font-weight: 600;
     }
     header h1 {
-      margin: 8px 0 0 0;
+      margin: 0;
       font-size: 20px;
     }
+
     main {
       max-width: 900px;
       margin: 0 auto;
@@ -110,8 +135,19 @@
 
 <body>
 <header>
-  <a href="/">← Home</a>
-  <h1>Marketing Materials</h1>
+  <div class="headerInner">
+    <div class="headerLeft">
+      <a href="/">← Home</a>
+      <h1>Marketing Materials</h1>
+    </div>
+
+    <!-- NEW: logo on the right -->
+    <img
+      class="headerLogo"
+      src="/mtc_couch_appicon_white_1024_adjusted.png"
+      alt="MOVE THAT COUCH! logo"
+    />
+  </div>
 </header>
 
 <main>
@@ -177,9 +213,6 @@
   const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
-  // What you want:
-  // - default (empty/invalid) = marketing site
-  // - valid referral = app referral URL (or any URL you choose)
   const GENERIC_LINK = "https://movethatcouch.com";
   const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
 
@@ -208,10 +241,8 @@
     const s = (input || "").trim();
     if(!s) return "";
 
-    // just code
     if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
 
-    // link
     try {
       const u = new URL(s);
 
@@ -239,7 +270,6 @@
     ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   }
 
-  // Draw QR using qrcode-generator (global function: qrcode)
   function drawQr(text){
     clearCanvas();
 
@@ -249,7 +279,6 @@
     }
 
     try {
-      // typeNumber 0 = auto, error correction M
       const qr = window.qrcode(0, 'M');
       qr.addData(text);
       qr.make();
@@ -259,11 +288,9 @@
       const cells = qr.getModuleCount();
       const tileSize = size / cells;
 
-      // white background
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, size, size);
 
-      // draw modules
       ctx.fillStyle = "#000000";
       for (let row = 0; row < cells; row++) {
         for (let col = 0; col < cells; col++) {
@@ -286,10 +313,6 @@
     }
   }
 
-  // This endpoint already exists in your app per your code:
-  // GET https://app.movethatcouch.com/api/public/referral-name?code=XXXX
-  // If code is invalid, it should return non-2xx or a payload without a usable name.
-  // We'll treat "no usable display" as invalid and show generic.
   async function validateReferralCode(code){
     const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
 
@@ -324,38 +347,27 @@
     const raw = refInput.value;
     const code = extractReferralCode(raw);
 
-    // Empty OR couldn't parse a code -> generic
     if(!raw.trim() || !code){
       renderGeneric("Showing generic MOVE THAT COUCH! QR.");
       return;
     }
 
-    // OPTIONAL: quick client-side sanity check to avoid needless API calls
     if(!/^[A-Za-z0-9]{4,20}$/.test(code)){
       renderGeneric("Showing generic MOVE THAT COUCH! QR.");
       showError("That doesn’t look like a valid referral code. Please paste your referral link or code.");
       return;
     }
 
-    // Disable generate while validating
     generateBtn.disabled = true;
-
-    // Validate code exists (and grab display name if available)
     const displayName = await validateReferralCode(code);
-
-    // Re-enable generate
     generateBtn.disabled = false;
 
     if(!displayName){
-      // Treat as invalid referral code => generic, and show error
       renderGeneric("Showing generic MOVE THAT COUCH! QR.");
       showError("Referral code not found. Please check the code and try again.");
       return;
     }
 
-    // VALID => build final link
-    // If you truly "do not care what the link looks like", this can be app URL OR /r/ URL.
-    // This version encodes the APP URL directly:
     const finalLink = APP_REF_BASE + encodeURIComponent(code);
 
     setCurrentLink(finalLink);
@@ -390,7 +402,6 @@
     }
   });
 
-  // Load the QR library from CDN, then start.
   (function boot(){
     function loadScript(src, onload, onerror){
       const s = document.createElement('script');
@@ -401,7 +412,6 @@
       document.head.appendChild(s);
     }
 
-    // qrcode-generator provides window.qrcode(...)
     loadScript(
       "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js",
       () => start(),
