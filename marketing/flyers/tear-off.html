@@ -22,7 +22,6 @@
       --qrBg: #f0fff6;
 
       --dash: #93c5fd;
-      --dash2: #bfdbfe;
     }
 
     html, body { margin:0; padding:0; background:#fff; }
@@ -171,15 +170,14 @@
 
     /* TEAR AREA */
     .tearArea{
-      padding: 34px 56px 76px; /* ✅ more bottom padding so nothing rides the page edge */
+      padding: 28px 56px 44px;
     }
 
     .tearTop{
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
-      margin-bottom: 26px;
-      padding-bottom: 6px;
+      margin-bottom: 26px; /* ✅ more padding below title */
     }
     .tearTop h3{
       margin:0;
@@ -195,24 +193,25 @@
 
     .grid{
       width: 100%;
-      height: calc(var(--H) - 520px - 92px - 34px - 76px - 70px);
+      height: calc(var(--H) - 520px - 92px - 28px - 44px - 60px); /* header + legal + tearArea paddings + title zone */
       border: 2px solid var(--line);
       border-radius: 14px;
       overflow:hidden;
       display:grid;
-      grid-template-columns: repeat(10, 1fr);
+      grid-template-columns: repeat(7, 1fr); /* ✅ fewer, wider tabs = more usable space */
       background:#fff;
       position: relative;
     }
 
     .tab{
       position: relative;
-      padding: 10px 12px 12px;
+      padding: 18px 16px 18px;
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:flex-start;
       gap: 12px;
+      overflow:hidden; /* keep rotated items clean inside */
     }
     .tab:not(:last-child)::after{
       content:"";
@@ -225,11 +224,12 @@
       opacity: 0.95;
     }
 
-    .miniMark{
+    /* Small top logo on each tab (REAL icon) */
+    .miniLogoTop{
       width: 34px;
       height: 34px;
       display:block;
-      color:#16a34a;
+      object-fit:contain;
       margin-top: 6px;
     }
 
@@ -249,16 +249,16 @@
       line-height: 1.15;
     }
 
+    /* QR */
     .tabQr{
       width: 240px;
       height: 240px;
       display:block;
       background:#fff;
       image-rendering: pixelated;
-      margin-top: 4px;
+      margin-top: 6px;
       border-radius: 12px;
     }
-
     .scanLbl{
       font-size: 20px;
       font-weight: 950;
@@ -267,60 +267,97 @@
       text-align:center;
     }
 
-    /* ✅ FIXED: reserve a zone and center the rotated block INSIDE it */
-    .actionsVertical{
-      margin-top: auto;
-      width: 100%;
-      height: 720px;             /* reserve space (tweakable) */
-      display:flex;
-      align-items:center;         /* ✅ center vertically */
-      justify-content:center;     /* ✅ center horizontally */
-      padding-bottom: 0;
+    /* BIG vertical brand filler in the empty area */
+    .vBrand{
+      position:absolute;
+      left:50%;
+      top:66%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      transform-origin:center;
+      text-align:center;
+      pointer-events:none;
+      opacity: 0.95;
+      width: 520px; /* gives the rotated block room */
+    }
+    .vLogo{
+      width: 64px;
+      height: 64px;
+      object-fit:contain;
+      display:block;
+      margin: 0 auto 10px;
+    }
+    .vName{
+      font-size: 46px;
+      font-weight: 950;
+      letter-spacing: 0.5px;
+      line-height: 1.0;
+      margin: 0;
+      color:#0f172a;
+      white-space: nowrap;
+    }
+    .vTag{
+      margin-top: 8px;
+      font-size: 22px;
+      font-weight: 900;
+      color:#475569;
+      white-space: nowrap;
     }
 
+    /* Bottom actions: rotated text (already working) */
     .actions{
-      /* rotate + nudge up/left so it stays fully inside the tab */
-      transform: rotate(-90deg) translate(-40px, -10px);
-      transform-origin: center;
+      margin-top: auto;
+      width: 100%;
+      padding-top: 18px;
       display:flex;
       flex-direction:column;
-      gap: 18px;
+      gap: 14px;
       align-items:flex-start;
+      padding-bottom: 12px; /* ✅ keeps it away from bottom edge */
     }
 
     .act{
       display:flex;
       align-items:center;
-      gap: 14px;
-      font-size: 30px;
-      font-weight: 950;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 900;
       color:#0f172a;
       line-height: 1.1;
-      white-space: nowrap;
     }
 
     .box{
-      width: 24px;
-      height: 24px;
-      border: 3px solid #0f172a;
-      border-radius: 4px;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #0f172a;
+      border-radius: 3px;
       flex: 0 0 auto;
     }
-
     .act svg{
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
       flex: 0 0 auto;
       color:#16a34a;
+    }
+
+    /* Rotate the action text block so it reads top-to-bottom and fits */
+    .actionsRot{
+      transform: rotate(-90deg);
+      transform-origin: left bottom;
+      position: relative;
+      left: 10px;
+      bottom: 6px;
+      width: 520px; /* give it room so it doesn't clip */
     }
   </style>
 </head>
 
 <body>
   <div id="flyer">
+    <!-- Header -->
     <div class="header">
       <div class="brand">
         <div class="logoBox">
+          <!-- ✅ Real icon asset -->
           <img src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH! logo" crossorigin="anonymous">
         </div>
         <div>
@@ -361,13 +398,16 @@
       The platform does not provide transportation services and is not responsible for loss, damage, or delays.
     </div>
 
+    <!-- Tear area -->
     <div class="tearArea">
       <div class="tearTop">
         <h3>Tear off a tab below to scan later!</h3>
         <p class="hint">✂ Cut along dotted lines</p>
       </div>
 
-      <div class="grid" id="tabsGrid"></div>
+      <div class="grid" id="tabsGrid">
+        <!-- Tabs inserted by JS -->
+      </div>
     </div>
   </div>
 
@@ -378,6 +418,7 @@
         return params.get("qr") || "https://www.movethatcouch.com/";
       }
 
+      // Load QR library
       await new Promise((resolve, reject) => {
         const s = document.createElement("script");
         s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
@@ -417,14 +458,8 @@
         }
       }
 
+      // Inline SVG icons (safe for html2canvas)
       const ICONS = {
-        couch: `
-          <svg class="miniMark" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 11a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5h-1a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <path d="M6 11V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M6 18v2M18 18v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        `,
         chat: `
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"
@@ -450,38 +485,45 @@
         `
       };
 
+      // ✅ Wider tabs: 7 across fits landscape better and gives room for readable rotated content
       const grid = document.getElementById("tabsGrid");
-      const TAB_COUNT = 10;
+      const TAB_COUNT = 7;
 
       for(let i=0; i<TAB_COUNT; i++){
         const tab = document.createElement("div");
         tab.className = "tab";
 
         tab.innerHTML = `
-          ${ICONS.couch}
+          <img class="miniLogoTop" src="/mtc_couch_appicon_white_1024_adjusted.png" alt="" crossorigin="anonymous" />
           <div class="miniTitle">MOVE THAT<br/>COUCH!</div>
           <div class="miniSub">Furniture delivery,<br/>made easy.</div>
 
           <canvas class="tabQr" width="240" height="240"></canvas>
           <div class="scanLbl">Scan to sign up</div>
 
-          <div class="actionsVertical">
-            <div class="actions">
-              <div class="act">
-                <span class="box"></span>
-                ${ICONS.chat}
-                <span>Get delivery quotes.</span>
-              </div>
-              <div class="act">
-                <span class="box"></span>
-                ${ICONS.truck}
-                <span>Sign up to drive.</span>
-              </div>
-              <div class="act">
-                <span class="box"></span>
-                ${ICONS.gift}
-                <span>Refer friends, earn cash.</span>
-              </div>
+          <!-- Big vertical filler brand -->
+          <div class="vBrand" aria-hidden="true">
+            <img class="vLogo" src="/mtc_couch_appicon_white_1024_adjusted.png" alt="" crossorigin="anonymous" />
+            <div class="vName">MOVE THAT COUCH!</div>
+            <div class="vTag">Furniture delivery, made easy.</div>
+          </div>
+
+          <!-- Rotated actions -->
+          <div class="actions actionsRot">
+            <div class="act">
+              <span class="box"></span>
+              <span style="color:#16a34a;">${ICONS.chat}</span>
+              <span>Get delivery quotes.</span>
+            </div>
+            <div class="act">
+              <span class="box"></span>
+              <span style="color:#16a34a;">${ICONS.truck}</span>
+              <span>Sign up to drive.</span>
+            </div>
+            <div class="act">
+              <span class="box"></span>
+              <span style="color:#16a34a;">${ICONS.gift}</span>
+              <span>Refer friends, earn cash.</span>
             </div>
           </div>
         `;
@@ -489,13 +531,17 @@
         grid.appendChild(tab);
       }
 
-      await new Promise(r => setTimeout(r, 250));
+      // Let images load for export
+      await new Promise(r => setTimeout(r, 350));
 
+      // Draw header QR
       drawQr(document.getElementById("qrHeader"), link);
 
+      // Draw tab QRs
       const canvases = grid.querySelectorAll("canvas.tabQr");
       canvases.forEach(c => drawQr(c, link));
 
+      // settle
       await new Promise(r => setTimeout(r, 150));
     })();
   </script>
