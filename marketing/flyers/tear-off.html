@@ -177,7 +177,7 @@
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
-      margin-bottom: 26px; /* extra breathing room */
+      margin-bottom: 26px; /* more breathing room */
     }
     .tearTop h3{
       margin:0;
@@ -211,7 +211,7 @@
       align-items:center;
       justify-content:flex-start;
       gap: 12px;
-      overflow:hidden;
+      overflow:hidden; /* keep everything within each tab */
     }
     .tab:not(:last-child)::after{
       content:"";
@@ -233,7 +233,7 @@
       image-rendering: pixelated;
       margin-top: 10px;
       border-radius: 12px;
-      z-index: 3;
+      z-index: 5;
     }
     .scanLbl{
       font-size: 20px;
@@ -241,31 +241,31 @@
       margin: 6px 0 0;
       color:#0f172a;
       text-align:center;
-      z-index: 3;
+      z-index: 5;
     }
 
-    /* BIG vertical brand filler (only ONE brand block per tab) */
+    /* BIG vertical brand filler (centered better) */
     .vBrand{
       position:absolute;
       left:50%;
-      top:62%;
+      top:56%; /* was lower; bring closer to center */
       transform: translate(-50%, -50%) rotate(-90deg);
       transform-origin:center;
       text-align:center;
       pointer-events:none;
       opacity: 0.95;
-      width: 560px;
-      z-index: 1;
+      width: 620px; /* slightly wider so it feels like a centerpiece */
+      z-index: 2;
     }
     .vLogo{
-      width: 70px;
-      height: 70px;
+      width: 84px;
+      height: 84px;
       object-fit:contain;
       display:block;
-      margin: 0 auto 12px;
+      margin: 0 auto 14px;
     }
     .vName{
-      font-size: 52px;
+      font-size: 58px;
       font-weight: 950;
       letter-spacing: 0.5px;
       line-height: 1.0;
@@ -274,33 +274,37 @@
       white-space: nowrap;
     }
     .vTag{
-      margin-top: 10px;
-      font-size: 24px;
+      margin-top: 12px;
+      font-size: 26px;
       font-weight: 900;
       color:#475569;
       white-space: nowrap;
     }
 
-    /* Rotated actions block (restored + positioned safely inside tab) */
+    /* Rotated actions (real container so it doesn't clip) */
     .actionsRotWrap{
       position:absolute;
-      left: 18px;
-      bottom: 40px;
-      width: 0;
-      height: 0;
-      z-index: 4;
+      left:50%;
+      bottom: 120px;            /* keep it comfortably low */
+      transform: translateX(-50%);
+      width: 440px;             /* container inside the tab */
+      height: 440px;            /* big enough for 3 lines rotated */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 6;
       pointer-events:none;
     }
     .actionsRot{
       transform: rotate(-90deg);
-      transform-origin: left bottom;
-      width: 540px;
+      transform-origin: center;
+      width: 560px;             /* this becomes the "height" after rotation */
     }
 
     .actions{
       display:flex;
       flex-direction:column;
-      gap: 14px;
+      gap: 16px;
       align-items:flex-start;
     }
 
@@ -469,18 +473,15 @@
         tab.className = "tab";
 
         tab.innerHTML = `
-          <!-- Top: QR + scan label only -->
           <canvas class="tabQr" width="240" height="240"></canvas>
           <div class="scanLbl">Scan to sign up</div>
 
-          <!-- Big vertical brand filler -->
           <div class="vBrand" aria-hidden="true">
             <img class="vLogo" src="/mtc_couch_appicon_white_1024_adjusted.png" alt="" crossorigin="anonymous" />
             <div class="vName">MOVE THAT COUCH!</div>
             <div class="vTag">Furniture delivery, made easy.</div>
           </div>
 
-          <!-- Rotated actions restored -->
           <div class="actionsRotWrap" aria-hidden="true">
             <div class="actionsRot">
               <div class="actions">
@@ -507,13 +508,10 @@
         grid.appendChild(tab);
       }
 
-      // Let images load for export
       await new Promise(r => setTimeout(r, 350));
 
-      // Draw header QR
       drawQr(document.getElementById("qrHeader"), link);
 
-      // Draw tab QRs
       const canvases = grid.querySelectorAll("canvas.tabQr");
       canvases.forEach(c => drawQr(c, link));
 
