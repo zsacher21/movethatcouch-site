@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting…</title>
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+  <script>
+    // Supports:
+    // 1) /r/CODE
+    // 2) /r/?ref=CODE
+    (function () {
+      const pathParts = window.location.pathname.split('/').filter(Boolean); // ["r","CODE"]
+      let code = "";
+
+      if (pathParts.length >= 2 && pathParts[0].toLowerCase() === "r") {
+        code = pathParts[1] || "";
+      }
+
+      if (!code) {
+        const params = new URLSearchParams(window.location.search);
+        code = params.get("ref") || "";
+      }
+
+      const clean = (code || "").trim();
+      if (/^[A-Za-z0-9]{4,20}$/.test(clean)) {
+        window.location.replace(`https://app.movethatcouch.com/?ref=${encodeURIComponent(clean)}`);
+        return;
+      }
+
+      // Fallback to site home
+      window.location.replace("https://movethatcouch.com");
+    })();
+  </script>
+
+  Redirecting…
+</body>
+</html>
