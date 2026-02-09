@@ -158,8 +158,7 @@
     <div class="row">
       <button class="btn-green" id="generateBtn">Generate QR</button>
       <button class="btn-blue" id="downloadBtn">Download QR (PNG)</button>
-      <button class="btn-gray" id="copyBtn">Copy QR Link</button>
-    </div>
+          </div>
 
     <div class="error" id="errorMsg"></div>
     <div class="success" id="successMsg"></div>
@@ -206,7 +205,6 @@
   const refInput = document.getElementById('refInput');
   const generateBtn = document.getElementById('generateBtn');
   const downloadBtn = document.getElementById('downloadBtn');
-  const copyBtn = document.getElementById('copyBtn');
   const errorMsg = document.getElementById('errorMsg');
   const successMsg = document.getElementById('successMsg');
   const greetingMsg = document.getElementById('greetingMsg');
@@ -262,8 +260,7 @@
     currentFinalLink = link;
     finalLinkText.textContent = link;
     downloadBtn.disabled = false;
-    copyBtn.disabled = false;
-  }
+    }
 
   function clearCanvas(){
     const ctx = qrCanvas.getContext('2d');
@@ -387,20 +384,6 @@
     a.click();
   });
 
-  copyBtn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(currentFinalLink);
-      showSuccess("QR link copied!");
-    } catch(e){
-      const t = document.createElement('textarea');
-      t.value = currentFinalLink;
-      document.body.appendChild(t);
-      t.select();
-      document.execCommand('copy');
-      document.body.removeChild(t);
-      showSuccess("QR link copied!");
-    }
-  });
 
   (function boot(){
     function loadScript(src, onload, onerror){
