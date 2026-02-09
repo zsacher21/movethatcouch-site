@@ -1,5 +1,6 @@
 // /marketing/js/flyerExport.js
-// Exports a flyer template (HTML) to a print-ready PNG (8.5x11 @ 300 DPI = 2550x3300).
+// Exports a flyer template (HTML) to a print-ready PNG.
+// Default: US Letter Portrait @ 300 DPI = 2550x3300
 
 export const PRINT = {
   width: 2550,
@@ -33,15 +34,12 @@ function waitForIframeReady(iframe, timeoutMs = 12000) {
 
     iframe.addEventListener("load", async () => {
       try {
-        // Wait for the flyer page to finish rendering (fonts/images/qr)
         const win = iframe.contentWindow;
         if (!win) return done();
 
-        // If the flyer exposes a ready promise, wait for it
         if (win.__flyerReady && typeof win.__flyerReady.then === "function") {
           await win.__flyerReady;
         } else {
-          // Fallback: small delay
           await new Promise(r => setTimeout(r, 300));
         }
         done();
@@ -63,9 +61,15 @@ export async function exportFlyerPng({
   templatePath,
   qrLink,
   filename = "movethatcouch-flyer.png",
-  onStatus = () => {}
+  onStatus = () => {},
+  // ✅ NEW (optional): override export dimensions per flyer
+  print = null
 }) {
   onStatus("Preparing flyer…");
+
+  const P = print && Number.isFinite(print.width) && Number.isFinite(print.height)
+    ? { width: Math.round(print.width), height: Math.round(print.height) }
+    : PRINT;
 
   // 1) Ensure html2canvas is loaded (in parent page)
   await loadScriptOnce("https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js");
@@ -75,8 +79,8 @@ export async function exportFlyerPng({
   iframe.style.position = "fixed";
   iframe.style.left = "-10000px";
   iframe.style.top = "0";
-  iframe.style.width = `${PRINT.width}px`;
-  iframe.style.height = `${PRINT.height}px`;
+  iframe.style.width = `${P.width}px`;
+  iframe.style.height = `${P.height}px`;
   iframe.style.border = "0";
   iframe.style.opacity = "0";
   iframe.setAttribute("aria-hidden", "true");
@@ -100,12 +104,12 @@ export async function exportFlyerPng({
     const flyerEl = doc.getElementById("flyer");
     if (!flyerEl) throw new Error("Flyer root #flyer not found");
 
-    // 3) Render to canvas at 1:1 pixels (we sized the iframe to 2550x3300)
+    // 3) Render to canvas at 1:1 pixels (we sized the iframe to P.width x P.height)
     const canvas = await window.html2canvas(flyerEl, {
       backgroundColor: "#ffffff",
       scale: 1,
-      width: PRINT.width,
-      height: PRINT.height,
+      width: P.width,
+      height: P.height,
       useCORS: true,
       allowTaint: true,
       logging: false
