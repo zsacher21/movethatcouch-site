@@ -216,7 +216,7 @@
   const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
-  const GENERIC_LINK = "https://movethatcouch.com";
+  const GENERIC_LINK = "https://www.movethatcouch.com/";
   const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
 
   let currentFinalLink = GENERIC_LINK;
@@ -492,7 +492,7 @@
     // Always use the current final link if present; otherwise fallback to generic
     return (window.currentFinalLink && String(window.currentFinalLink).trim())
       ? String(window.currentFinalLink).trim()
-      : "https://movethatcouch.com";
+      : "https://www.movethatcouch.com/";
   }
 
   flyer1Btn.addEventListener("click", async () => {
