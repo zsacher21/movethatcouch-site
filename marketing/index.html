@@ -178,6 +178,7 @@
   </div>
 </main>
 
+<!-- qrcode-generator build -->
 <script src="/assets/qrcode.min.js"></script>
 
 <script>
@@ -191,7 +192,7 @@
   const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
-  // Keep QR payload SHORT so your qrcode.min.js (typeNumber=4) doesn't overflow.
+  // Keep payload short to avoid QR overflow
   const GENERIC_LINK = "https://movethatcouch.com";
   const SHORT_REF_BASE = "https://movethatcouch.com/r/";
 
@@ -224,8 +225,10 @@
     const s = (input || "").trim();
     if(!s) return "";
 
+    // Just code like "V2Z9JE"
     if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
 
+    // Full link: extract ?ref=CODE OR /r/CODE
     try {
       const u = new URL(s);
       const hostOk = (
@@ -253,7 +256,7 @@
     ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   }
 
-  <script>
+  // ✅ Correct renderer for qrcode-generator
   function drawQr(text) {
     try {
       clearCanvas();
@@ -263,11 +266,7 @@
         return false;
       }
 
-      /*
-        typeNumber:
-        - 4 was too small (caused dataCount crash)
-        - 6 comfortably fits https://movethatcouch.com/r/CODE
-      */
+      // Version 6, low error correction: fits short URLs reliably
       const qr = qrcode(6, 'L');
       qr.addData(text);
       qr.make();
@@ -297,16 +296,7 @@
       return true;
     } catch (err) {
       console.error(err);
-      showError(
-        "QR rendering failed. This usually means the QR payload was too large."
-      );
-      return false;
-    }
-  }
-</script>
- catch (e) {
-      console.error(e);
-      showError("QR rendering failed (script loaded but errored). This usually means the QR payload was too long. We use the short /r/CODE format to prevent that.");
+      showError("QR rendering failed. (Console shows details.)");
       return false;
     }
   }
@@ -334,7 +324,9 @@
       if(display){
         showGreeting(`Hi ${display}! The flyers on this page now contain your unique referral QR code.`);
       }
-    } catch (_) {}
+    } catch (_) {
+      // silent fail
+    }
   }
 
   function renderGeneric(){
@@ -352,11 +344,13 @@
     const raw = refInput.value;
     const code = extractReferralCode(raw);
 
+    // Empty OR invalid -> generic QR
     if(!raw.trim() || !code){
       renderGeneric();
       return;
     }
 
+    // Valid -> personalized short link
     const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
     setCurrentLink(shortLink);
 
@@ -393,6 +387,7 @@
     }
   });
 
+  // Initial load: show generic, then auto-fill if ?ref=CODE is present
   (function(){
     renderGeneric();
 
