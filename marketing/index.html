@@ -71,12 +71,12 @@
       cursor: not-allowed;
     }
     .btn-green { background:#22c55e; color:white; }
-    .btn-blue { background:#2563eb; color:white; }
-    .btn-gray { background:#475569; color:white; }
+    .btn-blue  { background:#2563eb; color:white; }
+    .btn-gray  { background:#475569; color:white; }
     .note { color:#475569; font-size:14px; margin-top:10px; line-height:1.35; }
     .error { color:#b91c1c; font-weight:800; margin-top:10px; display:none; }
     .success { color:#166534; font-weight:800; margin-top:10px; display:none; }
-    .greeting { margin-top: 10px; font-weight: 900; color: #0f172a; display:none; }
+    .greeting { margin-top:10px; font-weight:900; color:#0f172a; display:none; }
 
     .qrWrap{
       display:flex;
@@ -103,8 +103,7 @@
     }
     .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
     .divider { height:1px; background:#e2e8f0; margin:16px 0; }
-
-    .sectionTitle { font-weight: 900; margin-top: 6px; }
+    .sectionTitle { font-weight:900; margin-top:6px; }
     .flyers button { margin-right:10px; margin-top:10px; }
   </style>
 </head>
@@ -188,7 +187,6 @@
   const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
-  // Keep links short (but with the CDN lib, long URLs are also fine).
   const GENERIC_LINK = "https://movethatcouch.com";
   const SHORT_REF_BASE = "https://movethatcouch.com/r/";
 
@@ -219,8 +217,10 @@
     const s = (input || "").trim();
     if(!s) return "";
 
+    // just code
     if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
 
+    // link
     try {
       const u = new URL(s);
 
@@ -248,32 +248,51 @@
     ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   }
 
+  // Draw QR using qrcode-generator (global function: qrcode)
   function drawQr(text){
     clearCanvas();
 
-    // Prefer the CDN "qrcode" library API if present (QRCode.toCanvas)
-    if (window.QRCode && typeof window.QRCode.toCanvas === "function") {
-      window.QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
-        if(err){
-          console.error(err);
-          showError("QR rendering failed. (Unexpected error from QR library.)");
-        }
-      });
-      return;
+    if (typeof window.qrcode !== "function") {
+      showError("QR library failed to load.");
+      return false;
     }
 
-    // Fallback: try your existing local file's API (also QRCode.toCanvas)
-    if (window.QRCode && typeof window.QRCode.toCanvas === "function") {
-      window.QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
-        if(err){
-          console.error(err);
-          showError("QR rendering failed. Your local /assets/qrcode.min.js may be buggy.");
-        }
-      });
-      return;
-    }
+    try {
+      // typeNumber 0 = auto, error correction M = solid scannability
+      const qr = window.qrcode(0, 'M');
+      qr.addData(text);
+      qr.make();
 
-    showError("QR library failed to load.");
+      const ctx = qrCanvas.getContext("2d");
+      const size = qrCanvas.width;
+      const cells = qr.getModuleCount();
+      const tileSize = size / cells;
+
+      // white background
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+
+      // draw modules
+      ctx.fillStyle = "#000000";
+      for (let row = 0; row < cells; row++) {
+        for (let col = 0; col < cells; col++) {
+          if (qr.isDark(row, col)) {
+            ctx.fillRect(
+              Math.floor(col * tileSize),
+              Math.floor(row * tileSize),
+              Math.ceil(tileSize),
+              Math.ceil(tileSize)
+            );
+          }
+        }
+      }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      showError("QR rendering failed (unexpected). Check console.");
+      return false;
+    }
   }
 
   async function tryLoadReferrerName(code){
@@ -298,8 +317,8 @@
   function renderGeneric(){
     clearMessages();
     setCurrentLink(GENERIC_LINK);
-    drawQr(GENERIC_LINK);
-    showSuccess("Showing generic MOVE THAT COUCH! QR.");
+    const ok = drawQr(GENERIC_LINK);
+    if(ok) showSuccess("Showing generic MOVE THAT COUCH! QR.");
   }
 
   async function generate(){
@@ -315,9 +334,12 @@
 
     const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
     setCurrentLink(shortLink);
-    drawQr(shortLink);
-    showSuccess("Personalized QR generated!");
-    await tryLoadReferrerName(code);
+
+    const ok = drawQr(shortLink);
+    if(ok){
+      showSuccess("Personalized QR generated!");
+      await tryLoadReferrerName(code);
+    }
   }
 
   generateBtn.addEventListener('click', generate);
@@ -344,7 +366,7 @@
     }
   });
 
-  // Load a GOOD QR library first (CDN), then fallback to your local one if needed.
+  // Load the QR library from CDN, then start.
   (function boot(){
     function loadScript(src, onload, onerror){
       const s = document.createElement('script');
@@ -355,32 +377,19 @@
       document.head.appendChild(s);
     }
 
-    // 1) Try CDN (reliable, supports long URLs, avoids your local bug)
+    // qrcode-generator provides window.qrcode(...)
     loadScript(
-      "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js",
+      "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js",
+      () => start(),
       () => {
-        // CDN loaded
-        start();
-      },
-      () => {
-        // 2) CDN failed -> fallback to local
-        loadScript(
-          "/assets/qrcode.min.js",
-          () => start(),
-          () => {
-            // Nothing worked
-            renderGeneric();
-            showError("QR library failed to load. (CDN + local both failed)");
-          }
-        );
+        renderGeneric();
+        showError("QR library failed to load (CDN blocked).");
       }
     );
 
     function start(){
-      // show something immediately
       renderGeneric();
 
-      // auto-fill from ?ref=CODE
       const params = new URLSearchParams(window.location.search);
       const refParam = params.get('ref');
       if(refParam){
