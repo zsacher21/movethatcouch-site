@@ -528,11 +528,10 @@
     }
   });
 
-  // Flyer 3 (Tear-Off)
-  flyer3Btn.addEventListener("click", async () => {
+  // ✅ Flyer 3 (tear-off)
+  flyer3Btn?.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 3…");
-
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/tear-off.html",
@@ -540,11 +539,11 @@
         filename: "MTC-Tear-Off-Flyer.png",
         onStatus: status
       });
-    } catch (e) {
-      console.error(e);
-      showExportError();
-    }
+    } catch (e) { console.error(e); showExportError(); }
   });
+
+  flyer4Btn?.addEventListener("click", () => status("Flyer 4 coming next…"));
+</script>
 
   // Flyer 4 (placeholder)
   flyer4Btn.addEventListener("click", () => status("Flyer 4 coming next…"));
