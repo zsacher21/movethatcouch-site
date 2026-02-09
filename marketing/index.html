@@ -289,27 +289,24 @@
     }
   }
 
-  async function tryLoadReferrerName(code){
+  async function validateReferralCode(code){
   const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
 
   try {
     const res = await fetch(url);
-    if(!res.ok) return;
+    if (!res.ok) return null;
 
     const data = await res.json();
 
     const display =
-      (data?.display && data.display.trim()) ? data.display.trim() :
-      (data?.firstName && data?.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
-      (data?.firstName) ? data.firstName : "";
+      (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
+      (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
+      (data && data.firstName) ? `${data.firstName}` :
+      null;
 
-    if(display){
-      showGreeting(
-        `Hi ${display}! The flyers on this page now contain your unique referral QR code.`
-      );
-    }
-  } catch {
-    // silent fail — QR still works
+    return display;
+  } catch (err) {
+    return null;
   }
 }
 
