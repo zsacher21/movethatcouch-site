@@ -529,18 +529,23 @@
   });
 
   // ✅ Flyer 3 (tear-off)
-  flyer3Btn?.addEventListener("click", async () => {
-    const qrLink = getQrLinkForFlyers();
-    status("Preparing Flyer 3…");
-    try {
-      await exportFlyerPng({
-        templatePath: "/marketing/flyers/tear-off.html",
-        qrLink,
-        filename: "MTC-Tear-Off-Flyer.png",
-        onStatus: status
-      });
-    } catch (e) { console.error(e); showExportError(); }
-  });
+  flyer3Btn.addEventListener("click", async () => {
+  const qrLink = getQrLinkForFlyers();
+  status("Preparing Flyer 3…");
+
+  try {
+    await exportFlyerPng({
+      templatePath: "/marketing/flyers/tear-off.html",
+      qrLink,
+      filename: "MTC-Tear-Off-Flyer.png",
+      print: { width: 3300, height: 2550 }, // ✅ LANDSCAPE Letter @ 300dpi
+      onStatus: status
+    });
+  } catch (e) {
+    console.error(e);
+    showExportError();
+  }
+});
 
   flyer4Btn?.addEventListener("click", () => status("Flyer 4 coming next…"));
 </script>
