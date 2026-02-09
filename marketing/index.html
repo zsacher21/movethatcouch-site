@@ -209,9 +209,13 @@
     greetingMsg.textContent = '';
   }
   function showGreeting(text){
-    greetingMsg.textContent = text;
-    greetingMsg.style.display = 'block';
-  }
+  // Replace the green success message with the friendly greeting
+  showSuccess(text);
+
+  // Hide the separate greeting line so we don't show two messages
+  greetingMsg.style.display = 'none';
+  greetingMsg.textContent = '';
+}
 
   function extractReferralCode(input){
     const s = (input || "").trim();
@@ -342,9 +346,10 @@
 
     const ok = drawQr(shortLink);
     if(ok){
-      showSuccess("Personalized QR generated!");
-      await tryLoadReferrerName(code);
-    }
+  // Default success message (may be replaced by greeting if name lookup succeeds)
+  showSuccess("Personalized QR generated!");
+  await tryLoadReferrerName(code);
+}
   }
 
   generateBtn.addEventListener('click', generate);
