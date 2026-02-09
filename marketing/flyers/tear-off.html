@@ -159,14 +159,15 @@
     }
 
     .legalLine{
-      height: 64px;
-      padding: 12px 74px;
-      display:flex;
-      align-items:center;
-      font-size: 16px;
-      color:#64748b;
-      border-bottom: 2px solid var(--line);
-    }
+  height: 92px;              /* was smaller */
+  padding: 18px 74px;
+  display:flex;
+  align-items:center;
+  font-size: 22px;           /* 🔥 bigger */
+  color:#64748b;
+  border-bottom: 2px solid var(--line);
+  line-height: 1.25;
+}
 
     /* TEAR AREA */
     .tearArea{
@@ -205,14 +206,14 @@
 
     /* Vertical dashed cut lines */
     .tab{
-      position: relative;
-      padding: 18px 12px 18px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      gap: 10px;
-    }
+  position: relative;
+  padding: 12px 12px 16px;   /* tighter top padding */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap: 12px;                 /* slightly larger than before */
+}
     .tab:not(:last-child)::after{
       content:"";
       position:absolute;
@@ -234,20 +235,20 @@
     }
 
     .miniTitle{
-      font-size: 16px;
-      font-weight: 950;
-      color:#16a34a;
-      line-height: 1.0;
-      text-align:center;
-      margin-top: 2px;
-    }
-    .miniSub{
-      font-size: 12px;
-      font-weight: 700;
-      color:#64748b;
-      text-align:center;
-      line-height: 1.15;
-    }
+  font-size: 20px;     /* was ~16 */
+  font-weight: 950;
+  color:#16a34a;
+  line-height: 1.0;
+  text-align:center;
+  margin-top: 4px;
+}
+.miniSub{
+  font-size: 14px;     /* was ~12 */
+  font-weight: 800;
+  color:#64748b;
+  text-align:center;
+  line-height: 1.15;
+}
 
     /* BIGGER QR to reduce dead space */
     .tabQr{
@@ -261,39 +262,41 @@
     }
 
     .scanLbl{
-      font-size: 16px;
-      font-weight: 950;
-      margin: 4px 0 0;
-      color:#0f172a;
-      text-align:center;
-    }
+  font-size: 20px;     /* was ~16 */
+  font-weight: 950;
+  margin: 6px 0 0;
+  color:#0f172a;
+  text-align:center;
+}
 
     /* Bottom action list (bigger + with icons) */
     .actions{
-      margin-top: auto; /* push to bottom but keep big */
-      width: 100%;
-      padding-top: 10px;
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      align-items:flex-start;
-    }
-    .act{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      font-size: 16px;         /* bigger than before */
-      font-weight: 900;
-      color:#0f172a;
-      line-height: 1.05;
-    }
-    .box{
-      width: 16px;
-      height: 16px;
-      border: 2px solid #0f172a;
-      border-radius: 3px;
-      flex: 0 0 auto;
-    }
+  margin-top: auto;
+  width: 100%;
+  padding-top: 16px;   /* was smaller */
+  display:flex;
+  flex-direction:column;
+  gap: 14px;           /* more spacing */
+  align-items:flex-start;
+}
+
+.act{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  font-size: 20px;     /* 🔥 was ~16 */
+  font-weight: 900;
+  color:#0f172a;
+  line-height: 1.1;
+}
+
+.box{
+  width: 18px;         /* slightly bigger */
+  height: 18px;
+  border: 2px solid #0f172a;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
     .act svg{
       width: 18px;
       height: 18px;
