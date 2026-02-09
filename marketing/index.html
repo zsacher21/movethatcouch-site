@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marketing Materials • MOVE THAT COUCH!</title>
-
   <style>
     body {
       margin: 0;
@@ -12,31 +11,26 @@
       background: #f7f7f7;
       color: #111;
     }
-
     header {
       background: #0f172a;
       color: white;
       padding: 18px 16px;
     }
-
     header a {
       color: white;
       text-decoration: none;
-      font-weight: 600;
       opacity: 0.9;
+      font-weight: 600;
     }
-
     header h1 {
       margin: 8px 0 0 0;
       font-size: 20px;
     }
-
     main {
       max-width: 900px;
       margin: 0 auto;
       padding: 18px 16px 40px;
     }
-
     .card {
       background: white;
       border-radius: 12px;
@@ -44,108 +38,72 @@
       padding: 16px;
       margin-top: 14px;
     }
-
-    label {
-      display:block;
-      font-weight:700;
-      margin-bottom:8px;
-    }
-
+    label { display:block; font-weight:700; margin-bottom:8px; }
     input {
       width: 100%;
+      box-sizing: border-box;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #cbd5e1;
       font-size: 15px;
-      box-sizing: border-box;
     }
-
     .row {
       display:flex;
       gap:12px;
       flex-wrap:wrap;
       margin-top:12px;
+      align-items:center;
     }
-
     button {
       border: 0;
       padding: 12px 14px;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 14px;
       cursor: pointer;
+      font-size: 14px;
     }
-
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
     .btn-green { background:#22c55e; color:white; }
     .btn-blue { background:#2563eb; color:white; }
     .btn-gray { background:#475569; color:white; }
+    .note { color:#475569; font-size:14px; margin-top:10px; line-height:1.35; }
+    .error { color:#b91c1c; font-weight:700; margin-top:10px; display:none; }
+    .success { color:#166534; font-weight:700; margin-top:10px; display:none; }
+    .greeting { margin-top: 10px; font-weight: 800; color: #0f172a; display:none; }
 
-    .error {
-      color:#b91c1c;
-      font-weight:700;
-      margin-top:10px;
-      display:none;
-    }
-
-    .success {
-      color:#166534;
-      font-weight:700;
-      margin-top:10px;
-      display:none;
-    }
-
-    .greeting {
-      margin-top:10px;
-      font-weight:800;
-      color:#0f172a;
-      display:none;
-    }
-
-    .qrWrap {
+    .qrWrap{
       display:flex;
       gap:18px;
+      align-items:flex-start;
       flex-wrap:wrap;
       margin-top:12px;
-      align-items:flex-start;
     }
-
-    .qrBox {
+    .qrBox{
       width: 280px;
+      background:#fff;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
       padding: 12px;
       text-align:center;
     }
-
-    canvas {
+    canvas{
       width: 240px;
       height: 240px;
+      image-rendering: pixelated;
       display:block;
       margin: 0 auto;
-      background: white;
+      background: #fff;
     }
+    .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
+    .divider { height:1px; background:#e2e8f0; margin:16px 0; }
 
-    .small {
-      font-size:12px;
-      color:#475569;
-      margin-top:8px;
-      word-break:break-all;
-    }
-
-    .note {
-      font-size:14px;
-      color:#475569;
-      line-height:1.35;
-    }
-
-    .divider {
-      height:1px;
-      background:#e2e8f0;
-      margin:16px 0;
-    }
+    .sectionTitle { font-weight: 800; margin-top: 6px; }
+    .flyers button { margin-right:10px; margin-top:10px; }
   </style>
 </head>
-
 <body>
 
 <header>
@@ -155,12 +113,13 @@
 
 <main>
   <div class="card">
-    <label>Paste your referral link (or just the code)</label>
-    <input id="refInput" placeholder="Example: V2Z9JE or https://app.movethatcouch.com/?ref=V2Z9JE">
+    <label for="refInput">Paste your referral link (or just the code)</label>
+    <input id="refInput" placeholder="Example: V2Z9JE  OR  https://app.movethatcouch.com/?ref=V2Z9JE" />
 
     <div class="row">
       <button class="btn-green" id="generateBtn">Generate QR</button>
-      <button class="btn-blue" id="copyBtn">Copy QR Link</button>
+      <button class="btn-blue" id="downloadBtn">Download QR (PNG)</button>
+      <button class="btn-gray" id="copyBtn">Copy QR Link</button>
     </div>
 
     <div class="error" id="errorMsg"></div>
@@ -170,108 +129,225 @@
     <div class="qrWrap">
       <div class="qrBox">
         <canvas id="qrCanvas" width="240" height="240"></canvas>
-        <div class="small" id="finalLink"></div>
+        <div class="small" id="finalLinkText"></div>
       </div>
 
-      <div style="flex:1;min-width:260px;">
+      <div style="flex:1; min-width: 260px;">
         <div class="note">
           <b>How it works:</b> This page generates a QR code that points to your referral link.
           <div class="divider"></div>
-          <b>Flyer format:</b><br>
-          https://movethatcouch.com/r/&lt;CODE&gt;
+          <b>Tip:</b> If no referral is entered (or it’s invalid), a generic MOVE THAT COUCH! QR is shown.
+          <div class="divider"></div>
+          <b>Flyer QR format:</b>
+          <div style="margin-top:6px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+            https://movethatcouch.com/r/&lt;YOURCODE&gt;
+          </div>
+          <div class="divider"></div>
+          <b>Auto-fill:</b> If you arrived here from the app, your code can be pre-filled via
+          <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">?ref=CODE</span>.
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="flyers">
+          <div class="sectionTitle">Flyers (coming next)</div>
+          <div class="note" style="margin-top:6px;">
+            We’ll embed your personalized QR directly into printable flyers.
+          </div>
+          <button class="btn-gray" disabled>Download Flyer 1</button>
+          <button class="btn-gray" disabled>Download Flyer 2</button>
+          <button class="btn-gray" disabled>Download Flyer 3</button>
+          <button class="btn-gray" disabled>Download Flyer 4</button>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="sectionTitle">Legal</div>
+    <div class="note" style="margin-top:8px;">
+      <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+      &nbsp;•&nbsp;
+      <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
+    </div>
+  </div>
 </main>
 
-<!-- EXACT library you already have -->
+<!-- IMPORTANT: This is the library you already have -->
 <script src="/assets/qrcode.min.js"></script>
 
 <script>
-  const canvas = document.getElementById("qrCanvas");
-  const ctx = canvas.getContext("2d");
-  const refInput = document.getElementById("refInput");
-  const errorMsg = document.getElementById("errorMsg");
-  const successMsg = document.getElementById("successMsg");
-  const greetingMsg = document.getElementById("greetingMsg");
-  const finalLink = document.getElementById("finalLink");
+  const refInput = document.getElementById('refInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+  const greetingMsg = document.getElementById('greetingMsg');
+  const qrCanvas = document.getElementById('qrCanvas');
+  const finalLinkText = document.getElementById('finalLinkText');
 
-  const GENERIC = "https://movethatcouch.com";
-  const BASE = "https://movethatcouch.com/r/";
+  // Keep links SHORT to avoid QR size issues with the current library build.
+  const GENERIC_LINK = "https://movethatcouch.com";
+  const SHORT_REF_BASE = "https://movethatcouch.com/r/";
 
-  function showError(t){ errorMsg.textContent=t; errorMsg.style.display="block"; successMsg.style.display="none"; }
-  function showSuccess(t){ successMsg.textContent=t; successMsg.style.display="block"; errorMsg.style.display="none"; }
-  function clearMsgs(){ errorMsg.style.display="none"; successMsg.style.display="none"; greetingMsg.style.display="none"; }
+  let currentFinalLink = GENERIC_LINK;
 
-  function extractCode(val){
-    if(!val) return "";
-    val = val.trim();
-    if(/^[A-Za-z0-9]{4,20}$/.test(val)) return val;
-    try{
-      const u = new URL(val);
-      return u.searchParams.get("ref") || "";
-    }catch{ return ""; }
+  function showError(text){
+    errorMsg.textContent = text;
+    errorMsg.style.display = 'block';
+    successMsg.style.display = 'none';
+  }
+  function showSuccess(text){
+    successMsg.textContent = text;
+    successMsg.style.display = 'block';
+    errorMsg.style.display = 'none';
+  }
+  function clearMessages(){
+    errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
+    greetingMsg.style.display = 'none';
+    greetingMsg.textContent = '';
+  }
+  function showGreeting(text){
+    greetingMsg.textContent = text;
+    greetingMsg.style.display = 'block';
   }
 
-  function drawQR(text){
-    ctx.clearRect(0,0,240,240);
+  function extractReferralCode(input){
+    const s = (input || "").trim();
+    if(!s) return "";
 
-    if(typeof qrcode !== "function"){
-      showError("QR library failed to load.");
+    // Just code like "V2Z9JE"
+    if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
+
+    // Full link: extract ?ref=CODE OR /r/CODE
+    try {
+      const u = new URL(s);
+
+      const ref = u.searchParams.get("ref");
+      if(ref && /^[A-Za-z0-9]{4,20}$/.test(ref)) return ref;
+
+      const pathMatch = u.pathname.match(/^\/r\/([A-Za-z0-9]{4,20})\/?$/);
+      if(pathMatch) return pathMatch[1];
+
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function setCurrentLink(link){
+    currentFinalLink = link;
+    finalLinkText.textContent = link;
+    downloadBtn.disabled = false;
+    copyBtn.disabled = false;
+  }
+
+  function drawQr(text){
+    // Your qrcode.min.js exposes QRCode.toCanvas
+    if(!window.QRCode || typeof window.QRCode.toCanvas !== "function"){
+      showError("QR library failed to load. (QRCode.toCanvas not found)");
       return;
     }
 
-    const qr = qrcode(6, "L");
-    qr.addData(text);
-    qr.make();
+    // Clear first
+    const ctx = qrCanvas.getContext('2d');
+    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
 
-    const cells = qr.getModuleCount();
-    const tile = 240 / cells;
-
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0,0,240,240);
-    ctx.fillStyle = "#000";
-
-    for(let r=0;r<cells;r++){
-      for(let c=0;c<cells;c++){
-        if(qr.isDark(r,c)){
-          ctx.fillRect(
-            Math.floor(c*tile),
-            Math.floor(r*tile),
-            Math.ceil(tile),
-            Math.ceil(tile)
-          );
-        }
+    window.QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
+      if(err){
+        console.error(err);
+        showError("QR rendering failed. (This usually means the QR text was too long.)");
+        return;
       }
-    }
+      // success
+    });
   }
 
-  function render(link){
-    clearMsgs();
-    finalLink.textContent = link;
-    drawQR(link);
+  async function tryLoadReferrerName(code){
+    // Optional: only works if your app serves this endpoint.
+    // Safe to fail silently.
+    const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
+    try {
+      const res = await fetch(url);
+      if(!res.ok) return;
+      const data = await res.json();
+
+      const display =
+        (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
+        (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
+        (data && data.firstName) ? `${data.firstName}` : "";
+
+      if(display){
+        showGreeting(`Hi ${display}! The flyers on this page now contain your unique referral QR code.`);
+      }
+    } catch (_) {}
   }
 
-  document.getElementById("generateBtn").onclick = () => {
-    const code = extractCode(refInput.value);
-    if(!code){
-      render(GENERIC);
-      showSuccess("Showing generic MOVE THAT COUCH! QR.");
+  function renderGeneric(){
+    clearMessages();
+    setCurrentLink(GENERIC_LINK);
+    drawQr(GENERIC_LINK);
+    showSuccess("Showing generic MOVE THAT COUCH! QR.");
+  }
+
+  async function generate(){
+    clearMessages();
+
+    const raw = refInput.value;
+    const code = extractReferralCode(raw);
+
+    // Empty OR invalid -> generic QR (no hard error)
+    if(!raw.trim() || !code){
+      renderGeneric();
       return;
     }
-    const link = BASE + code;
-    render(link);
+
+    // Valid -> personalized short link
+    const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
+    setCurrentLink(shortLink);
+    drawQr(shortLink);
+
     showSuccess("Personalized QR generated!");
-  };
+    await tryLoadReferrerName(code);
+  }
 
-  document.getElementById("copyBtn").onclick = async () => {
-    await navigator.clipboard.writeText(finalLink.textContent);
-    showSuccess("QR link copied!");
-  };
+  generateBtn.addEventListener('click', generate);
 
-  // initial render
-  render(GENERIC);
+  downloadBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'movethatcouch-qr.png';
+    link.href = qrCanvas.toDataURL('image/png');
+    link.click();
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(currentFinalLink);
+      showSuccess("QR link copied!");
+    } catch(e){
+      const t = document.createElement('textarea');
+      t.value = currentFinalLink;
+      document.body.appendChild(t);
+      t.select();
+      document.execCommand('copy');
+      document.body.removeChild(t);
+      showSuccess("QR link copied!");
+    }
+  });
+
+  // Auto-fill from ?ref=CODE on the marketing page URL
+  (function(){
+    renderGeneric();
+
+    const params = new URLSearchParams(window.location.search);
+    const refParam = params.get('ref');
+    if(refParam){
+      refInput.value = decodeURIComponent(refParam);
+      setTimeout(generate, 50);
+    }
+  })();
 </script>
 
 </body>
