@@ -177,8 +177,11 @@
   const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
+  // What you want:
+  // - default (empty/invalid) = marketing site
+  // - valid referral = app referral URL (or any URL you choose)
   const GENERIC_LINK = "https://movethatcouch.com";
-  const SHORT_REF_BASE = "https://movethatcouch.com/r/";
+  const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
 
   let currentFinalLink = GENERIC_LINK;
 
@@ -186,6 +189,8 @@
     errorMsg.textContent = text;
     errorMsg.style.display = 'block';
     successMsg.style.display = 'none';
+    greetingMsg.style.display = 'none';
+    greetingMsg.textContent = '';
   }
   function showSuccess(text){
     successMsg.textContent = text;
@@ -198,14 +203,6 @@
     greetingMsg.style.display = 'none';
     greetingMsg.textContent = '';
   }
-  function showGreeting(text){
-  // Replace the green success message with the friendly greeting
-  showSuccess(text);
-
-  // Hide the separate greeting line so we don't show two messages
-  greetingMsg.style.display = 'none';
-  greetingMsg.textContent = '';
-}
 
   function extractReferralCode(input){
     const s = (input || "").trim();
@@ -252,7 +249,7 @@
     }
 
     try {
-      // typeNumber 0 = auto, error correction M = solid scannability
+      // typeNumber 0 = auto, error correction M
       const qr = window.qrcode(0, 'M');
       qr.addData(text);
       qr.make();
@@ -289,32 +286,36 @@
     }
   }
 
+  // This endpoint already exists in your app per your code:
+  // GET https://app.movethatcouch.com/api/public/referral-name?code=XXXX
+  // If code is invalid, it should return non-2xx or a payload without a usable name.
+  // We'll treat "no usable display" as invalid and show generic.
   async function validateReferralCode(code){
-  const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
+    const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
 
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return null;
+    try {
+      const res = await fetch(url, { method: "GET" });
+      if (!res.ok) return null;
 
-    const data = await res.json();
+      const data = await res.json();
 
-    const display =
-      (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
-      (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
-      (data && data.firstName) ? `${data.firstName}` :
-      null;
+      const display =
+        (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
+        (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
+        (data && data.firstName) ? `${data.firstName}` :
+        null;
 
-    return display;
-  } catch (err) {
-    return null;
+      return display;
+    } catch (err) {
+      return null;
+    }
   }
-}
 
-  function renderGeneric(){
+  function renderGeneric(message){
     clearMessages();
     setCurrentLink(GENERIC_LINK);
     const ok = drawQr(GENERIC_LINK);
-    if(ok) showSuccess("Showing generic MOVE THAT COUCH! QR.");
+    if(ok) showSuccess(message || "Showing generic MOVE THAT COUCH! QR.");
   }
 
   async function generate(){
@@ -323,20 +324,46 @@
     const raw = refInput.value;
     const code = extractReferralCode(raw);
 
+    // Empty OR couldn't parse a code -> generic
     if(!raw.trim() || !code){
-      renderGeneric();
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
       return;
     }
 
-    const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
-    setCurrentLink(shortLink);
+    // OPTIONAL: quick client-side sanity check to avoid needless API calls
+    if(!/^[A-Za-z0-9]{4,20}$/.test(code)){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      showError("That doesn’t look like a valid referral code. Please paste your referral link or code.");
+      return;
+    }
 
-    const ok = drawQr(shortLink);
+    // Disable generate while validating
+    generateBtn.disabled = true;
+
+    // Validate code exists (and grab display name if available)
+    const displayName = await validateReferralCode(code);
+
+    // Re-enable generate
+    generateBtn.disabled = false;
+
+    if(!displayName){
+      // Treat as invalid referral code => generic, and show error
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      showError("Referral code not found. Please check the code and try again.");
+      return;
+    }
+
+    // VALID => build final link
+    // If you truly "do not care what the link looks like", this can be app URL OR /r/ URL.
+    // This version encodes the APP URL directly:
+    const finalLink = APP_REF_BASE + encodeURIComponent(code);
+
+    setCurrentLink(finalLink);
+
+    const ok = drawQr(finalLink);
     if(ok){
-  // Default success message (may be replaced by greeting if name lookup succeeds)
-  showSuccess("Personalized QR generated!");
-  await tryLoadReferrerName(code);
-}
+      showSuccess(`Personalized QR generated! (Hi ${displayName} 👋)`);
+    }
   }
 
   generateBtn.addEventListener('click', generate);
@@ -379,13 +406,13 @@
       "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js",
       () => start(),
       () => {
-        renderGeneric();
+        renderGeneric("Showing generic MOVE THAT COUCH! QR.");
         showError("QR library failed to load (CDN blocked).");
       }
     );
 
     function start(){
-      renderGeneric();
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
 
       const params = new URLSearchParams(window.location.search);
       const refParam = params.get('ref');
