@@ -16,9 +16,6 @@
       --muted: #475569;
       --line: #e2e8f0;
 
-      --green1: #22c55e;
-      --green2: #34d399;
-
       --pillBg: #eafff1;
       --pillBorder: #b8f3cf;
       --pillInk: #0b7a35;
@@ -27,11 +24,7 @@
       --qrBg: #f0fff6;
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #fff;
-    }
+    html, body { margin:0; padding:0; background:#fff; }
 
     /* One single printable page */
     #flyer{
@@ -198,35 +191,11 @@
       color: var(--ink);
     }
 
-    /* Slight variant spacing for bottom half to look centered when folded */
-    .tent.bottom{
-      padding-top: 110px;
-    }
+    .tent.bottom{ padding-top: 110px; }
   </style>
 </head>
 
 <body>
-  <!-- Inline SVG icon sprite (self-contained; no external fonts/assets) -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
-    <symbol id="i-chat" viewBox="0 0 24 24">
-      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-    <symbol id="i-truck" viewBox="0 0 24 24">
-      <path d="M10 17h4V6H3v11h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M14 9h5l2 3v5h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="7.5" cy="17.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
-      <circle cx="17.5" cy="17.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
-    </symbol>
-    <symbol id="i-gift" viewBox="0 0 24 24">
-      <path d="M20 12v10H4V12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M2 7h20v5H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 22V7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-  </svg>
-
   <div id="flyer">
     <!-- TOP TENT -->
     <section class="tent top">
@@ -249,15 +218,33 @@
 
         <div class="pillRow">
           <div class="pill">
-            <svg aria-hidden="true"><use href="#i-chat" xlink:href="#i-chat"></use></svg>
+            <!-- chat -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+            </svg>
             Get delivery quotes
           </div>
+
           <div class="pill">
-            <svg aria-hidden="true"><use href="#i-truck" xlink:href="#i-truck"></use></svg>
+            <!-- truck -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 17h4V6H3v11h2"/>
+              <path d="M14 9h5l2 3v5h-2"/>
+              <circle cx="7.5" cy="17.5" r="2.5"/>
+              <circle cx="17.5" cy="17.5" r="2.5"/>
+            </svg>
             Sign up to drive
           </div>
+
           <div class="pill">
-            <svg aria-hidden="true"><use href="#i-gift" xlink:href="#i-gift"></use></svg>
+            <!-- gift -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 12v10H4V12"/>
+              <path d="M2 7h20v5H2z"/>
+              <path d="M12 22V7"/>
+              <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/>
+              <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/>
+            </svg>
             Refer friends, earn cash
           </div>
         </div>
@@ -302,15 +289,33 @@
 
         <div class="pillRow">
           <div class="pill">
-            <svg aria-hidden="true"><use href="#i-chat" xlink:href="#i-chat"></use></svg>
+            <!-- chat -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+            </svg>
             Get delivery quotes
           </div>
+
           <div class="pill">
-            <svg aria-hidden="true"><use href="#i-truck" xlink:href="#i-truck"></use></svg>
+            <!-- truck -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 17h4V6H3v11h2"/>
+              <path d="M14 9h5l2 3v5h-2"/>
+              <circle cx="7.5" cy="17.5" r="2.5"/>
+              <circle cx="17.5" cy="17.5" r="2.5"/>
+            </svg>
             Sign up to drive
           </div>
+
           <div class="pill">
-            <svg aria-hidden="true"><use href="#i-gift" xlink:href="#i-gift"></use></svg>
+            <!-- gift -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 12v10H4V12"/>
+              <path d="M2 7h20v5H2z"/>
+              <path d="M12 22V7"/>
+              <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/>
+              <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/>
+            </svg>
             Refer friends, earn cash
           </div>
         </div>
