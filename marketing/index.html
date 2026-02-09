@@ -69,6 +69,7 @@
     .btn-green { background:#22c55e; color:white; }
     .btn-blue { background:#2563eb; color:white; }
     .btn-gray { background:#475569; color:white; }
+
     .note { color:#475569; font-size:14px; margin-top:10px; line-height:1.35; }
     .error { color:#b91c1c; font-weight:700; margin-top:10px; display:none; }
     .success { color:#166534; font-weight:700; margin-top:10px; display:none; }
@@ -94,14 +95,25 @@
       padding: 12px;
       text-align:center;
     }
-    canvas{
+
+    /* The library will inject an <img> or <canvas> inside qrTarget */
+    #qrTarget {
       width: 240px;
       height: 240px;
-      image-rendering: pixelated;
-      display:block;
       margin: 0 auto;
-      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
     }
+
+    /* Make whatever it injects fit nicely */
+    #qrTarget img, #qrTarget canvas {
+      width: 240px !important;
+      height: 240px !important;
+      display: block;
+    }
+
     .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
     .divider { height:1px; background:#e2e8f0; margin:16px 0; }
 
@@ -133,7 +145,7 @@
 
     <div class="qrWrap">
       <div class="qrBox">
-        <canvas id="qrCanvas" width="240" height="240"></canvas>
+        <div id="qrTarget"></div>
         <div class="small" id="finalLinkText"></div>
       </div>
 
@@ -178,7 +190,7 @@
   </div>
 </main>
 
-<!-- qrcode-generator build -->
+<!-- Must exist in your repo at /assets/qrcode.min.js -->
 <script src="/assets/qrcode.min.js"></script>
 
 <script>
@@ -189,10 +201,10 @@
   const errorMsg = document.getElementById('errorMsg');
   const successMsg = document.getElementById('successMsg');
   const greetingMsg = document.getElementById('greetingMsg');
-  const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
+  const qrTarget = document.getElementById('qrTarget');
 
-  // Keep payload short to avoid QR overflow
+  // Keep QR payload SHORT to avoid overflow issues
   const GENERIC_LINK = "https://movethatcouch.com";
   const SHORT_REF_BASE = "https://movethatcouch.com/r/";
 
@@ -251,61 +263,39 @@
     }
   }
 
-  function clearCanvas(){
-    const ctx = qrCanvas.getContext('2d');
-    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+  function setCurrentLink(link){
+    currentFinalLink = link;
+    finalLinkText.textContent = link;
   }
 
-  // ✅ Correct renderer for qrcode-generator
-  function drawQr(text) {
+  function drawQr(text){
     try {
-      clearCanvas();
+      clearMessages();
 
-      if (typeof qrcode !== "function") {
-        showError("QR library failed to load. qrcode() not found.");
+      // Clear the target
+      qrTarget.innerHTML = "";
+
+      if (typeof QRCode !== "function") {
+        showError("QR library failed to load. QRCode constructor not found. Check /assets/qrcode.min.js");
         return false;
       }
 
-      // Version 6, low error correction: fits short URLs reliably
-      const qr = qrcode(6, 'L');
-      qr.addData(text);
-      qr.make();
-
-      const ctx = qrCanvas.getContext("2d");
-      const size = qrCanvas.width;
-      const cells = qr.getModuleCount();
-      const tileSize = size / cells;
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, size, size);
-
-      ctx.fillStyle = "#000000";
-      for (let row = 0; row < cells; row++) {
-        for (let col = 0; col < cells; col++) {
-          if (qr.isDark(row, col)) {
-            ctx.fillRect(
-              Math.floor(col * tileSize),
-              Math.floor(row * tileSize),
-              Math.ceil(tileSize),
-              Math.ceil(tileSize)
-            );
-          }
-        }
-      }
+      // qrcodejs renders into the element you pass it
+      new QRCode(qrTarget, {
+        text: text,
+        width: 240,
+        height: 240,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : undefined
+      });
 
       return true;
     } catch (err) {
       console.error(err);
-      showError("QR rendering failed. (Console shows details.)");
+      showError("QR rendering failed. Check console for details.");
       return false;
     }
-  }
-
-  function setCurrentLink(link){
-    currentFinalLink = link;
-    finalLinkText.textContent = link;
-    downloadQrPngBtn.disabled = false;
-    copyLinkBtn.disabled = false;
   }
 
   async function tryLoadReferrerName(code){
@@ -325,7 +315,7 @@
         showGreeting(`Hi ${display}! The flyers on this page now contain your unique referral QR code.`);
       }
     } catch (_) {
-      // silent fail
+      // silent
     }
   }
 
@@ -333,6 +323,7 @@
     hideGreeting();
     clearMessages();
     setCurrentLink(GENERIC_LINK);
+
     const ok = drawQr(GENERIC_LINK);
     if(ok) showSuccess("Showing generic MOVE THAT COUCH! QR.");
   }
@@ -344,13 +335,12 @@
     const raw = refInput.value;
     const code = extractReferralCode(raw);
 
-    // Empty OR invalid -> generic QR
+    // Empty OR invalid -> generic (no hard error)
     if(!raw.trim() || !code){
       renderGeneric();
       return;
     }
 
-    // Valid -> personalized short link
     const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
     setCurrentLink(shortLink);
 
@@ -363,12 +353,9 @@
 
   generateBtn.addEventListener('click', generate);
 
+  // For now: no reliable PNG export from qrcodejs without extra work.
   downloadQrPngBtn.addEventListener('click', () => {
-    if(!currentFinalLink) return;
-    const link = document.createElement('a');
-    link.download = 'movethatcouch-qr.png';
-    link.href = qrCanvas.toDataURL('image/png');
-    link.click();
+    showError("PNG download will be available soon. For now, use Copy QR Link.");
   });
 
   copyLinkBtn.addEventListener('click', async () => {
@@ -387,7 +374,7 @@
     }
   });
 
-  // Initial load: show generic, then auto-fill if ?ref=CODE is present
+  // On load: always show generic immediately, then apply ?ref= if present
   (function(){
     renderGeneric();
 
