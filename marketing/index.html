@@ -492,6 +492,7 @@
       : "https://www.movethatcouch.com/";
   }
 
+  // Flyer 1 (Shop)
   flyer1Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 1…");
@@ -509,7 +510,7 @@
     }
   });
 
-  // ✅ WIRED: Flyer 2 (Countertop Tent)
+  // Flyer 2 (Countertop Tent)
   flyer2Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 2…");
@@ -517,7 +518,8 @@
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/countertop-tent.html",
-filename: "MTC-Countertop-Tent.png",
+        qrLink, // ✅ important
+        filename: "MTC-Countertop-Tent.png",
         onStatus: status
       });
     } catch (e) {
@@ -526,7 +528,25 @@ filename: "MTC-Countertop-Tent.png",
     }
   });
 
-  flyer3Btn.addEventListener("click", () => status("Flyer 3 coming next…"));
+  // Flyer 3 (Tear-Off)
+  flyer3Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Flyer 3…");
+
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/tear-off.html",
+        qrLink,
+        filename: "MTC-Tear-Off-Flyer.png",
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
+  // Flyer 4 (placeholder)
   flyer4Btn.addEventListener("click", () => status("Flyer 4 coming next…"));
 </script>
 
