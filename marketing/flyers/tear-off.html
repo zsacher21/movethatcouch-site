@@ -177,7 +177,7 @@
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
-      margin-bottom: 26px; /* more breathing room */
+      margin-bottom: 26px;
     }
     .tearTop h3{
       margin:0;
@@ -206,12 +206,8 @@
     .tab{
       position: relative;
       padding: 18px 16px 18px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:flex-start;
-      gap: 12px;
-      overflow:hidden; /* keep everything within each tab */
+      overflow:hidden;
+      background:#fff;
     }
     .tab:not(:last-child)::after{
       content:"";
@@ -224,38 +220,74 @@
       opacity: 0.95;
     }
 
-    /* QR */
+    /* === NEW TAB LAYOUT (top actions, middle QR, bottom brand) === */
+    .tabTopActions{
+      position:absolute;
+      left:50%;
+      top: 90px;                 /* away from top edge */
+      transform: translateX(-50%);
+      width: 440px;
+      height: 440px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 6;
+      pointer-events:none;
+    }
+    .tabTopActions .actionsRot{
+      transform: rotate(-90deg);
+      transform-origin: center;
+      width: 560px;
+    }
+
+    /* Middle QR (moved down so it can't get torn) */
+    .tabQrWrap{
+      position:absolute;
+      left:50%;
+      top: 420px;                /* safely below tear edge */
+      transform: translateX(-50%);
+      text-align:center;
+      z-index: 5;
+      width: 280px;
+    }
     .tabQr{
       width: 240px;
       height: 240px;
       display:block;
+      margin: 0 auto;
       background:#fff;
       image-rendering: pixelated;
-      margin-top: 10px;
       border-radius: 12px;
-      z-index: 5;
     }
     .scanLbl{
       font-size: 20px;
       font-weight: 950;
-      margin: 6px 0 0;
+      margin: 10px 0 0;
       color:#0f172a;
       text-align:center;
-      z-index: 5;
+      white-space:nowrap;
     }
 
-    /* BIG vertical brand filler (centered better) */
-    .vBrand{
+    /* Bottom vertical brand */
+    .tabBottomBrand{
       position:absolute;
       left:50%;
-      top:56%; /* was lower; bring closer to center */
-      transform: translate(-50%, -50%) rotate(-90deg);
+      bottom: 140px;
+      transform: translateX(-50%);
+      width: 520px;
+      height: 520px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index: 3;
+      pointer-events:none;
+    }
+    .tabBottomBrand .vBrand{
+      transform: rotate(-90deg);
       transform-origin:center;
       text-align:center;
-      pointer-events:none;
+      width: 620px;
       opacity: 0.95;
-      width: 620px; /* slightly wider so it feels like a centerpiece */
-      z-index: 2;
     }
     .vLogo{
       width: 84px;
@@ -281,33 +313,13 @@
       white-space: nowrap;
     }
 
-    /* Rotated actions (real container so it doesn't clip) */
-    .actionsRotWrap{
-      position:absolute;
-      left:50%;
-      bottom: 120px;            /* keep it comfortably low */
-      transform: translateX(-50%);
-      width: 440px;             /* container inside the tab */
-      height: 440px;            /* big enough for 3 lines rotated */
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index: 6;
-      pointer-events:none;
-    }
-    .actionsRot{
-      transform: rotate(-90deg);
-      transform-origin: center;
-      width: 560px;             /* this becomes the "height" after rotation */
-    }
-
+    /* Actions styling */
     .actions{
       display:flex;
       flex-direction:column;
       gap: 16px;
       align-items:flex-start;
     }
-
     .act{
       display:flex;
       align-items:center;
@@ -318,7 +330,6 @@
       line-height: 1.1;
       white-space: nowrap;
     }
-
     .box{
       width: 18px;
       height: 18px;
@@ -473,16 +484,8 @@
         tab.className = "tab";
 
         tab.innerHTML = `
-          <canvas class="tabQr" width="240" height="240"></canvas>
-          <div class="scanLbl">Scan to sign up</div>
-
-          <div class="vBrand" aria-hidden="true">
-            <img class="vLogo" src="/mtc_couch_appicon_white_1024_adjusted.png" alt="" crossorigin="anonymous" />
-            <div class="vName">MOVE THAT COUCH!</div>
-            <div class="vTag">Furniture delivery, made easy.</div>
-          </div>
-
-          <div class="actionsRotWrap" aria-hidden="true">
+          <!-- TOP: Actions -->
+          <div class="tabTopActions" aria-hidden="true">
             <div class="actionsRot">
               <div class="actions">
                 <div class="act">
@@ -501,6 +504,21 @@
                   <span>Refer friends, earn cash.</span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- MIDDLE: QR -->
+          <div class="tabQrWrap">
+            <canvas class="tabQr" width="240" height="240"></canvas>
+            <div class="scanLbl">Scan to sign up</div>
+          </div>
+
+          <!-- BOTTOM: Brand -->
+          <div class="tabBottomBrand" aria-hidden="true">
+            <div class="vBrand">
+              <img class="vLogo" src="/mtc_couch_appicon_white_1024_adjusted.png" alt="" crossorigin="anonymous" />
+              <div class="vName">MOVE THAT COUCH!</div>
+              <div class="vTag">Furniture delivery, made easy.</div>
             </div>
           </div>
         `;
