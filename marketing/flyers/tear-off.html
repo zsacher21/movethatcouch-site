@@ -7,7 +7,7 @@
 
   <style>
     :root{
-      /* US Letter landscape @ 300dpi */
+      /* US Letter Landscape @ 300dpi */
       --W: 3300px;
       --H: 2550px;
 
@@ -22,751 +22,439 @@
       --pillBorder: #b8f3cf;
       --pillInk: #0b7a35;
 
-      --qrBg: #f0fff6;
       --qrBorder: #b8f3cf;
+      --qrBg: #f0fff6;
 
-      --dash: #b8c7e6; /* light blue-ish dashed separators */
+      --dash: #9fbbe0;
     }
 
     html, body { margin:0; padding:0; background:#fff; }
 
-    /* Export root MUST be #flyer */
+    /* Exporter expects this */
     #flyer{
       width: var(--W);
       height: var(--H);
-      position: relative;
-      overflow: hidden;
-      box-sizing: border-box;
+      background:#fff;
+      overflow:hidden;
+      position:relative;
+      box-sizing:border-box;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--ink);
-      background: #fff;
     }
 
-    /* ===== TOP HERO ===== */
-    .hero{
-      display: grid;
-      grid-template-columns: 1.05fr 1.95fr;
-      height: 420px;
+    /* ===== HEADER ===== */
+    .header{
+      height: 560px;
+      display:grid;
+      grid-template-columns: 1.05fr 1.35fr;
+      border-bottom: 2px solid var(--line);
     }
 
-    .heroLeft{
-      background: linear-gradient(90deg, var(--green1), var(--green2));
-      padding: 72px 78px;
+    .brandLeft{
+      background: linear-gradient(135deg, var(--green1), var(--green2));
+      padding: 70px 70px;
       display:flex;
       align-items:center;
-      gap: 36px;
-      color:#fff;
+      gap: 34px;
+      box-sizing:border-box;
     }
-
-    .appIcon{
-      width: 124px;
-      height: 124px;
+    .brandLogo{
+      width: 150px;
+      height: 150px;
       border-radius: 28px;
       background:#fff;
       display:flex;
       align-items:center;
       justify-content:center;
       overflow:hidden;
-      flex: 0 0 auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,.10);
     }
-    .appIcon img{
-      width: 112px;
-      height: 112px;
-      object-fit: contain;
+    .brandLogo img{
+      width: 120px;
+      height: 120px;
+      object-fit:contain;
       display:block;
     }
-
-    .brandStack .brand{
-      font-size: 76px;
+    .brandText h1{
+      margin:0;
+      font-size: 82px;
       font-weight: 950;
       letter-spacing: 1px;
-      line-height: 1.0;
-      margin: 0;
+      color:#fff;
+      line-height:1.0;
     }
-    .brandStack .tag{
+    .brandText .sub{
       margin-top: 10px;
       font-size: 34px;
       font-weight: 800;
-      opacity: 0.95;
+      color:#ecfeff;
+      opacity: .95;
     }
 
-    .heroRight{
-      padding: 62px 78px;
+    .headerRight{
+      padding: 64px 70px 54px;
+      box-sizing:border-box;
+      position:relative;
       display:grid;
-      grid-template-columns: 1fr 430px;
-      gap: 44px;
-      align-items: start;
-      background:#fff;
+      grid-template-columns: 1fr 520px;
+      gap: 36px;
+      align-items:start;
     }
 
-    .headline{
-      font-size: 58px;
+    .hTitle{
+      margin:0;
+      font-size: 56px;
       font-weight: 950;
-      margin: 0 0 12px 0;
       line-height: 1.05;
     }
-    .desc{
+    .hDesc{
+      margin: 14px 0 18px;
       font-size: 30px;
       color: var(--muted);
-      line-height: 1.25;
-      margin: 0 0 18px 0;
-      max-width: 1500px;
+      line-height: 1.22;
+      max-width: 1450px;
     }
 
-    /* top icon list (export-safe inline SVG) */
-    .catRow{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 16px 22px;
+    /* Categories: force wrapping instead of overflowing off-page */
+    .cats{
       margin-top: 10px;
-      align-items: center;
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px 18px;
+      max-width: 1500px;
     }
     .cat{
-      display:flex;
+      display:inline-flex;
       align-items:center;
-      gap: 10px;
+      gap: 8px;
       font-size: 26px;
       font-weight: 900;
       color: var(--ink);
       white-space: nowrap;
     }
-    .cat svg{
-      width: 26px;
-      height: 26px;
-      flex: 0 0 auto;
-      color: var(--ink);
-    }
+    .cat svg{ width: 24px; height: 24px; color: var(--ink); }
 
     .qrCard{
-      width: 430px;
-      justify-self: end;
-      border-radius: 26px;
+      justify-self:end;
+      width: 520px;
+      border-radius: 28px;
       border: 4px solid var(--qrBorder);
       background: var(--qrBg);
-      padding: 22px 22px 18px;
-      box-sizing: border-box;
+      padding: 26px 26px 18px;
       text-align:center;
+      box-sizing:border-box;
     }
-    .qrMain{
-      width: 340px;
-      height: 340px;
-      border-radius: 18px;
+    .qrCanvasBig{
+      width: 420px;
+      height: 420px;
       background:#fff;
+      border-radius: 18px;
       image-rendering: pixelated;
       display:block;
       margin: 0 auto 14px;
     }
     .qrLabel{
-      font-size: 28px;
+      margin:0;
+      font-size: 34px;
       font-weight: 950;
-      margin: 0;
-      color: var(--green1);
+      color: var(--pillInk);
     }
 
-    .legalTop{
-      padding: 12px 78px 0;
+    .legalLine{
+      position:absolute;
+      left:0; right:0;
+      top: 560px;
+      transform: translateY(-2px);
+      height: 2px;
+      background: var(--line);
+    }
+    .legalText{
+      position:absolute;
+      left: 70px;
+      right: 70px;
+      top: 520px;
       font-size: 18px;
       color:#64748b;
-      line-height: 1.25;
-      border-bottom: 2px solid var(--line);
-      height: 70px;
-      display:flex;
-      align-items:center;
+      line-height:1.25;
+      opacity:.95;
     }
 
-    /* ===== TEAR-OFF SECTION ===== */
-    .tearHeader{
+    /* ===== SECTION LABEL ===== */
+    .sectionRow{
+      height: 86px;
       display:flex;
-      justify-content: space-between;
-      align-items:center;
-      padding: 26px 78px 14px;
+      align-items:flex-end;
+      justify-content:space-between;
+      padding: 22px 70px 10px;
+      box-sizing:border-box;
     }
-    .tearHeader .left{
-      font-size: 44px;
+    .sectionRow .left{
+      font-size: 36px;
       font-weight: 950;
-      margin: 0;
+      color: var(--ink);
     }
-    .tearHeader .right{
+    .sectionRow .right{
       font-size: 26px;
       font-weight: 900;
-      color: #64748b;
+      color:#64748b;
       display:flex;
       align-items:center;
       gap: 10px;
     }
-    .tearHeader .right svg{
-      width: 22px;
-      height: 22px;
-      color:#64748b;
-    }
+    .sectionRow .right svg{ width: 22px; height: 22px; color:#64748b; }
 
+    /* ===== TABS GRID ===== */
     .tabsWrap{
-      margin: 0 78px;
-      border: 2px solid var(--line);
-      border-radius: 18px;
-      padding: 18px 16px;
-      box-sizing: border-box;
+      padding: 10px 50px 40px;
+      box-sizing:border-box;
     }
 
-    .tabsGrid{
+    /* The key fix: hard grid, 10 columns, NO WRAP */
+    .tabs{
+      width: calc(var(--W) - 100px);
+      height: calc(var(--H) - 560px - 86px - 60px);
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      overflow:hidden;
       display:grid;
       grid-template-columns: repeat(10, 1fr);
-      gap: 0;
-      align-items: stretch;
+      background:#fff;
     }
 
     .tab{
-      position: relative;
-      padding: 14px 12px 10px;
-      min-height: 1560px;
-      box-sizing: border-box;
-      display:flex;
-      flex-direction: column;
-      align-items: center;
+      position:relative;
+      padding: 26px 22px 18px;
+      box-sizing:border-box;
+      min-width: 0;
     }
-
-    /* dashed separators between tabs */
-    .tab:not(:last-child){
-      border-right: 4px dashed var(--dash);
+    .tab:not(:first-child){
+      border-left: 4px dashed var(--dash);
     }
 
     .tabTopIcon{
-      width: 44px;
-      height: 44px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin-top: 10px;
-      margin-bottom: 24px;
-    }
-    .tabTopIcon svg{
-      width: 44px;
-      height: 44px;
-      color: var(--green1);
+      width: 42px; height: 42px;
+      margin: 0 auto 10px;
+      color: var(--pillInk);
     }
 
     .tabBrand{
       text-align:center;
       font-weight: 950;
-      color: var(--green1);
-      font-size: 18px;
-      letter-spacing: 0.4px;
-      line-height: 1.1;
-      margin-bottom: 48px;
+      color: var(--pillInk);
+      letter-spacing: .5px;
+      line-height: 1.0;
+      font-size: 22px;
     }
-
-    .tabSub{
-      font-size: 16px;
-      color: #64748b;
+    .tabTag{
       text-align:center;
-      margin-bottom: 70px;
-      line-height: 1.2;
+      color: #64748b;
+      font-size: 16px;
+      font-weight: 800;
+      margin-top: 8px;
+      line-height: 1.05;
     }
 
     .tabQr{
-      width: 230px;
-      height: 230px;
+      width: 250px;
+      height: 250px;
+      display:block;
+      margin: 18px auto 10px;
       background:#fff;
       image-rendering: pixelated;
-      display:block;
-      margin: 0 auto 44px;
       border-radius: 10px;
     }
 
     .tabScan{
-      font-size: 22px;
-      font-weight: 950;
-      margin: 0 0 110px 0;
       text-align:center;
+      font-size: 18px;
+      font-weight: 950;
+      color: var(--ink);
+      margin-top: 6px;
     }
 
-    .tabActions{
-      margin-top: auto;
-      width: 100%;
-      padding-bottom: 14px;
-      display:flex;
-      flex-direction: column;
-      gap: 18px;
-      align-items: center;
+    .tabBottom{
+      position:absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      font-size: 14px;
+      color:#64748b;
+      line-height:1.35;
     }
 
-    .actionRow{
+    .miniRow{
       display:flex;
       align-items:center;
       gap: 10px;
-      font-size: 16px;
-      color: #475569;
-      width: 92%;
-      justify-content: center;
+      margin-top: 10px;
     }
-    .actionRow svg{
-      width: 18px;
-      height: 18px;
+    .miniRow svg{
+      width: 18px; height: 18px;
       color: var(--ink);
       flex: 0 0 auto;
     }
-
-    .box{
-      width: 16px;
-      height: 16px;
-      border: 2px solid #0f172a;
-      border-radius: 2px;
-      display:inline-block;
-      margin-right: 8px;
-      flex: 0 0 auto;
+    .miniRow span{
+      font-weight: 800;
+      color:#0f172a;
+      opacity:.9;
     }
-
-    /* keep canvases crisp in export */
-    canvas{ image-rendering: pixelated; }
   </style>
 </head>
 
 <body>
-  <div id="flyer">
+  <!-- Inline SVG icons (self-contained for export) -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="i-couch" viewBox="0 0 24 24">
+      <path d="M4 11V9a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M3 12h18a2 2 0 0 1 2 2v2H1v-2a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M4 18v2M20 18v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
 
-    <!-- TOP HERO -->
-    <section class="hero">
-      <div class="heroLeft">
-        <div class="appIcon">
-          <img src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH! logo" />
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="i-truck" viewBox="0 0 24 24">
+      <path d="M10 17h4V6H3v11h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 9h5l2 3v5h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="7.5" cy="17.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="17.5" cy="17.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+
+    <symbol id="i-gift" viewBox="0 0 24 24">
+      <path d="M20 12v10H4V12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 7h20v5H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 22V7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="i-scissors" viewBox="0 0 24 24">
+      <path d="M4 6l8 8M4 18l8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="6" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="6" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M14 14l6 6M14 10l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- Category icons -->
+    <symbol id="i-box" viewBox="0 0 24 24">
+      <path d="M21 8l-9-5-9 5 9 5 9-5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M3 8v8l9 5 9-5V8" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M12 13v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24">
+      <rect x="3" y="6" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+      <path d="M8 20h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-chair" viewBox="0 0 24 24">
+      <path d="M7 20V10a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M7 14h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <div id="flyer">
+    <div class="header">
+      <div class="brandLeft">
+        <div class="brandLogo">
+          <img src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH! logo">
         </div>
-        <div class="brandStack">
-          <div class="brand">MOVE THAT COUCH!</div>
-          <div class="tag">Furniture delivery, made easy.</div>
+        <div class="brandText">
+          <h1>MOVE THAT COUCH!</h1>
+          <div class="sub">Furniture delivery, made easy.</div>
         </div>
       </div>
 
-      <div class="heroRight">
+      <div class="headerRight">
         <div>
-          <h2 class="headline">Need help getting it home?</h2>
-          <p class="desc">
+          <h2 class="hTitle">Need help getting it home?</h2>
+          <div class="hDesc">
             Scan to get help delivering a single item or small load. Nearby drivers can send quotes.
-          </p>
+          </div>
 
-          <!-- Category icons (inline SVG; export-safe) -->
-          <div class="catRow">
-            <div class="cat">
-              <span class="box"></span>
-              Couches
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Dressers
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Mattresses
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Tables
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Chairs
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Appliances
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              TVs
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Art
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Mirrors
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              Pianos
-            </div>
-            <div class="cat">
-              <span class="box"></span>
-              + More
-            </div>
+          <div class="cats">
+            <div class="cat"><svg><use href="#i-couch"/></svg> Couches</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Dressers</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Mattresses</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Tables</div>
+            <div class="cat"><svg><use href="#i-chair"/></svg> Chairs</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Appliances</div>
+            <div class="cat"><svg><use href="#i-tv"/></svg> TVs</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Art</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Mirrors</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> Pianos</div>
+            <div class="cat"><svg><use href="#i-box"/></svg> + More</div>
           </div>
         </div>
 
         <div class="qrCard">
-          <canvas class="qrMain" id="qrMain" width="340" height="340"></canvas>
+          <canvas id="qrHeader" class="qrCanvasBig" width="420" height="420"></canvas>
           <p class="qrLabel">Scan to sign up</p>
         </div>
-      </div>
-    </section>
 
-    <!-- Legal under hero -->
-    <div class="legalTop">
-      MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees, agents, or contractors of MOVE THAT COUCH!. The platform does not provide transportation services and is not responsible for loss, damage, or delays.
+        <div class="legalText">
+          MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees, agents, or contractors of MOVE THAT COUCH!.
+          The platform does not provide transportation services and is not responsible for loss, damage, or delays.
+        </div>
+      </div>
     </div>
 
-    <!-- Tear-off header -->
-    <div class="tearHeader">
+    <div class="sectionRow">
       <div class="left">Tear off a tab below to scan later!</div>
-      <div class="right">
-        <!-- scissors icon -->
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M20 4L8.5 15.5"/>
-          <path d="M8.5 8.5L20 20"/>
-          <circle cx="6" cy="6" r="2.5"/>
-          <circle cx="6" cy="18" r="2.5"/>
-        </svg>
-        Cut along dotted lines
-      </div>
+      <div class="right"><svg><use href="#i-scissors"/></svg> Cut along dotted lines</div>
     </div>
 
-    <!-- Tabs -->
     <div class="tabsWrap">
-      <div class="tabsGrid">
-        <!-- Create 10 tabs -->
-        <!-- Reuse same structure; canvases are filled by JS -->
-        <!-- Tab 1 -->
+      <div class="tabs" id="tabs">
+        <!-- 10 tabs -->
         <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <!-- couch icon -->
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
+          <svg class="tabTopIcon"><use href="#i-couch"/></svg>
           <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
+          <div class="tabTag">Furniture delivery,<br/>made easy.</div>
+          <canvas class="tabQr" id="tqr1" width="250" height="250"></canvas>
           <div class="tabScan">Scan to sign up</div>
 
-          <div class="tabActions">
-            <div class="actionRow">
-              <span class="box"></span>
-              <!-- chat -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
-              </svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow">
-              <span class="box"></span>
-              <!-- truck -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M10 17h4V6H3v11h2"/>
-                <path d="M14 9h5l2 3v5h-2"/>
-                <circle cx="7.5" cy="17.5" r="2.5"/>
-                <circle cx="17.5" cy="17.5" r="2.5"/>
-              </svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow">
-              <span class="box"></span>
-              <!-- gift -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 12v10H4V12"/>
-                <path d="M2 7h20v5H2z"/>
-                <path d="M12 22V7"/>
-                <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/>
-                <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/>
-              </svg>
-              Refer friends, earn cash.
-            </div>
+          <div class="tabBottom">
+            <div class="miniRow"><svg><use href="#i-chat"/></svg><span>Get delivery quotes.</span></div>
+            <div class="miniRow"><svg><use href="#i-truck"/></svg><span>Sign up to drive.</span></div>
+            <div class="miniRow"><svg><use href="#i-gift"/></svg><span>Refer friends, earn cash.</span></div>
           </div>
         </div>
 
-        <!-- Tabs 2..10 (same markup) -->
-        <!-- Tip: identical content; just canvases get filled -->
-        <!-- Tab 2 -->
+        <!-- clone 2..10 -->
+        ${Array.from({length:9}).map((_,i)=>`
         <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
+          <svg class="tabTopIcon"><use href="#i-couch"/></svg>
           <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
+          <div class="tabTag">Furniture delivery,<br/>made easy.</div>
+          <canvas class="tabQr" id="tqr${i+2}" width="250" height="250"></canvas>
           <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
+
+          <div class="tabBottom">
+            <div class="miniRow"><svg><use href="#i-chat"/></svg><span>Get delivery quotes.</span></div>
+            <div class="miniRow"><svg><use href="#i-truck"/></svg><span>Sign up to drive.</span></div>
+            <div class="miniRow"><svg><use href="#i-gift"/></svg><span>Refer friends, earn cash.</span></div>
           </div>
         </div>
-
-        <!-- Tabs 3-10 -->
-        <!-- To keep this message readable: tabs 3-10 are identical copies of Tab 2. -->
-        <!-- Paste 8 more copies if you want exactly 10. -->
-        <!-- If you already have 10 in your existing file, just keep them and ensure they use inline SVG like above. -->
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
-        <div class="tab">
-          <div class="tabTopIcon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-              <path d="M5 11V9a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v2"/>
-              <path d="M4 12a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4v-4Z"/>
-              <path d="M6 16v2M18 16v2"/>
-            </svg>
-          </div>
-          <div class="tabBrand">MOVE THAT<br/>COUCH!</div>
-          <div class="tabSub">Furniture delivery,<br/>made easy.</div>
-          <canvas class="tabQr qr" width="230" height="230"></canvas>
-          <div class="tabScan">Scan to sign up</div>
-          <div class="tabActions">
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-              Get delivery quotes.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17h4V6H3v11h2"/><path d="M14 9h5l2 3v5h-2"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-              Sign up to drive.
-            </div>
-            <div class="actionRow"><span class="box"></span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z"/></svg>
-              Refer friends, earn cash.
-            </div>
-          </div>
-        </div>
-
+        `).join("")}
       </div>
     </div>
-
   </div>
+
+  <script>
+    // NOTE: The ${...} above is template syntax; GitHub Pages will not evaluate it.
+    // We generate tabs in JS instead.
+    (function buildTabs(){
+      const tabs = document.getElementById("tabs");
+      const first = tabs.firstElementChild;
+      tabs.innerHTML = "";
+      for(let i=1;i<=10;i++){
+        const node = first.cloneNode(true);
+        node.querySelector(".tabQr").id = "tqr" + i;
+        tabs.appendChild(node);
+      }
+    })();
+  </script>
 
   <script>
     // Expose a promise the parent can await before exporting
@@ -776,7 +464,7 @@
         return params.get("qr") || "https://www.movethatcouch.com/";
       }
 
-      // Load QR library
+      // Load QR lib
       await new Promise((resolve, reject) => {
         const s = document.createElement("script");
         s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
@@ -816,16 +504,18 @@
         }
       }
 
-      // Let images settle
+      // Give images a moment to load for export fidelity
       await new Promise(r => setTimeout(r, 250));
 
-      // Main QR
-      drawQr(document.getElementById("qrMain"), link);
+      // Header QR
+      drawQr(document.getElementById("qrHeader"), link);
 
-      // All tab QRs
-      document.querySelectorAll("canvas.qr").forEach(c => drawQr(c, link));
+      // Tab QRs
+      for(let i=1;i<=10;i++){
+        const c = document.getElementById("tqr"+i);
+        drawQr(c, link);
+      }
 
-      // Final paint settle
       await new Promise(r => setTimeout(r, 150));
     })();
   </script>
