@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countertop Tent • MOVE THAT COUCH!</title>
+
+  <style>
+    :root{
+      /* US Letter @ 300dpi */
+      --W: 2550px;
+      --H: 3300px;
+      --HALF: 1650px;
+
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #e2e8f0;
+
+      --green1: #22c55e;
+      --green2: #34d399;
+
+      --pillBg: #eafff1;
+      --pillBorder: #b8f3cf;
+      --pillInk: #0b7a35;
+
+      --qrBorder: #b8f3cf;
+      --qrBg: #f0fff6;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+
+    /* One single printable page */
+    #page{
+      width: var(--W);
+      height: var(--H);
+      overflow: hidden;
+      position: relative;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    /* Two halves */
+    .tent{
+      width: var(--W);
+      height: var(--HALF);
+      box-sizing: border-box;
+      padding: 96px 110px;
+      display: grid;
+      grid-template-columns: 1.5fr 0.9fr;
+      gap: 70px;
+      align-items: start;
+    }
+
+    /* Cut line + instruction */
+    .cutWrap{
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(var(--HALF) - 8px);
+      text-align: center;
+      pointer-events: none;
+    }
+    .cutText{
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 34px;
+      color: #94a3b8;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      background: #fff;
+      padding: 0 18px;
+    }
+    .cutLine{
+      border-top: 8px dashed #cbd5e1;
+      width: 100%;
+    }
+
+    /* Left brand row */
+    .brandRow{
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 26px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .logoBox{
+      width: 110px;
+      height: 110px;
+      border-radius: 24px;
+      background: #fff;
+      border: 2px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .logoBox img{
+      width: 96px;
+      height: 96px;
+      object-fit: contain;
+      display: block;
+    }
+    .brandTitle{
+      font-size: 74px;
+      font-weight: 950;
+      letter-spacing: 1px;
+      line-height: 1.0;
+      margin: 0;
+    }
+    .brandSub{
+      margin-top: 10px;
+      font-size: 34px;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    .headline{
+      font-size: 56px;
+      font-weight: 950;
+      margin: 18px 0 10px 0;
+      line-height: 1.08;
+    }
+
+    .desc{
+      font-size: 34px;
+      color: var(--muted);
+      line-height: 1.25;
+      margin: 0 0 24px 0;
+      max-width: 1500px;
+    }
+
+    /* Pills row */
+    .pillRow{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .pill{
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--pillBg);
+      border: 3px solid var(--pillBorder);
+      color: var(--pillInk);
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-size: 30px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .pill svg{
+      width: 30px;
+      height: 30px;
+      display: block;
+      color: var(--pillInk);
+      flex: 0 0 auto;
+    }
+
+    .fine{
+      margin-top: 20px;
+      font-size: 22px;
+      color: #64748b;
+      line-height: 1.25;
+      max-width: 1600px;
+    }
+
+    /* QR card */
+    .qrCard{
+      justify-self: end;
+      width: 700px;
+      border-radius: 30px;
+      border: 4px solid var(--qrBorder);
+      background: var(--qrBg);
+      padding: 36px 36px 28px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .qrCanvas{
+      width: 520px;
+      height: 520px;
+      background: #fff;
+      border-radius: 20px;
+      image-rendering: pixelated;
+      display: block;
+      margin: 0 auto 22px;
+    }
+    .qrLabel{
+      font-size: 42px;
+      font-weight: 950;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    /* Slight variant spacing for bottom half to look centered when folded */
+    .tent.bottom{
+      padding-top: 110px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Inline SVG icon sprite (self-contained; no external fonts/assets) -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24">
+      <path d="M10 17h4V6H3v11h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14 9h5l2 3v5h-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="7.5" cy="17.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+      <circle cx="17.5" cy="17.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24">
+      <path d="M20 12v10H4V12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 7h20v5H2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 22V7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <div id="page">
+    <!-- TOP TENT -->
+    <section class="tent top">
+      <div>
+        <div class="brandRow">
+          <div class="logoBox">
+            <img src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH! logo" />
+          </div>
+          <div>
+            <div class="brandTitle">MOVE THAT COUCH!</div>
+            <div class="brandSub">Furniture delivery, made easy.</div>
+          </div>
+        </div>
+
+        <div class="headline">Need help getting it home?</div>
+        <p class="desc">
+          Scan to get help delivering a single item or small load.
+          Nearby drivers can send quotes.
+        </p>
+
+        <div class="pillRow">
+          <div class="pill">
+            <svg aria-hidden="true"><use href="#i-chat"></use></svg>
+            Get delivery quotes
+          </div>
+          <div class="pill">
+            <svg aria-hidden="true"><use href="#i-truck"></use></svg>
+            Sign up to drive
+          </div>
+          <div class="pill">
+            <svg aria-hidden="true"><use href="#i-gift"></use></svg>
+            Refer friends, earn cash
+          </div>
+        </div>
+
+        <div class="fine">
+          MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees, agents, or contractors
+          of MOVE THAT COUCH!. The platform does not provide transportation services and is not responsible for loss,
+          damage, or delays.
+        </div>
+      </div>
+
+      <div class="qrCard">
+        <canvas class="qrCanvas" id="qrTop" width="520" height="520"></canvas>
+        <p class="qrLabel">Scan to get started</p>
+      </div>
+    </section>
+
+    <!-- CUT LINE -->
+    <div class="cutWrap">
+      <div class="cutText">Cut on dashed line. Fold each half into a tent.</div>
+      <div class="cutLine"></div>
+    </div>
+
+    <!-- BOTTOM TENT -->
+    <section class="tent bottom" style="position:absolute; left:0; right:0; top: var(--HALF);">
+      <div>
+        <div class="brandRow">
+          <div class="logoBox">
+            <img src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH! logo" />
+          </div>
+          <div>
+            <div class="brandTitle">MOVE THAT COUCH!</div>
+            <div class="brandSub">Furniture delivery, made easy.</div>
+          </div>
+        </div>
+
+        <div class="headline">Need help getting it home?</div>
+        <p class="desc">
+          Scan to get help delivering a single item or small load.
+          Nearby drivers can send quotes.
+        </p>
+
+        <div class="pillRow">
+          <div class="pill">
+            <svg aria-hidden="true"><use href="#i-chat"></use></svg>
+            Get delivery quotes
+          </div>
+          <div class="pill">
+            <svg aria-hidden="true"><use href="#i-truck"></use></svg>
+            Sign up to drive
+          </div>
+          <div class="pill">
+            <svg aria-hidden="true"><use href="#i-gift"></use></svg>
+            Refer friends, earn cash
+          </div>
+        </div>
+
+        <div class="fine">
+          MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees, agents, or contractors
+          of MOVE THAT COUCH!. The platform does not provide transportation services and is not responsible for loss,
+          damage, or delays.
+        </div>
+      </div>
+
+      <div class="qrCard">
+        <canvas class="qrCanvas" id="qrBottom" width="520" height="520"></canvas>
+        <p class="qrLabel">Scan to get started</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Expose a promise the parent can await before exporting
+    window.__flyerReady = (async function(){
+      function getQrParam(){
+        const params = new URLSearchParams(window.location.search);
+        return params.get("qr") || "https://www.movethatcouch.com/";
+      }
+
+      // Load QR library
+      await new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+        s.async = true;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+
+      const link = getQrParam();
+
+      function drawQr(canvasId, text){
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext("2d");
+
+        const qr = window.qrcode(0, "M");
+        qr.addData(text);
+        qr.make();
+
+        const size = canvas.width;
+        const cells = qr.getModuleCount();
+        const tile = size / cells;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, size, size);
+
+        ctx.fillStyle = "#000000";
+        for(let r=0; r<cells; r++){
+          for(let c=0; c<cells; c++){
+            if(qr.isDark(r,c)){
+              ctx.fillRect(
+                Math.floor(c*tile),
+                Math.floor(r*tile),
+                Math.ceil(tile),
+                Math.ceil(tile)
+              );
+            }
+          }
+        }
+      }
+
+      // Let logo images load
+      await new Promise(r => setTimeout(r, 250));
+
+      drawQr("qrTop", link);
+      drawQr("qrBottom", link);
+
+      // Final paint settle
+      await new Promise(r => setTimeout(r, 150));
+    })();
+  </script>
+</body>
+</html>
