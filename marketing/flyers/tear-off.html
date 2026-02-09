@@ -224,7 +224,7 @@
     .tabTopActions{
       position:absolute;
       left:50%;
-      top: 90px;                 /* away from top edge */
+      top: 60px;                 /* away from top edge */
       transform: translateX(-50%);
       width: 440px;
       height: 440px;
@@ -244,7 +244,7 @@
     .tabQrWrap{
       position:absolute;
       left:50%;
-      top: 420px;                /* safely below tear edge */
+      top: 470px;                /* safely below tear edge */
       transform: translateX(-50%);
       text-align:center;
       z-index: 5;
@@ -338,12 +338,12 @@
       flex: 0 0 auto;
     }
     .act svg{
-      width: 18px;
-      height: 18px;
-      flex: 0 0 auto;
-      color:#16a34a;
-      display:block;
-    }
+  width: 22px;   /* was 18 */
+  height: 22px;  /* was 18 */
+  flex: 0 0 auto;
+  color:#16a34a;
+  display:block;
+}
   </style>
 </head>
 
@@ -489,17 +489,14 @@
             <div class="actionsRot">
               <div class="actions">
                 <div class="act">
-                  <span class="box"></span>
                   <span style="color:#16a34a;">${ICONS.chat}</span>
                   <span>Get delivery quotes.</span>
                 </div>
                 <div class="act">
-                  <span class="box"></span>
                   <span style="color:#16a34a;">${ICONS.truck}</span>
                   <span>Sign up to drive.</span>
                 </div>
                 <div class="act">
-                  <span class="box"></span>
                   <span style="color:#16a34a;">${ICONS.gift}</span>
                   <span>Refer friends, earn cash.</span>
                 </div>
