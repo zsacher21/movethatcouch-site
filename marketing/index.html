@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marketing Materials • MOVE THAT COUCH!</title>
+
+  <!-- Optional: stop favicon 404 noise -->
+  <link rel="icon" href="data:," />
+
   <style>
     body {
       margin: 0;
@@ -70,9 +74,9 @@
     .btn-blue { background:#2563eb; color:white; }
     .btn-gray { background:#475569; color:white; }
     .note { color:#475569; font-size:14px; margin-top:10px; line-height:1.35; }
-    .error { color:#b91c1c; font-weight:700; margin-top:10px; display:none; }
-    .success { color:#166534; font-weight:700; margin-top:10px; display:none; }
-    .greeting { margin-top: 10px; font-weight: 800; color: #0f172a; display:none; }
+    .error { color:#b91c1c; font-weight:800; margin-top:10px; display:none; }
+    .success { color:#166534; font-weight:800; margin-top:10px; display:none; }
+    .greeting { margin-top: 10px; font-weight: 900; color: #0f172a; display:none; }
 
     .qrWrap{
       display:flex;
@@ -95,17 +99,17 @@
       image-rendering: pixelated;
       display:block;
       margin: 0 auto;
-      background: #fff;
+      background:#fff;
     }
     .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
     .divider { height:1px; background:#e2e8f0; margin:16px 0; }
 
-    .sectionTitle { font-weight: 800; margin-top: 6px; }
+    .sectionTitle { font-weight: 900; margin-top: 6px; }
     .flyers button { margin-right:10px; margin-top:10px; }
   </style>
 </head>
-<body>
 
+<body>
 <header>
   <a href="/">← Home</a>
   <h1>Marketing Materials</h1>
@@ -132,7 +136,7 @@
         <div class="small" id="finalLinkText"></div>
       </div>
 
-      <div style="flex:1; min-width: 260px;">
+      <div style="flex:1; min-width:260px;">
         <div class="note">
           <b>How it works:</b> This page generates a QR code that points to your referral link.
           <div class="divider"></div>
@@ -173,9 +177,6 @@
   </div>
 </main>
 
-<!-- IMPORTANT: This is the library you already have -->
-<script src="/assets/qrcode.min.js"></script>
-
 <script>
   const refInput = document.getElementById('refInput');
   const generateBtn = document.getElementById('generateBtn');
@@ -187,7 +188,7 @@
   const qrCanvas = document.getElementById('qrCanvas');
   const finalLinkText = document.getElementById('finalLinkText');
 
-  // Keep links SHORT to avoid QR size issues with the current library build.
+  // Keep links short (but with the CDN lib, long URLs are also fine).
   const GENERIC_LINK = "https://movethatcouch.com";
   const SHORT_REF_BASE = "https://movethatcouch.com/r/";
 
@@ -218,10 +219,8 @@
     const s = (input || "").trim();
     if(!s) return "";
 
-    // Just code like "V2Z9JE"
     if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
 
-    // Full link: extract ?ref=CODE OR /r/CODE
     try {
       const u = new URL(s);
 
@@ -244,30 +243,41 @@
     copyBtn.disabled = false;
   }
 
+  function clearCanvas(){
+    const ctx = qrCanvas.getContext('2d');
+    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+  }
+
   function drawQr(text){
-    // Your qrcode.min.js exposes QRCode.toCanvas
-    if(!window.QRCode || typeof window.QRCode.toCanvas !== "function"){
-      showError("QR library failed to load. (QRCode.toCanvas not found)");
+    clearCanvas();
+
+    // Prefer the CDN "qrcode" library API if present (QRCode.toCanvas)
+    if (window.QRCode && typeof window.QRCode.toCanvas === "function") {
+      window.QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
+        if(err){
+          console.error(err);
+          showError("QR rendering failed. (Unexpected error from QR library.)");
+        }
+      });
       return;
     }
 
-    // Clear first
-    const ctx = qrCanvas.getContext('2d');
-    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+    // Fallback: try your existing local file's API (also QRCode.toCanvas)
+    if (window.QRCode && typeof window.QRCode.toCanvas === "function") {
+      window.QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
+        if(err){
+          console.error(err);
+          showError("QR rendering failed. Your local /assets/qrcode.min.js may be buggy.");
+        }
+      });
+      return;
+    }
 
-    window.QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
-      if(err){
-        console.error(err);
-        showError("QR rendering failed. (This usually means the QR text was too long.)");
-        return;
-      }
-      // success
-    });
+    showError("QR library failed to load.");
   }
 
   async function tryLoadReferrerName(code){
-    // Optional: only works if your app serves this endpoint.
-    // Safe to fail silently.
+    // Optional endpoint (safe if missing)
     const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
     try {
       const res = await fetch(url);
@@ -298,17 +308,14 @@
     const raw = refInput.value;
     const code = extractReferralCode(raw);
 
-    // Empty OR invalid -> generic QR (no hard error)
     if(!raw.trim() || !code){
       renderGeneric();
       return;
     }
 
-    // Valid -> personalized short link
     const shortLink = SHORT_REF_BASE + encodeURIComponent(code);
     setCurrentLink(shortLink);
     drawQr(shortLink);
-
     showSuccess("Personalized QR generated!");
     await tryLoadReferrerName(code);
   }
@@ -316,10 +323,10 @@
   generateBtn.addEventListener('click', generate);
 
   downloadBtn.addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'movethatcouch-qr.png';
-    link.href = qrCanvas.toDataURL('image/png');
-    link.click();
+    const a = document.createElement('a');
+    a.download = 'movethatcouch-qr.png';
+    a.href = qrCanvas.toDataURL('image/png');
+    a.click();
   });
 
   copyBtn.addEventListener('click', async () => {
@@ -337,15 +344,49 @@
     }
   });
 
-  // Auto-fill from ?ref=CODE on the marketing page URL
-  (function(){
-    renderGeneric();
+  // Load a GOOD QR library first (CDN), then fallback to your local one if needed.
+  (function boot(){
+    function loadScript(src, onload, onerror){
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = onload;
+      s.onerror = onerror;
+      document.head.appendChild(s);
+    }
 
-    const params = new URLSearchParams(window.location.search);
-    const refParam = params.get('ref');
-    if(refParam){
-      refInput.value = decodeURIComponent(refParam);
-      setTimeout(generate, 50);
+    // 1) Try CDN (reliable, supports long URLs, avoids your local bug)
+    loadScript(
+      "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js",
+      () => {
+        // CDN loaded
+        start();
+      },
+      () => {
+        // 2) CDN failed -> fallback to local
+        loadScript(
+          "/assets/qrcode.min.js",
+          () => start(),
+          () => {
+            // Nothing worked
+            renderGeneric();
+            showError("QR library failed to load. (CDN + local both failed)");
+          }
+        );
+      }
+    );
+
+    function start(){
+      // show something immediately
+      renderGeneric();
+
+      // auto-fill from ?ref=CODE
+      const params = new URLSearchParams(window.location.search);
+      const refParam = params.get('ref');
+      if(refParam){
+        refInput.value = decodeURIComponent(refParam);
+        setTimeout(generate, 50);
+      }
     }
   })();
 </script>
