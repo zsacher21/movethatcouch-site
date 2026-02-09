@@ -180,15 +180,18 @@
           <b>Tip:</b> If no referral is entered (or it’s invalid), a generic MOVE THAT COUCH! QR is shown.
           <div class="divider"></div>
 
-        <div class="flyers">
-          <div class="sectionTitle">Flyers (coming next)</div>
-          <div class="note" style="margin-top:6px;">
-            We’ll embed your personalized QR directly into printable flyers.
+          <div class="flyers">
+            <div class="sectionTitle">Flyers</div>
+            <div class="note" style="margin-top:6px;">
+              We’ll embed your personalized QR directly into printable flyers.
+            </div>
+
+            <!-- Enabled + IDs -->
+            <button class="btn-gray" id="flyer1Btn">Download Flyer 1</button>
+            <button class="btn-gray" id="flyer2Btn">Download Flyer 2</button>
+            <button class="btn-gray" id="flyer3Btn">Download Flyer 3</button>
+            <button class="btn-gray" id="flyer4Btn">Download Flyer 4</button>
           </div>
-          <button class="btn-gray" disabled>Download Flyer 1</button>
-          <button class="btn-gray" disabled>Download Flyer 2</button>
-          <button class="btn-gray" disabled>Download Flyer 3</button>
-          <button class="btn-gray" disabled>Download Flyer 4</button>
         </div>
       </div>
     </div>
@@ -217,6 +220,7 @@
   const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
 
   let currentFinalLink = GENERIC_LINK;
+  window.currentFinalLink = currentFinalLink; // expose for module exporter
 
   // Auto-generate helpers
   let autoTimer = null;
@@ -267,6 +271,7 @@
 
   function setCurrentLink(link){
     currentFinalLink = link;
+    window.currentFinalLink = link; // keep module exporter in sync
     finalLinkText.textContent = link;
     downloadBtn.disabled = false;
   }
@@ -464,6 +469,55 @@
       }
     }
   })();
+</script>
+
+<!-- Flyer export wiring (module) -->
+<script type="module">
+  import { exportFlyerPng } from "./js/flyerExport.js";
+
+  const flyer1Btn = document.getElementById("flyer1Btn");
+  const flyer2Btn = document.getElementById("flyer2Btn");
+  const flyer3Btn = document.getElementById("flyer3Btn");
+  const flyer4Btn = document.getElementById("flyer4Btn");
+
+  function status(msg){
+    const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+    successMsg.textContent = msg;
+    successMsg.style.display = "block";
+    errorMsg.style.display = "none";
+  }
+
+  function getQrLinkForFlyers(){
+    // Always use the current final link if present; otherwise fallback to generic
+    return (window.currentFinalLink && String(window.currentFinalLink).trim())
+      ? String(window.currentFinalLink).trim()
+      : "https://movethatcouch.com";
+  }
+
+  flyer1Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Flyer 1…");
+
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/shop.html",
+        qrLink,
+        filename: "MTC-Shop-Flyer.png",
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      const errorMsg = document.getElementById("errorMsg");
+      errorMsg.textContent = "Flyer export failed. Check the console for details.";
+      errorMsg.style.display = "block";
+      document.getElementById("successMsg").style.display = "none";
+    }
+  });
+
+  flyer2Btn.addEventListener("click", () => status("Flyer 2 coming next…"));
+  flyer3Btn.addEventListener("click", () => status("Flyer 3 coming next…"));
+  flyer4Btn.addEventListener("click", () => status("Flyer 4 coming next…"));
 </script>
 
 </body>
