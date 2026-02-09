@@ -171,14 +171,14 @@
 
     /* TEAR AREA */
     .tearArea{
-      padding: 34px 56px 44px; /* a bit more top padding */
+      padding: 34px 56px 76px; /* ✅ more bottom padding so nothing rides the page edge */
     }
 
     .tearTop{
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
-      margin-bottom: 26px; /* ✅ more space below title */
+      margin-bottom: 26px;
       padding-bottom: 6px;
     }
     .tearTop h3{
@@ -195,8 +195,7 @@
 
     .grid{
       width: 100%;
-      height: calc(var(--H) - 520px - 92px - 34px - 44px - 70px);
-      /* header + legal + tearArea padding + tearTop zone (approx) */
+      height: calc(var(--H) - 520px - 92px - 34px - 76px - 70px);
       border: 2px solid var(--line);
       border-radius: 14px;
       overflow:hidden;
@@ -206,7 +205,6 @@
       position: relative;
     }
 
-    /* Individual tear tabs */
     .tab{
       position: relative;
       padding: 10px 12px 12px;
@@ -227,7 +225,6 @@
       opacity: 0.95;
     }
 
-    /* Tab header: icon + text */
     .miniMark{
       width: 34px;
       height: 34px;
@@ -252,7 +249,6 @@
       line-height: 1.15;
     }
 
-    /* QR on each tab (perfect as you said) */
     .tabQr{
       width: 240px;
       height: 240px;
@@ -271,19 +267,20 @@
       text-align:center;
     }
 
-    /* ✅ ROTATED ACTION BLOCK (fills blank space + makes it readable) */
+    /* ✅ FIXED: reserve a zone and center the rotated block INSIDE it */
     .actionsVertical{
       margin-top: auto;
       width: 100%;
-      height: 760px;               /* controls how much of the blank space it uses */
+      height: 720px;             /* reserve space (tweakable) */
       display:flex;
-      align-items:flex-end;        /* anchor near the bottom of the tab */
-      justify-content:center;
-      padding-bottom: 18px;
+      align-items:center;         /* ✅ center vertically */
+      justify-content:center;     /* ✅ center horizontally */
+      padding-bottom: 0;
     }
 
     .actions{
-      transform: rotate(-90deg);
+      /* rotate + nudge up/left so it stays fully inside the tab */
+      transform: rotate(-90deg) translate(-40px, -10px);
       transform-origin: center;
       display:flex;
       flex-direction:column;
@@ -295,7 +292,7 @@
       display:flex;
       align-items:center;
       gap: 14px;
-      font-size: 30px;             /* ✅ much larger now */
+      font-size: 30px;
       font-weight: 950;
       color:#0f172a;
       line-height: 1.1;
@@ -321,7 +318,6 @@
 
 <body>
   <div id="flyer">
-    <!-- Header -->
     <div class="header">
       <div class="brand">
         <div class="logoBox">
@@ -365,16 +361,13 @@
       The platform does not provide transportation services and is not responsible for loss, damage, or delays.
     </div>
 
-    <!-- Tear area -->
     <div class="tearArea">
       <div class="tearTop">
         <h3>Tear off a tab below to scan later!</h3>
         <p class="hint">✂ Cut along dotted lines</p>
       </div>
 
-      <div class="grid" id="tabsGrid">
-        <!-- Tabs inserted by JS -->
-      </div>
+      <div class="grid" id="tabsGrid"></div>
     </div>
   </div>
 
@@ -385,7 +378,6 @@
         return params.get("qr") || "https://www.movethatcouch.com/";
       }
 
-      // Load QR library
       await new Promise((resolve, reject) => {
         const s = document.createElement("script");
         s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
@@ -425,7 +417,6 @@
         }
       }
 
-      // Inline SVG icons (reliable for html2canvas)
       const ICONS = {
         couch: `
           <svg class="miniMark" viewBox="0 0 24 24" aria-hidden="true">
@@ -459,7 +450,6 @@
         `
       };
 
-      // Build 10 tabs
       const grid = document.getElementById("tabsGrid");
       const TAB_COUNT = 10;
 
@@ -499,17 +489,13 @@
         grid.appendChild(tab);
       }
 
-      // Let logo image load for export
       await new Promise(r => setTimeout(r, 250));
 
-      // Draw header QR
       drawQr(document.getElementById("qrHeader"), link);
 
-      // Draw tab QRs
       const canvases = grid.querySelectorAll("canvas.tabQr");
       canvases.forEach(c => drawQr(c, link));
 
-      // settle
       await new Promise(r => setTimeout(r, 150));
     })();
   </script>
