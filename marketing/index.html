@@ -253,23 +253,58 @@
     ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
   }
 
-  function drawQr(text){
-    clearCanvas();
+  <script>
+  function drawQr(text) {
+    try {
+      clearCanvas();
 
-    if(typeof QRCode === "undefined" || typeof QRCode.toCanvas !== "function"){
-      showError("QR library failed to load. Confirm /assets/qrcode.min.js exists and is reachable.");
+      if (typeof qrcode !== "function") {
+        showError("QR library failed to load. qrcode() not found.");
+        return false;
+      }
+
+      /*
+        typeNumber:
+        - 4 was too small (caused dataCount crash)
+        - 6 comfortably fits https://movethatcouch.com/r/CODE
+      */
+      const qr = qrcode(6, 'L');
+      qr.addData(text);
+      qr.make();
+
+      const ctx = qrCanvas.getContext("2d");
+      const size = qrCanvas.width;
+      const cells = qr.getModuleCount();
+      const tileSize = size / cells;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.fillStyle = "#000000";
+      for (let row = 0; row < cells; row++) {
+        for (let col = 0; col < cells; col++) {
+          if (qr.isDark(row, col)) {
+            ctx.fillRect(
+              Math.floor(col * tileSize),
+              Math.floor(row * tileSize),
+              Math.ceil(tileSize),
+              Math.ceil(tileSize)
+            );
+          }
+        }
+      }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      showError(
+        "QR rendering failed. This usually means the QR payload was too large."
+      );
       return false;
     }
-
-    try {
-      QRCode.toCanvas(qrCanvas, text, { width: 240, margin: 2 }, function(err){
-        if(err){
-          console.error(err);
-          showError("Could not generate QR code. (If this is a long link, try again — this page uses a short /r/CODE format.)");
-        }
-      });
-      return true;
-    } catch (e) {
+  }
+</script>
+ catch (e) {
       console.error(e);
       showError("QR rendering failed (script loaded but errored). This usually means the QR payload was too long. We use the short /r/CODE format to prevent that.");
       return false;
