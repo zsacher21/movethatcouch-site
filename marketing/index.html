@@ -158,7 +158,6 @@
     <label for="refInput">Paste your referral link (or just the code)</label>
     <input id="refInput" placeholder="Example: V2Z9JE  OR  https://app.movethatcouch.com/?ref=V2Z9JE" />
 
-    <!-- Generate button removed; QR auto-generates on valid input -->
     <div class="row">
       <button class="btn-blue" id="downloadBtn">Download QR (PNG)</button>
     </div>
@@ -186,7 +185,6 @@
               We’ll embed your personalized QR directly into printable flyers.
             </div>
 
-            <!-- Enabled + IDs -->
             <button class="btn-gray" id="flyer1Btn">Download Flyer 1</button>
             <button class="btn-gray" id="flyer2Btn">Download Flyer 2</button>
             <button class="btn-gray" id="flyer3Btn">Download Flyer 3</button>
@@ -353,7 +351,6 @@
   }
 
   async function generate(){
-    // prevent overlapping validations when user types fast
     if (inFlight) return;
     inFlight = true;
 
@@ -368,7 +365,6 @@
       return;
     }
 
-    // sanity check
     if(!/^[A-Za-z0-9]{4,20}$/.test(code)){
       renderGeneric("Showing generic MOVE THAT COUCH! QR.");
       showError("That doesn’t look like a valid referral code. Please paste your referral link or code.");
@@ -406,17 +402,14 @@
       const raw = refInput.value || "";
       const code = extractReferralCode(raw);
 
-      // Empty -> generic
       if (!raw.trim()) {
         lastAutoCode = "";
         renderGeneric("Showing generic MOVE THAT COUCH! QR.");
         return;
       }
 
-      // If user typed something but we can't parse a code yet, don't flash errors
       if (!code) return;
 
-      // Avoid re-validating the same code repeatedly
       if (code === lastAutoCode) return;
       lastAutoCode = code;
 
@@ -424,7 +417,6 @@
     }, 450);
   }
 
-  // Auto-generate when user types/pastes
   refInput.addEventListener("input", scheduleAutoGenerate);
   refInput.addEventListener("paste", scheduleAutoGenerate);
 
@@ -461,7 +453,6 @@
       const refParam = params.get('ref');
       if(refParam){
         refInput.value = decodeURIComponent(refParam);
-        // generate immediately for app-driven navigation
         setTimeout(() => {
           lastAutoCode = "";
           generate();
@@ -488,8 +479,14 @@
     errorMsg.style.display = "none";
   }
 
+  function showExportError(){
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.textContent = "Flyer export failed. Check the console for details.";
+    errorMsg.style.display = "block";
+    document.getElementById("successMsg").style.display = "none";
+  }
+
   function getQrLinkForFlyers(){
-    // Always use the current final link if present; otherwise fallback to generic
     return (window.currentFinalLink && String(window.currentFinalLink).trim())
       ? String(window.currentFinalLink).trim()
       : "https://www.movethatcouch.com/";
@@ -508,14 +505,28 @@
       });
     } catch (e) {
       console.error(e);
-      const errorMsg = document.getElementById("errorMsg");
-      errorMsg.textContent = "Flyer export failed. Check the console for details.";
-      errorMsg.style.display = "block";
-      document.getElementById("successMsg").style.display = "none";
+      showExportError();
     }
   });
 
-  flyer2Btn.addEventListener("click", () => status("Flyer 2 coming next…"));
+  // ✅ WIRED: Flyer 2 (Countertop Tent)
+  flyer2Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Flyer 2…");
+
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/countertop-tent.html",
+        qrLink,
+        filename: "MTC-Countertop-Tent.png",
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
   flyer3Btn.addEventListener("click", () => status("Flyer 3 coming next…"));
   flyer4Btn.addEventListener("click", () => status("Flyer 4 coming next…"));
 </script>
