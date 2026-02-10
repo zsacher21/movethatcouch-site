@@ -98,7 +98,7 @@
     .brand{
       display:flex;
       align-items:center;
-      justify-content:flex-start;
+      justify-content:center; /* center within its column */
       min-height:520px;
     }
 
@@ -110,6 +110,8 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      /* Nudge right so it centers between page edge and QR */
+      transform: translateX(70px); /* tweak 40–110px if desired */
     }
     .brand img{
       height:520px;
@@ -202,6 +204,7 @@
       align-self:center;
     }
 
+    /* SWAPPED: Control column on RIGHT, What Is column on LEFT */
     .bottom{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -250,16 +253,18 @@
     }
     .whatIs .strong{ font-weight:900; }
 
+    /* ONE-LINE LEGAL */
     .footerNote{
       position:absolute;
       left:var(--pad);
       right:var(--pad);
-      bottom:80px;
+      bottom:70px;
       font-size:26px;
       color:#9ca3af;
-      display:flex;
-      justify-content:space-between;
-      gap:40px;
+      display:block;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
       pointer-events:none;
     }
   </style>
@@ -318,6 +323,17 @@
       <!-- BOTTOM HALF -->
       <div class="bottomHalf">
         <div class="bottom">
+          <!-- LEFT COLUMN: What Is -->
+          <div class="whatIs">
+            <div class="sectionTitle">What Is MOVE THAT COUCH!?</div>
+            <p>MOVE THAT COUCH! connects people who need a single item or small load delivered with nearby independent drivers.</p>
+            <p>You quote the job.<br/>They book it.<br/>You deliver.</p>
+            <p class="strong">Built for independent drivers. Scales with you.</p>
+            <p>Sign up as a solo driver &mdash; or operate under a business or fleet account if you have one.</p>
+            <p><span class="strong">Refer drivers or customers.</span><br/>Earn cash when jobs are completed.</p>
+          </div>
+
+          <!-- RIGHT COLUMN: You're in Control -->
           <div>
             <div class="sectionTitle">You&rsquo;re in Control.</div>
             <ul class="bullets">
@@ -336,22 +352,12 @@
               <li>Trailer</li>
             </ul>
           </div>
-
-          <div class="whatIs">
-            <div class="sectionTitle">What Is MOVE THAT COUCH!?</div>
-            <p>MOVE THAT COUCH! connects people who need a single item or small load delivered with nearby independent drivers.</p>
-            <p>You quote the job.<br/>They book it.<br/>You deliver.</p>
-            <p class="strong">Built for independent drivers. Scales with you.</p>
-            <p>Sign up as a solo driver &mdash; or operate under a business or fleet account if you have one.</p>
-            <p><span class="strong">Refer drivers or customers.</span><br/>Earn cash when jobs are completed.</p>
-          </div>
         </div>
       </div>
     </div>
 
     <div class="footerNote">
-      <div>Independent drivers and businesses are not employees.</div>
-      <div>Platform facilitates bookings only.</div>
+      Independent drivers and businesses are not employees; platform facilitates bookings only.
     </div>
   </div>
 
