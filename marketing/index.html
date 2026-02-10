@@ -403,11 +403,11 @@
     greetingMsg.style.display = 'none';
     greetingMsg.textContent = '';
   }
-  function showSuccess(text){
-    successMsg.textContent = text;
-    successMsg.style.display = 'block';
-    errorMsg.style.display = 'none';
-  }
+  function showSuccess(html){
+  successMsg.innerHTML = html;
+  successMsg.style.display = 'block';
+  errorMsg.style.display = 'none';
+}
   function clearMessages(){
     errorMsg.style.display = 'none';
     successMsg.style.display = 'none';
