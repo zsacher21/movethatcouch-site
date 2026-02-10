@@ -9,6 +9,16 @@
   <link rel="icon" href="data:," />
 
   <style>
+    /* Success message: put the "Hi Name 👋" on its own centered line */
+.success{
+  text-align: center;
+}
+
+.successSub{
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 800;
+}
     :root{
       --page-pad: clamp(16px, 4.5vw, 28px);
       --max: 900px;
@@ -548,7 +558,7 @@
 
     const ok = drawQr(finalLink);
     if(ok){
-      showSuccess(`Personalized QR generated! (Hi ${displayName} 👋)`);
+      showSuccess(`Personalized QR generated!<br><span class="successSub">Hi ${displayName} 👋</span>`);
     }
 
     inFlight = false;
