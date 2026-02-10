@@ -205,10 +205,265 @@
   </div>
 </main>
 
-<!-- QR generation logic (unchanged) -->
-<script src="./js/qr-generator.js"></script>
+<!-- ✅ ORIGINAL QR GENERATION LOGIC (restored) -->
+<script>
+  const refInput = document.getElementById('refInput');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+  const greetingMsg = document.getElementById('greetingMsg');
+  const qrCanvas = document.getElementById('qrCanvas');
+  const finalLinkText = document.getElementById('finalLinkText');
 
-<!-- Flyer export wiring -->
+  const GENERIC_LINK = "https://www.movethatcouch.com/";
+  const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
+
+  let currentFinalLink = GENERIC_LINK;
+  window.currentFinalLink = currentFinalLink; // expose for module exporter
+
+  // Auto-generate helpers
+  let autoTimer = null;
+  let lastAutoCode = "";
+  let inFlight = false;
+
+  function showError(text){
+    errorMsg.textContent = text;
+    errorMsg.style.display = 'block';
+    successMsg.style.display = 'none';
+    greetingMsg.style.display = 'none';
+    greetingMsg.textContent = '';
+  }
+  function showSuccess(text){
+    successMsg.textContent = text;
+    successMsg.style.display = 'block';
+    errorMsg.style.display = 'none';
+  }
+  function clearMessages(){
+    errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
+    greetingMsg.style.display = 'none';
+    greetingMsg.textContent = '';
+  }
+
+  function extractReferralCode(input){
+    const s = (input || "").trim();
+    if(!s) return "";
+
+    // just code
+    if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
+
+    // link
+    try {
+      const u = new URL(s);
+
+      const ref = u.searchParams.get("ref");
+      if(ref && /^[A-Za-z0-9]{4,20}$/.test(ref)) return ref;
+
+      const pathMatch = u.pathname.match(/^\/r\/([A-Za-z0-9]{4,20})\/?$/);
+      if(pathMatch) return pathMatch[1];
+
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function setCurrentLink(link){
+    currentFinalLink = link;
+    window.currentFinalLink = link; // keep module exporter in sync
+    finalLinkText.textContent = link;
+    downloadBtn.disabled = false;
+  }
+
+  function clearCanvas(){
+    const ctx = qrCanvas.getContext('2d');
+    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+  }
+
+  function drawQr(text){
+    clearCanvas();
+
+    if (typeof window.qrcode !== "function") {
+      showError("QR library failed to load.");
+      return false;
+    }
+
+    try {
+      const qr = window.qrcode(0, 'M');
+      qr.addData(text);
+      qr.make();
+
+      const ctx = qrCanvas.getContext("2d");
+      const size = qrCanvas.width;
+      const cells = qr.getModuleCount();
+      const tileSize = size / cells;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.fillStyle = "#000000";
+      for (let row = 0; row < cells; row++) {
+        for (let col = 0; col < cells; col++) {
+          if (qr.isDark(row, col)) {
+            ctx.fillRect(
+              Math.floor(col * tileSize),
+              Math.floor(row * tileSize),
+              Math.ceil(tileSize),
+              Math.ceil(tileSize)
+            );
+          }
+        }
+      }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      showError("QR rendering failed (unexpected). Check console.");
+      return false;
+    }
+  }
+
+  async function validateReferralCode(code){
+    const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
+
+    try {
+      const res = await fetch(url, { method: "GET" });
+      if (!res.ok) return null;
+
+      const data = await res.json();
+
+      const display =
+        (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
+        (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
+        (data && data.firstName) ? `${data.firstName}` :
+        null;
+
+      return display;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function renderGeneric(message){
+    clearMessages();
+    setCurrentLink(GENERIC_LINK);
+    const ok = drawQr(GENERIC_LINK);
+    if(ok) showSuccess(message || "Showing generic MOVE THAT COUCH! QR.");
+  }
+
+  async function generate(){
+    if (inFlight) return;
+    inFlight = true;
+
+    clearMessages();
+
+    const raw = refInput.value;
+    const code = extractReferralCode(raw);
+
+    if(!raw.trim() || !code){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      inFlight = false;
+      return;
+    }
+
+    if(!/^[A-Za-z0-9]{4,20}$/.test(code)){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      showError("That doesn’t look like a valid referral code. Please paste your referral link or code.");
+      inFlight = false;
+      return;
+    }
+
+    showSuccess("Checking referral code…");
+
+    const displayName = await validateReferralCode(code);
+
+    if(!displayName){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      showError("Referral code not found. Please check the code and try again.");
+      inFlight = false;
+      return;
+    }
+
+    const finalLink = APP_REF_BASE + encodeURIComponent(code);
+
+    setCurrentLink(finalLink);
+
+    const ok = drawQr(finalLink);
+    if(ok){
+      showSuccess(`Personalized QR generated! (Hi ${displayName} 👋)`);
+    }
+
+    inFlight = false;
+  }
+
+  function scheduleAutoGenerate(){
+    clearTimeout(autoTimer);
+
+    autoTimer = setTimeout(async () => {
+      const raw = refInput.value || "";
+      const code = extractReferralCode(raw);
+
+      if (!raw.trim()) {
+        lastAutoCode = "";
+        renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+        return;
+      }
+
+      if (!code) return;
+
+      if (code === lastAutoCode) return;
+      lastAutoCode = code;
+
+      await generate();
+    }, 450);
+  }
+
+  refInput.addEventListener("input", scheduleAutoGenerate);
+  refInput.addEventListener("paste", scheduleAutoGenerate);
+
+  downloadBtn.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.download = 'movethatcouch-qr.png';
+    a.href = qrCanvas.toDataURL('image/png');
+    a.click();
+  });
+
+  (function boot(){
+    function loadScript(src, onload, onerror){
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = onload;
+      s.onerror = onerror;
+      document.head.appendChild(s);
+    }
+
+    loadScript(
+      "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js",
+      () => start(),
+      () => {
+        renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+        showError("QR library failed to load (CDN blocked).");
+      }
+    );
+
+    function start(){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+
+      const params = new URLSearchParams(window.location.search);
+      const refParam = params.get('ref');
+      if(refParam){
+        refInput.value = decodeURIComponent(refParam);
+        setTimeout(() => {
+          lastAutoCode = "";
+          generate();
+        }, 50);
+      }
+    }
+  })();
+</script>
+
+<!-- Flyer export wiring (module) -->
 <script type="module">
   import { exportFlyerPng } from "./js/flyerExport.js";
 
@@ -238,54 +493,78 @@
       : "https://www.movethatcouch.com/";
   }
 
+  // Flyer 1 (Shop)
   flyer1Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 1…");
+
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/shop.html",
-        qrLink: getQrLinkForFlyers(),
+        qrLink,
         filename: "MTC-Shop-Flyer.png",
         onStatus: status
       });
-    } catch (e) { console.error(e); showExportError(); }
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
   });
 
+  // Flyer 2 (Countertop Tent)
   flyer2Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 2…");
+
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/countertop-tent.html",
-        qrLink: getQrLinkForFlyers(),
+        qrLink,
         filename: "MTC-Countertop-Tent.png",
         onStatus: status
       });
-    } catch (e) { console.error(e); showExportError(); }
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
   });
 
+  // Flyer 3 (tear-off)
   flyer3Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 3…");
+
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/tear-off.html",
-        qrLink: getQrLinkForFlyers(),
+        qrLink,
         filename: "MTC-Tear-Off-Flyer.png",
-        print: { width: 3300, height: 2550 },
+        print: { width: 3300, height: 2550 }, // LANDSCAPE Letter @ 300dpi
         onStatus: status
       });
-    } catch (e) { console.error(e); showExportError(); }
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
   });
 
+  // ✅ Flyer 4 (Driver Windshield)
   flyer4Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
     status("Preparing Flyer 4…");
+
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/driver-windshield.html",
-        qrLink: getQrLinkForFlyers(),
+        qrLink,
         filename: "MTC-Driver-Windshield-Flyer.png",
-        print: { width: 2550, height: 3300 },
+        print: { width: 2550, height: 3300 }, // PORTRAIT Letter @ 300dpi
         onStatus: status
       });
-    } catch (e) { console.error(e); showExportError(); }
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
   });
 </script>
 
