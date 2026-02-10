@@ -9,131 +9,284 @@
   <link rel="icon" href="data:," />
 
   <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f7f7f7;
-      color: #111;
+    :root{
+      --page-pad: clamp(16px, 4.5vw, 28px);
+      --max: 900px;
+
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+
+      --shadow: 0 1px 8px rgba(0,0,0,0.06);
+      --radius: 12px;
+
+      --btn-max: 520px;
+      --btn-h: 56px;
     }
 
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 18px 16px;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:#f7f7f7;
+      color:#111;
+    }
+
+    header{
+      background: var(--ink);
+      color:#fff;
+      padding:
+        calc(14px + env(safe-area-inset-top))
+        calc(var(--page-pad) + env(safe-area-inset-right))
+        14px
+        calc(var(--page-pad) + env(safe-area-inset-left));
     }
 
     .headerInner{
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      max-width: var(--max);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
     }
+
     .headerLeft{
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-width: 0;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-width:0;
     }
+
+    header a{
+      color:#fff;
+      text-decoration:none;
+      opacity:0.9;
+      font-weight:600;
+      width: fit-content;
+    }
+    header a:hover{ opacity:1; }
+
+    header h1{
+      margin:0;
+      font-size: clamp(18px, 4.6vw, 22px);
+      line-height:1.15;
+    }
+
+    /* ✅ Make logo clickable + tap-friendly */
+    .logoLink{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 16px;
+      -webkit-tap-highlight-color: transparent;
+      text-decoration:none;
+      flex-shrink:0;
+    }
+
     .headerLogo{
       height: 56px;
-      width: auto;
-      display: block;
+      width:auto;
+      display:block;
       border-radius: 14px;
-      background: #fff;
-      padding: 6px;
+      background:#fff;
+      padding:6px;
     }
     @media (min-width: 768px){
-      .headerLogo{ height: 64px; }
+      .headerLogo{ height:64px; }
     }
 
-    header a {
-      color: white;
-      text-decoration: none;
-      opacity: 0.9;
-      font-weight: 600;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 20px;
+    main{
+      max-width: var(--max);
+      margin:0 auto;
+      padding:
+        18px
+        calc(var(--page-pad) + env(safe-area-inset-right))
+        calc(40px + env(safe-area-inset-bottom))
+        calc(var(--page-pad) + env(safe-area-inset-left));
     }
 
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 18px 16px 40px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    .card{
+      background:#fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
       padding: 16px;
       margin-top: 14px;
     }
-    label { display:block; font-weight:700; margin-bottom:8px; }
-    input {
-      width: 100%;
-      box-sizing: border-box;
+
+    label{
+      display:block;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    input{
+      width:100%;
       padding: 12px;
       border-radius: 10px;
       border: 1px solid #cbd5e1;
       font-size: 15px;
     }
-    .row {
+
+    .row{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
       margin-top:12px;
       align-items:center;
     }
-    button {
-      border: 0;
+
+    button{
+      border:0;
       padding: 12px 14px;
       border-radius: 10px;
       font-weight: 800;
-      cursor: pointer;
-      font-size: 14px;
+      cursor:pointer;
+      font-size:14px;
     }
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-    .btn-green { background:#22c55e; color:white; }
-    .btn-blue  { background:#2563eb; color:white; }
-    .btn-gray  { background:#475569; color:white; }
-    .note { color:#475569; font-size:14px; margin-top:10px; line-height:1.35; }
-    .error { color:#b91c1c; font-weight:800; margin-top:10px; display:none; }
-    .success { color:#166534; font-weight:800; margin-top:10px; display:none; }
-    .greeting { margin-top:10px; font-weight:900; color:#0f172a; display:none; }
 
-    .qrWrap{
-      display:flex;
-      gap:18px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-      margin-top:12px;
+    button:disabled{
+      opacity:0.55;
+      cursor:not-allowed;
     }
+
+    .btn-green{ background:#22c55e; color:#fff; }
+    .btn-blue { background:#2563eb; color:#fff; }
+    .btn-gray { background:#475569; color:#fff; }
+
+    .note{
+      color: var(--muted);
+      font-size:14px;
+      margin-top:10px;
+      line-height:1.35;
+    }
+
+    .error{ color:#b91c1c; font-weight:800; margin-top:10px; display:none; }
+    .success{ color:#166534; font-weight:800; margin-top:10px; display:none; }
+    .greeting{ margin-top:10px; font-weight:900; color: var(--ink); display:none; }
+
+    .divider{ height:1px; background: var(--line); margin:16px 0; }
+    .sectionTitle{ font-weight:900; margin-top:6px; color: var(--ink); }
+
+    /* ======= Mobile-first layout adjustments =======
+       Goal: Flyers appear earlier. QR is smaller and de-emphasized.
+    */
+    .qrWrap{
+      display:grid;
+      gap: 14px;
+      margin-top: 14px;
+      align-items:start;
+    }
+
+    /* On desktop, restore side-by-side */
+    @media (min-width: 900px){
+      .qrWrap{
+        grid-template-columns: 320px 1fr;
+        gap: 18px;
+      }
+    }
+
+    /* QR box: smaller footprint */
     .qrBox{
-      width: 280px;
+      width:100%;
+      max-width: 260px;
       background:#fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
       padding: 12px;
       text-align:center;
+      justify-self: center;
     }
+
+    /* Make the QR smaller on phones */
     canvas{
-      width: 240px;
-      height: 240px;
+      width: 180px;
+      height: 180px;
       image-rendering: pixelated;
       display:block;
       margin: 0 auto;
       background:#fff;
     }
-    .small { font-size: 12px; color:#475569; word-break: break-all; margin-top: 8px; }
-    .divider { height:1px; background:#e2e8f0; margin:16px 0; }
-    .sectionTitle { font-weight:900; margin-top:6px; }
-    .flyers button { margin-right:10px; margin-top:10px; }
+
+    /* keep real canvas resolution in sync with drawQr (uses qrCanvas.width) */
+    #qrCanvas{ width: 180px; height: 180px; }
+
+    @media (min-width: 480px){
+      canvas, #qrCanvas{ width: 200px; height: 200px; }
+    }
+    @media (min-width: 900px){
+      canvas, #qrCanvas{ width: 220px; height: 220px; }
+      .qrBox{ max-width: 280px; }
+    }
+
+    .small{
+      font-size:12px;
+      color: var(--muted);
+      word-break: break-all;
+      margin-top:8px;
+    }
+
+    /* Flyers: centered, uniform buttons like home/about */
+    .flyers{
+      margin-top: 6px;
+    }
+
+    .flyerActions{
+      margin-top: 10px;
+      display:grid;
+      gap: 12px;
+      justify-items:center;
+    }
+
+    .flyerBtn{
+      width:100%;
+      max-width: var(--btn-max);
+      height: var(--btn-h);
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: clamp(16px, 4.2vw, 18px);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0 18px;
+      text-align:center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* QR download button also matches sizing */
+    .primaryActions{
+      margin-top: 12px;
+      display:grid;
+      gap: 12px;
+      justify-items:center;
+    }
+
+    .primaryBtn{
+      width:100%;
+      max-width: var(--btn-max);
+      height: var(--btn-h);
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: clamp(16px, 4.2vw, 18px);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0 18px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Make the explanatory panel feel lighter */
+    .notePanel{
+      padding-top: 2px;
+    }
+
+    /* Minor: avoid huge vertical space on tiny phones */
+    @media (max-width: 360px){
+      :root{ --btn-h: 52px; }
+      .flyerBtn, .primaryBtn{ border-radius: 12px; font-size: 16px; }
+    }
   </style>
 </head>
 
@@ -145,11 +298,14 @@
       <h1>Marketing Materials</h1>
     </div>
 
-    <img
-      class="headerLogo"
-      src="/mtc_couch_appicon_white_1024_adjusted.png"
-      alt="MOVE THAT COUCH! logo"
-    />
+    <!-- ✅ Clickable logo back to home -->
+    <a class="logoLink" href="/" aria-label="Back to home">
+      <img
+        class="headerLogo"
+        src="/mtc_couch_appicon_white_1024_adjusted.png"
+        alt="MOVE THAT COUCH! logo"
+      />
+    </a>
   </div>
 </header>
 
@@ -158,8 +314,9 @@
     <label for="refInput">Paste your referral link (or just the code)</label>
     <input id="refInput" placeholder="Example: V2Z9JE  OR  https://app.movethatcouch.com/?ref=V2Z9JE" />
 
-    <div class="row">
-      <button class="btn-blue" id="downloadBtn">Download QR (PNG)</button>
+    <!-- ✅ Unified button sizing -->
+    <div class="primaryActions">
+      <button class="btn-blue primaryBtn" id="downloadBtn">Download QR (PNG)</button>
     </div>
 
     <div class="error" id="errorMsg"></div>
@@ -167,12 +324,8 @@
     <div class="greeting" id="greetingMsg"></div>
 
     <div class="qrWrap">
-      <div class="qrBox">
-        <canvas id="qrCanvas" width="240" height="240"></canvas>
-        <div class="small" id="finalLinkText"></div>
-      </div>
-
-      <div style="flex:1; min-width:260px;">
+      <!-- ✅ Note panel first so flyers appear sooner in the scroll -->
+      <div class="notePanel">
         <div class="note">
           <b>How it works:</b> This page generates a QR code that points to your referral link.
           <div class="divider"></div>
@@ -185,12 +338,21 @@
               We’ll embed your personalized QR directly into printable flyers.
             </div>
 
-            <button class="btn-gray" id="flyer1Btn">Download Flyer 1</button>
-            <button class="btn-gray" id="flyer2Btn">Download Flyer 2</button>
-            <button class="btn-gray" id="flyer3Btn">Download Flyer 3</button>
-            <button class="btn-gray" id="flyer4Btn">Download Flyer 4</button>
+            <!-- ✅ Renamed + uniform, centered buttons -->
+            <div class="flyerActions">
+              <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
+              <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
+              <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
+              <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- ✅ Smaller, de-emphasized QR -->
+      <div class="qrBox">
+        <canvas id="qrCanvas" width="240" height="240"></canvas>
+        <div class="small" id="finalLinkText"></div>
       </div>
     </div>
   </div>
@@ -496,7 +658,7 @@
   // Flyer 1 (Shop)
   flyer1Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
-    status("Preparing Flyer 1…");
+    status("Preparing Shop Flyer…");
 
     try {
       await exportFlyerPng({
@@ -514,7 +676,7 @@
   // Flyer 2 (Countertop Tent)
   flyer2Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
-    status("Preparing Flyer 2…");
+    status("Preparing Countertop Tents…");
 
     try {
       await exportFlyerPng({
@@ -532,7 +694,7 @@
   // Flyer 3 (tear-off)
   flyer3Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
-    status("Preparing Flyer 3…");
+    status("Preparing Tear-off Tabs…");
 
     try {
       await exportFlyerPng({
@@ -548,10 +710,10 @@
     }
   });
 
-  // ✅ Flyer 4 (Driver Windshield)
+  // Flyer 4 (Driver Windshield)
   flyer4Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
-    status("Preparing Flyer 4…");
+    status("Preparing Driver Windshield…");
 
     try {
       await exportFlyerPng({
