@@ -8,15 +8,15 @@
     html, body { margin: 0; padding: 0; background: #ffffff; }
     body { font-family: Arial, Helvetica, sans-serif; }
 
-    :root {
+    :root{
       --mtc-green: #39AD54;
-      --white: #ffffff;
       --black: #000000;
       --muted: #444;
+      --light: #e5e7eb;
     }
 
     /* Root required by flyerExport.js */
-    #flyer {
+    #flyer{
       width: 2550px;
       height: 3300px;
       display: flex;
@@ -24,157 +24,175 @@
       background: #ffffff;
     }
 
-    .panel {
+    .panel{
       width: 100%;
       box-sizing: border-box;
       padding: 140px;
     }
 
-    /* ================= FRONT (visible under wiper) ================= */
-    .front {
-      /* Use pixel height to match 2550x3300 layout */
+    /* ================= TOP HALF (windshield-facing) ================= */
+    .front{
       height: 1650px;
-      background: var(--mtc-green);
-      color: var(--white);
+      background: #ffffff;
+      color: var(--black);
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
     }
 
-    .brand-row {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-      margin-bottom: 40px;
-    }
-
-    .couch-icon {
-      height: 170px;
-      width: auto;
-      display: block;
-    }
-
-    .headline {
+    .headline{
       font-weight: 900;
-      font-size: 120px;
-      line-height: 1.05;
+      font-size: 130px;
+      line-height: 1.02;
       letter-spacing: -1px;
       text-transform: uppercase;
       margin: 0;
     }
 
-    .subhead {
-      margin-top: 26px;
-      font-size: 34px;
-      font-weight: 650;
+    .subhead{
+      margin-top: 34px;
+      font-size: 40px;
+      font-weight: 750;
       line-height: 1.25;
-      opacity: 0.98;
+      color: var(--black);
     }
 
-    /* NEW: Front QR block inside green band */
-    .front-qr {
+    /* Full logo centered below the subhead */
+    .logo-center{
       margin-top: 70px;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 50px;
+    }
+    .logo-center img{
+      width: 900px;   /* adjust if you want bigger/smaller */
+      height: auto;
+      display: block;
     }
 
-    .qr-box {
-      width: 420px;
-      height: 420px;
+    /* Optional: a clean little green accent line so it still feels branded
+       (not a background flood). Remove if you want pure black/white. */
+    .accent-line{
+      margin-top: 80px;
+      height: 16px;
+      width: 360px;
+      background: var(--mtc-green);
+      border-radius: 999px;
+    }
+
+    /* Divider / fold cue */
+    .fold-divider{
+      height: 14px;
+      background: var(--light);
+    }
+
+    /* ================= BOTTOM HALF ================= */
+    .inside{
+      height: 1650px;
       background: #ffffff;
-      border-radius: 14px;
+      color: var(--black);
+      position: relative;
+      padding-bottom: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+    }
+
+    /* QR moved to bottom half, made impossible to miss */
+    .qr-row{
+      display: flex;
+      align-items: center;
+      gap: 70px;
+    }
+
+    .qr-box{
+      width: 520px;
+      height: 520px;
+      background: #ffffff;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 0 10px rgba(255,255,255,0.25);
       overflow: hidden;
+      box-shadow: 0 0 0 10px rgba(0,0,0,0.06);
+      border: 6px solid #111;
       flex: 0 0 auto;
     }
 
-    #qrImg {
+    #qrImg{
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
     }
 
-    .qr-label {
-      font-size: 50px;
+    .qr-copy{
+      flex: 1;
+      min-width: 0;
+    }
+
+    .qr-copy .cta{
+      font-size: 78px;
       font-weight: 900;
-      line-height: 1.08;
+      line-height: 1.02;
       text-transform: uppercase;
       margin: 0;
     }
 
-    .qr-label small {
-      display: block;
-      font-size: 28px;
-      font-weight: 700;
-      margin-top: 14px;
-      text-transform: none;
-      opacity: 0.95;
+    .qr-copy .cta span{
+      color: var(--mtc-green);
     }
 
-    /* Fold divider cue */
-    .fold-divider {
-      height: 14px;
-      background: #e5e7eb;
+    .qr-copy .micro{
+      margin-top: 18px;
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--muted);
     }
 
-    /* ================= INSIDE (unfolded) ================= */
-    .inside {
-      height: 1650px;
-      background: var(--white);
-      color: var(--black);
-      position: relative;
-      padding-bottom: 180px;
-    }
-
-    .columns {
+    /* Two-column info area below QR */
+    .columns{
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: 160px;
+      column-gap: 180px;
       align-items: start;
     }
 
-    /* Bigger inside type for readability */
-    .inside h2 {
+    .inside h2{
       font-size: 42px;
       font-weight: 900;
       margin: 0 0 18px 0;
       letter-spacing: -0.2px;
     }
 
-    .inside p {
+    .inside p{
       font-size: 28px;
       margin: 0 0 18px 0;
       line-height: 1.35;
     }
 
-    .bullets {
+    .bullets{
       margin: 0 0 26px 34px;
       padding: 0;
       font-size: 28px;
       line-height: 1.35;
     }
+    .bullets li{ margin-bottom: 14px; }
 
-    .bullets li { margin-bottom: 14px; }
-
-    .expansion {
+    .expansion{
       margin-top: 22px;
       font-size: 26px;
       font-weight: 900;
       line-height: 1.25;
     }
 
-    .referral {
+    .referral{
       margin-top: 20px;
       font-size: 28px;
       line-height: 1.25;
     }
 
-    .legal {
+    .legal{
       position: absolute;
       left: 140px;
       bottom: 70px;
@@ -182,31 +200,14 @@
       color: var(--muted);
       line-height: 1.25;
     }
-
-    .full-logo {
-      position: absolute;
-      right: 140px;
-      bottom: 62px;
-      height: 90px;
-      width: auto;
-      opacity: 0.95;
-    }
   </style>
 </head>
 
 <body>
   <div id="flyer">
 
-    <!-- FRONT -->
+    <!-- TOP HALF (white, black text, logo centered) -->
     <div class="panel front">
-      <div class="brand-row">
-        <img
-          class="couch-icon"
-          src="/mtc_couch_appicon_white_1024_adjusted.png"
-          alt="MOVE THAT COUCH couch icon"
-        />
-      </div>
-
       <div class="headline">
         GOT A TRUCK?<br />
         GET PAID TO USE IT.
@@ -217,24 +218,39 @@
         Furniture • Appliances • Marketplace pickups
       </div>
 
-      <!-- NEW: QR inside green band -->
-      <div class="front-qr">
-        <div class="qr-box">
-          <img id="qrImg" alt="QR Code" />
-        </div>
-
-        <div class="qr-label">
-          SCAN TO START DRIVING
-          <small>Free to join • Takes ~2 minutes</small>
-        </div>
+      <!-- Full logo centered below "Marketplace pickups" -->
+      <div class="logo-center">
+        <img src="/logo.png" alt="MOVE THAT COUCH logo" />
       </div>
+
+      <!-- Optional subtle brand accent (keep or delete) -->
+      <div class="accent-line"></div>
     </div>
 
     <!-- Fold cue divider -->
     <div class="fold-divider"></div>
 
-    <!-- INSIDE -->
+    <!-- BOTTOM HALF (QR lives here) -->
     <div class="panel inside">
+
+      <!-- Big QR + CTA -->
+      <div class="qr-row">
+        <div class="qr-box">
+          <img id="qrImg" alt="QR Code" />
+        </div>
+
+        <div class="qr-copy">
+          <div class="cta">
+            SCAN TO<br />
+            <span>START DRIVING</span>
+          </div>
+          <div class="micro">
+            Free to join • Takes ~2 minutes
+          </div>
+        </div>
+      </div>
+
+      <!-- Info columns -->
       <div class="columns">
         <div>
           <h2>You’re in Control.</h2>
@@ -284,12 +300,6 @@
         Independent drivers and businesses are not employees.<br />
         Platform facilitates bookings only.
       </div>
-
-      <img
-        class="full-logo"
-        src="/logo.png"
-        alt="MOVE THAT COUCH logo"
-      />
     </div>
   </div>
 
@@ -311,13 +321,13 @@
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
 
       await loadScript("https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js");
-
       if (typeof window.qrcode !== "function") return;
 
       const img = document.getElementById("qrImg");
       if (!img) return;
 
-      const size = 1100; // a bit higher for extra crispness at 420px
+      // High-res QR -> downscaled by CSS for crisp print
+      const size = 1400;
       const canvas = document.createElement("canvas");
       canvas.width = size;
       canvas.height = size;
