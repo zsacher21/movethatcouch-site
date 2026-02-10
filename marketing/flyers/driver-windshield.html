@@ -34,7 +34,6 @@
       overflow:hidden;
     }
 
-    /* Lock fold exactly at center */
     .wrap{
       position:absolute;
       inset:0;
@@ -47,9 +46,8 @@
     .topHalf{
       display:flex;
       flex-direction:column;
-      justify-content:flex-start; /* keep headline at top */
+      justify-content:flex-start;
       gap:80px;
-      padding-top:0;
     }
 
     .headline h1{
@@ -62,7 +60,7 @@
     }
 
     .headline .sub{
-      margin-top:36px; /* intentional breathing room */
+      margin-top:36px;
       font-size:46px;
       font-weight:700;
       line-height:1.3;
@@ -74,6 +72,7 @@
       grid-template-columns:1fr auto 1fr;
       align-items:center;
       gap:90px;
+      margin-top:80px; /* ✅ THIS IS THE ONLY POSITION CHANGE */
     }
 
     .brand{
@@ -90,7 +89,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      transform:translateX(10px); /* subtle nudge */
+      transform:translateX(10px);
     }
 
     .logoFrame img{
@@ -150,7 +149,6 @@
       color:var(--gray);
     }
 
-    /* Fold divider */
     .divider{
       height:16px;
       background:#e5e7eb;
@@ -284,7 +282,7 @@
     </div>
   </div>
 
-  <!-- QR generation (export-safe) -->
+  <!-- QR generation -->
   <script>
     window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
