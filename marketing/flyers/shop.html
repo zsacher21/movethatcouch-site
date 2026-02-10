@@ -34,48 +34,47 @@
       background: #fff;
     }
 
-    /* ✅ HEADER: same height, bigger content inside */
+    /* ✅ HEADER: same height, just nudged down slightly */
     .header{
       height: 380px; /* unchanged */
-      padding: 66px 110px 0 110px; /* was 92px 120px 0 120px */
+      padding: 78px 110px 0 110px; /* was 66px 110px 0 110px */
       background: linear-gradient(90deg, var(--green1), #34d399);
       color: #fff;
       display: flex;
       align-items: flex-start;
-      gap: 48px; /* was 42px */
+      gap: 48px;
     }
 
     .logoBox{
-      width: 176px; height: 176px;   /* was 148px */
-      border-radius: 34px;           /* was 30px */
+      width: 176px; height: 176px;
+      border-radius: 34px;
       background: #fff;
       display:flex; align-items:center; justify-content:center;
       overflow:hidden;
       flex: 0 0 auto;
     }
     .logoBox img{
-      width: 160px; height: 160px;   /* was 138px */
+      width: 160px; height: 160px;
       object-fit: contain;
       display:block;
     }
 
-    .titleWrap{ padding-top: 2px; }  /* was 6px */
+    .titleWrap{ padding-top: 2px; }
 
     .title{
-      font-size: calc(92px * var(--scaleText)); /* was 78px */
+      font-size: calc(92px * var(--scaleText));
       font-weight: 900;
       letter-spacing: 2px;
       margin: 0;
       line-height: 1.05;
     }
     .subtitle{
-      margin-top: 14px; /* was 12px */
-      font-size: calc(40px * var(--scaleText)); /* was 34px */
+      margin-top: 14px;
+      font-size: calc(40px * var(--scaleText));
       font-weight: 750;
       opacity: 0.96;
     }
 
-    /* Panel: slightly less outer margin so content gets more area */
     .panel{
       margin: -46px 98px 0 98px;
       border: 2px solid var(--line);
@@ -91,7 +90,6 @@
       color: var(--ink);
     }
 
-    /* HOW IT WORKS */
     .how{
       display: grid;
       grid-template-columns: 1fr;
@@ -129,7 +127,6 @@
       max-width: 1820px;
     }
 
-    /* GET HELP DELIVERING */
     .helpTitle{
       font-weight: 900;
       margin-top: 22px;
@@ -168,7 +165,6 @@
       display:block;
     }
 
-    /* PAYMENT BOX */
     .payBox{
       margin-top: 34px;
       border: 2px solid var(--line);
@@ -203,7 +199,6 @@
       line-height: 1.46;
     }
 
-    /* LOWER SECTION — bigger QR + taller cards */
     .lower{
       display:grid;
       grid-template-columns: 1fr 1fr;
