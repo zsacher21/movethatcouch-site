@@ -346,9 +346,9 @@
           <div class="divider"></div>
 
           <div class="sectionTitle">Flyers</div>
-          <div class="note" style="margin-top:6px;">
-            We’ll embed your personalized QR directly into printable flyers.
-          </div>
+          <div class="note" id="flyerNote" style="margin-top:6px;">
+  We’ll embed your personalized QR directly into printable flyers.
+</div>
 
           <div class="flyerActions">
             <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
@@ -563,6 +563,11 @@
     if(ok){
       showSuccess(`Personalized QR generated!<br><span class="successSub">Hi ${displayName} 👋</span>`);
     }
+    const flyerNote = document.getElementById("flyerNote");
+if (flyerNote) {
+  flyerNote.textContent =
+    "Your personalized QR has been embedded into these flyers. Tap to download — then print!";
+}
 
     inFlight = false;
   }
