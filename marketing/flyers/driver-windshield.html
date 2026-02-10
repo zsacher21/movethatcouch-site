@@ -246,7 +246,7 @@
       <div class="actionRow">
         <div class="brand">
           <img
-            id="brandLogo"
+            id="brandLogo"  data-role="logo"
             alt="MOVE THAT COUCH! logo"
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
@@ -256,7 +256,7 @@
         <div class="qrBlock">
           <div class="qrBox">
             <img
-              id="qrImage"
+              id="qrImage" data-role="qr"
               alt="QR code to start driving"
               crossorigin="anonymous"
               referrerpolicy="no-referrer"
@@ -314,9 +314,15 @@
   <script>
     // --- Robust asset injection for export tools (iframe/srcdoc/html2canvas safe) ---
 
-    const logoEl = document.getElementById("brandLogo");
-    const qrEl = document.getElementById("qrImage");
-    const qrFallback = document.getElementById("qrFallback");
+    const logoEl = document.querySelector(
+  '#brandLogo, #logo, #brand, #flyerLogo, img[data-role="logo"]'
+);
+
+const qrEl = document.querySelector(
+  '#qrImage, #qr, #qrCode, #qrImg, img[data-role="qr"]'
+);
+
+const qrFallback = document.getElementById("qrFallback");
 
     function setLogo(src) {
       if (!src || !logoEl) return;
