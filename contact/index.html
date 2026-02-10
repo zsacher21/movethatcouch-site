@@ -1,117 +1,144 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact • MOVE THAT COUCH!</title>
 
   <meta name="description" content="Contact MOVE THAT COUCH! Support and general inquiries." />
 
   <style>
     :root{
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --ink:#111827;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --green:#29b34a;
-      --radius:18px;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      --max: 860px;
-      --pad: 20px;
+      --bg: #f7f7f7;
+      --ink: #111;
+
+      --green: #22c55e;
+      --blue: #2563eb;
+      --slate: #475569;
+
+      /* Mobile-first spacing knobs (match Home) */
+      --pad: clamp(16px, 4.5vw, 28px);
+      --contentMax: 680px;
+
+      --radius: 14px;
+      --gap: clamp(10px, 2.8vw, 14px);
+
+      --line: rgba(0,0,0,0.10);
+      --card: #fff;
     }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family:var(--font);
-      background:var(--bg);
-      color:var(--ink);
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      text-align: center;
     }
 
-    .wrap{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding: 36px var(--pad) 28px;
+    /* Center content nicely and respect iPhone safe areas (match Home) */
+    main {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding:
+        calc(var(--pad) + env(safe-area-inset-top))
+        calc(var(--pad) + env(safe-area-inset-right))
+        calc(var(--pad) + env(safe-area-inset-bottom))
+        calc(var(--pad) + env(safe-area-inset-left));
     }
 
-    .logo-wrap{
-      width:100%;
-      max-width:var(--max);
-      display:flex;
-      justify-content:center;
-      margin-bottom: 18px;
+    .container{
+      width: 100%;
+      max-width: var(--contentMax);
+      margin: 0 auto;
     }
 
-    .logo-link{
-      display:inline-block;
-      text-decoration:none;
-      line-height:0;
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: clamp(18px, 4vw, 28px);
     }
 
-    .logo{
-      width: min(520px, 92vw);
-      height:auto;
-      border-radius: 10px;
+    .logo-link { display: inline-block; }
+
+    /* EXACT logo sizing from Home */
+    .logo {
+      width: min(300px, 70vw);
+      height: auto;
+      display: block;
     }
 
     .card{
-      width:100%;
-      max-width:var(--max);
-      background:var(--card);
-      border:1px solid var(--line);
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 26px 26px 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      padding: clamp(16px, 4.2vw, 22px);
+      text-align: left; /* readable for paragraphs */
     }
 
     h1{
-      margin:0 0 10px;
-      font-size: 28px;
-      letter-spacing: .2px;
+      margin: 0 0 10px;
+      font-size: clamp(22px, 5.2vw, 28px);
+      letter-spacing: 0.2px;
+      text-align: left;
     }
 
     h2{
       margin: 18px 0 8px;
-      font-size: 18px;
+      font-size: clamp(16px, 4.2vw, 18px);
+      text-align: left;
     }
 
     p{
       margin: 10px 0;
-      line-height:1.55;
-      color: var(--ink);
-      font-size: 16px;
+      line-height: 1.55;
+      font-size: clamp(15px, 4.0vw, 16px);
+      text-align: left;
     }
 
     ul{
       margin: 10px 0 0 18px;
       padding: 0;
-      color: var(--ink);
+      text-align: left;
     }
-    li{ margin: 8px 0; line-height:1.5; }
+    li{
+      margin: 8px 0;
+      line-height: 1.5;
+      font-size: clamp(15px, 4.0vw, 16px);
+    }
 
-    .muted{ color: var(--muted); }
+    .muted{ color: #555; }
 
     .box{
       margin: 14px 0;
       padding: 14px 16px;
-      border:1px solid var(--line);
-      border-radius: 14px;
-      background: #fafafa;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,0.02);
+      text-align: left;
     }
 
-    .emails p{ margin: 8px 0; }
+    .box p{ margin: 8px 0; }
 
     a{
       color: var(--green);
       text-decoration: none;
-      font-weight: 650;
+      font-weight: 700;
     }
     a:hover{ text-decoration: underline; }
+
+    .fineprint{
+      margin-top: 10px;
+      color: #555;
+      font-size: 13px;
+      line-height: 1.5;
+    }
 
     .divider{
       margin-top: 16px;
@@ -119,93 +146,106 @@
       border-top: 1px solid var(--line);
     }
 
-    .fineprint{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    footer{
-      width:100%;
-      max-width:var(--max);
-      text-align:center;
-      margin-top: 16px;
-      padding: 14px 10px 0;
-      color: var(--muted);
+    footer {
+      margin-top: clamp(22px, 5vw, 40px);
       font-size: 14px;
+      color: #555;
     }
 
-    footer a{
-      color:#2563eb;
+    footer a {
+      color: var(--blue);
+      text-decoration: none;
+      margin: 0 8px;
+      white-space: nowrap;
       font-weight: 500;
     }
 
-    .sep{ margin: 0 10px; color: #9ca3af; }
+    footer a:hover{ text-decoration: underline; }
+
+    /* Slightly tighter on very small phones (match Home pattern) */
+    @media (max-width: 360px){
+      .logo { width: min(280px, 74vw); }
+      footer { font-size: 13px; }
+      .card { padding: 14px; }
+    }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <!-- Logo (clickable back to Home) -->
-    <div class="logo-wrap">
-      <a class="logo-link" href="/" aria-label="Back to Home">
-        <img class="logo" src="/logo.png" alt="MOVE THAT COUCH! logo" />
-      </a>
-    </div>
-
-    <main class="card" role="main">
-      <h1>Contact</h1>
-      <p class="muted">Need help or have a question? Email us and we’ll get back to you as soon as we can.</p>
-
-      <div class="box emails" aria-label="Contact emails">
-        <p><strong>Support:</strong> <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a></p>
-        <p><strong>All other inquiries:</strong> <a href="mailto:hello@movethatcouch.com">hello@movethatcouch.com</a></p>
+  <main>
+    <div class="container">
+      <div class="logo-container">
+        <!-- Contact page: logo clicks back to Home -->
+        <a class="logo-link" href="/" aria-label="Back to MOVE THAT COUCH! Home">
+          <img src="/logo.png" alt="MOVE THAT COUCH!" class="logo" />
+        </a>
       </div>
 
-      <p class="muted"><strong>Note:</strong> We do not offer phone support at this time.</p>
+      <div class="card" role="main" aria-label="Contact information">
+        <h1>Contact</h1>
 
-      <h2>Before you email us</h2>
-      <div class="box">
-        <p><strong>MOVE THAT COUCH!</strong> is a platform that connects customers with nearby <strong>independent drivers</strong>.</p>
-        <ul>
-          <li>Drivers are independent service providers — we don’t employ them and we don’t supervise their work.</li>
-          <li>Drivers set their own prices, availability, and service details — we do not set or guarantee pricing.</li>
-          <li>We do not guarantee pickup or delivery times, driver availability, or outcomes.</li>
-          <li>We are not responsible for a driver’s performance, conduct, or any damage, loss, or issues that occur during service.</li>
-          <li>Any remaining balance is paid directly to the driver outside the app, and we cannot enforce or guarantee payment between customers and drivers.</li>
-        </ul>
-        <p class="fineprint">
-          This is a summary for convenience only. Please refer to our Terms of Service for the full legal terms and conditions.
-        </p>
-      </div>
-
-      <h2>If you need support</h2>
-      <p>Please include as much information as possible so we can quickly locate the right account and delivery.</p>
-      <div class="box">
-        <ul>
-          <li><strong>User ID</strong> (ideal)</li>
-          <li><strong>Delivery ID</strong> (ideal)</li>
-          <li>Pickup city/state and delivery city/state</li>
-          <li>The requested date/time window</li>
-          <li>Screenshots (if relevant)</li>
-        </ul>
-      </div>
-
-      <div class="divider">
-        <h2>Urgent / safety issues</h2>
         <p class="muted">
-          If you feel unsafe or there is an immediate emergency, contact local authorities first. After you’re safe, email
-          <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a> with details so we can review the account activity.
+          Need help or have a question? Email us and we’ll get back to you as soon as we can.
         </p>
-      </div>
-    </main>
 
-    <footer>
-      <a href="/">Home</a><span class="sep">|</span>
-      <a href="/privacy/">Privacy Policy</a><span class="sep">|</span>
-      <a href="/terms/">Terms of Service</a>
-    </footer>
-  </div>
+        <div class="box" aria-label="Contact emails">
+          <p><strong>Support:</strong> <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a></p>
+          <p><strong>All other inquiries:</strong> <a href="mailto:hello@movethatcouch.com">hello@movethatcouch.com</a></p>
+        </div>
+
+        <p class="muted"><strong>Note:</strong> We do not offer phone support at this time.</p>
+
+        <h2>Before you email us</h2>
+        <div class="box">
+          <p>
+            <strong>MOVE THAT COUCH!</strong> is a platform that connects customers with nearby
+            <strong>independent drivers</strong>.
+          </p>
+          <ul>
+            <li>Drivers are independent service providers — we don’t employ them and we don’t supervise their work.</li>
+            <li>Drivers set their own prices, availability, and service details — we do not set or guarantee pricing.</li>
+            <li>We do not guarantee pickup or delivery times, driver availability, or outcomes.</li>
+            <li>We are not responsible for a driver’s performance, conduct, or any damage, loss, or issues that occur during service.</li>
+            <li>Any remaining balance is paid directly to the driver outside the app, and we cannot enforce or guarantee payment between customers and drivers.</li>
+          </ul>
+          <p class="fineprint">
+            This is a summary for convenience only. Please refer to our Terms of Service for the full legal terms and conditions.
+          </p>
+        </div>
+
+        <h2>If you need support</h2>
+        <p>
+          Please include as much information as possible so we can identify the user and delivery.
+          <strong>User ID</strong> and <strong>Delivery ID</strong> are ideal.
+        </p>
+
+        <div class="box">
+          <ul>
+            <li><strong>User ID</strong> (ideal)</li>
+            <li><strong>Delivery ID</strong> (ideal)</li>
+            <li>Pickup city/state and delivery city/state</li>
+            <li>The requested date/time window</li>
+            <li>Screenshots (if relevant)</li>
+          </ul>
+        </div>
+
+        <div class="divider">
+          <h2>Urgent / safety issues</h2>
+          <p class="muted">
+            If you feel unsafe or there is an immediate emergency, contact local authorities first. After you’re safe, email
+            <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a> with details so we can review the account activity.
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        <a href="/">Home</a>
+        |
+        <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+        |
+        <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
+      </footer>
+    </div>
+  </main>
 </body>
 </html>
