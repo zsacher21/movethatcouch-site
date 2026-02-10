@@ -29,6 +29,7 @@
       color:var(--black);
     }
 
+    /* IMPORTANT: exporter looks for #flyer */
     .page{
       width:var(--page-w);
       height:var(--page-h);
@@ -37,13 +38,32 @@
       overflow:hidden;
     }
 
+    /* LOCK THE FOLD TO THE TRUE CENTER:
+       top half (1fr) + divider (16px) + bottom half (1fr) */
     .wrap{
       position:absolute;
       inset:0;
       padding:var(--pad);
+      display:grid;
+      grid-template-rows: 1fr 16px 1fr;
+      gap:0;
+    }
+
+    .topHalf{
       display:flex;
       flex-direction:column;
+      justify-content:flex-start;
       gap:70px;
+      padding-top:0;
+      min-height:0;
+    }
+
+    .bottomHalf{
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      padding-top:70px;
+      min-height:0;
     }
 
     .headline{
@@ -81,11 +101,22 @@
       justify-content:flex-start;
       min-height:520px;
     }
+
+    /* Visually "crop/zoom" logo to remove baked-in padding */
+    .brand .logoFrame{
+      width:520px;
+      height:520px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
     .brand img{
-      max-height:520px;
-      max-width:100%;
-      height:auto;
-      width:auto;
+      height:520px;
+      width:520px;
+      object-fit:cover;
+      transform: scale(1.35);   /* adjust 1.25–1.55 if needed */
+      transform-origin:center;
       display:block;
     }
 
@@ -161,12 +192,14 @@
       color:var(--gray);
     }
 
+    /* Divider is now a dedicated grid row (always centered) */
     .divider{
       height:16px;
       background:#e5e7eb;
       width:calc(100% + (var(--pad) * 2));
       margin-left:calc(var(--pad) * -1);
       margin-right:calc(var(--pad) * -1);
+      align-self:center;
     }
 
     .bottom{
@@ -227,6 +260,7 @@
       display:flex;
       justify-content:space-between;
       gap:40px;
+      pointer-events:none;
     }
   </style>
 </head>
@@ -234,73 +268,83 @@
 <body>
   <div class="page" id="flyer">
     <div class="wrap">
-      <div class="headline">
-        <h1>GOT A TRUCK?<br/>GET PAID TO USE IT.</h1>
-        <div class="sub">
-          Single-item &amp; small-load deliveries<br/>
-          Furniture &bull; Appliances &bull; Marketplace pickups
-        </div>
-      </div>
 
-      <!-- LOGO | QR | CTA -->
-      <div class="actionRow">
-        <div class="brand">
-          <img
-            id="brandLogo" data-role="logo"
-            alt="MOVE THAT COUCH! logo"
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-          />
-        </div>
-
-        <div class="qrBlock">
-          <div class="qrBox">
-            <img
-              id="qrImage" data-role="qr"
-              alt="QR code to start driving"
-              crossorigin="anonymous"
-              referrerpolicy="no-referrer"
-            />
-            <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
+      <!-- TOP HALF -->
+      <div class="topHalf">
+        <div class="headline">
+          <h1>GOT A TRUCK?<br/>GET PAID TO USE IT.</h1>
+          <div class="sub">
+            Single-item &amp; small-load deliveries<br/>
+            Furniture &bull; Appliances &bull; Marketplace pickups
           </div>
         </div>
 
-        <div class="cta">
-          <div class="scanTo">SCAN TO</div>
-          <div class="startDriving">START DRIVING</div>
-          <div class="meta">Free to join &bull; Takes ~2 minutes</div>
+        <!-- LOGO | QR | CTA -->
+        <div class="actionRow">
+          <div class="brand">
+            <div class="logoFrame">
+              <img
+                id="brandLogo" data-role="logo"
+                alt="MOVE THAT COUCH! logo"
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+          <div class="qrBlock">
+            <div class="qrBox">
+              <img
+                id="qrImage" data-role="qr"
+                alt="QR code to start driving"
+                crossorigin="anonymous"
+                referrerpolicy="no-referrer"
+              />
+              <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
+            </div>
+          </div>
+
+          <div class="cta">
+            <div class="scanTo">SCAN TO</div>
+            <div class="startDriving">START DRIVING</div>
+            <div class="meta">Free to join &bull; Takes ~2 minutes</div>
+          </div>
         </div>
       </div>
 
+      <!-- CENTER FOLD DIVIDER (fixed true center) -->
       <div class="divider"></div>
 
-      <div class="bottom">
-        <div>
-          <div class="sectionTitle">You&rsquo;re in Control.</div>
-          <ul class="bullets">
-            <li>Set your own quotes</li>
-            <li>Accept only the jobs you want</li>
-            <li>Work when it fits your schedule</li>
-            <li>Customers pay a <strong>20%</strong> booking deposit in-app</li>
-            <li>You&rsquo;re paid directly for the rest</li>
-          </ul>
+      <!-- BOTTOM HALF -->
+      <div class="bottomHalf">
+        <div class="bottom">
+          <div>
+            <div class="sectionTitle">You&rsquo;re in Control.</div>
+            <ul class="bullets">
+              <li>Set your own quotes</li>
+              <li>Accept only the jobs you want</li>
+              <li>Work when it fits your schedule</li>
+              <li>Customers pay a <strong>20%</strong> booking deposit in-app</li>
+              <li>You&rsquo;re paid directly for the rest</li>
+            </ul>
 
-          <div class="miniTitle">Perfect If You Have:</div>
-          <ul class="miniBullets">
-            <li>Pickup truck</li>
-            <li>Cargo van</li>
-            <li>Box truck</li>
-            <li>Trailer</li>
-          </ul>
-        </div>
+            <div class="miniTitle">Perfect If You Have:</div>
+            <ul class="miniBullets">
+              <li>Pickup truck</li>
+              <li>Cargo van</li>
+              <li>Box truck</li>
+              <li>Trailer</li>
+            </ul>
+          </div>
 
-        <div class="whatIs">
-          <div class="sectionTitle">What Is MOVE THAT COUCH!?</div>
-          <p>MOVE THAT COUCH! connects people who need a single item or small load delivered with nearby independent drivers.</p>
-          <p>You quote the job.<br/>They book it.<br/>You deliver.</p>
-          <p class="strong">Built for independent drivers. Scales with you.</p>
-          <p>Sign up as a solo driver &mdash; or operate under a business or fleet account if you have one.</p>
-          <p><span class="strong">Refer drivers or customers.</span><br/>Earn cash when jobs are completed.</p>
+          <div class="whatIs">
+            <div class="sectionTitle">What Is MOVE THAT COUCH!?</div>
+            <p>MOVE THAT COUCH! connects people who need a single item or small load delivered with nearby independent drivers.</p>
+            <p>You quote the job.<br/>They book it.<br/>You deliver.</p>
+            <p class="strong">Built for independent drivers. Scales with you.</p>
+            <p>Sign up as a solo driver &mdash; or operate under a business or fleet account if you have one.</p>
+            <p><span class="strong">Refer drivers or customers.</span><br/>Earn cash when jobs are completed.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -315,7 +359,6 @@
     // === FlyerExport handshake: flyerExport.js waits for window.__flyerReady Promise ===
     window.__flyerReady = (async () => {
 
-      // Pick up elements robustly
       const logoEl = document.querySelector('#brandLogo, #logo, #brand, #flyerLogo, img[data-role="logo"]');
       const qrEl   = document.querySelector('#qrImage, #qr, #qrCode, #qrImg, img[data-role="qr"]');
       const qrFallback = document.getElementById("qrFallback");
@@ -356,24 +399,21 @@
         });
       }
 
-      // 1) Always set logo to the real known path first (your repo has /logo.png)
+      // 1) Known-good default logo path in your repo
       if (logoEl && !logoEl.src) setLogo("/logo.png");
 
-      // 2) Accept injected globals if you ever use them (optional)
+      // 2) Optional injected globals
       const g = window;
-      const injectedLogo =
-        g.MTC_FLYER_LOGO_SRC || g.FLYER_LOGO_SRC || g.__FLYER_LOGO_SRC || null;
-      const injectedQr =
-        g.MTC_FLYER_QR_SRC || g.FLYER_QR_SRC || g.__FLYER_QR_SRC || g.MTC_FLYER_QR_PNG_DATA_URL || null;
+      const injectedLogo = g.MTC_FLYER_LOGO_SRC || g.FLYER_LOGO_SRC || g.__FLYER_LOGO_SRC || null;
+      const injectedQr   = g.MTC_FLYER_QR_SRC || g.FLYER_QR_SRC || g.__FLYER_QR_SRC || g.MTC_FLYER_QR_PNG_DATA_URL || null;
 
       if (injectedLogo) setLogo(injectedLogo);
       if (injectedQr) setQR(injectedQr);
 
-      // 3) Primary path: generate QR from ?qr=... (this is how your exporter passes it)
+      // 3) Generate QR from ?qr=... (exporter passes this)
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
 
-      // Only generate if we don't already have an injected QR
       const needsGeneratedQR = !(qrEl && qrEl.src && qrEl.src.startsWith("data:image/"));
 
       if (needsGeneratedQR) {
@@ -414,7 +454,7 @@
         }
       }
 
-      // 4) postMessage support still available (optional)
+      // 4) Optional postMessage support
       window.addEventListener("message", (e) => {
         const data = e && e.data ? e.data : null;
         if (!data || typeof data !== "object") return;
@@ -430,7 +470,6 @@
       // 5) Wait for images to load before snapshot
       await Promise.all([waitImg(logoEl), waitImg(qrEl)]);
 
-      // Optional flag (harmless) for debugging
       window.__MTC_FLYER_READY = true;
       document.documentElement.setAttribute("data-flyer-ready", "true");
     })();
