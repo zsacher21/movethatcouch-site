@@ -262,32 +262,38 @@
       .flyerBtn, .primaryBtn{ border-radius: 12px; font-size: 16px; }
     }
 
-    /* Footer links – match home page */
-    .footerLinks{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding:
-        18px
-        calc(var(--page-pad) + env(safe-area-inset-right))
-        calc(28px + env(safe-area-inset-bottom))
-        calc(var(--page-pad) + env(safe-area-inset-left));
-      display:flex;
-      justify-content:center;
-      gap:18px;
-      flex-wrap:wrap;
-      font-size:14px;
-      color: var(--muted);
-    }
+    /* Footer links – match HOME page style (blue + pipe separators) */
+.footerLinks{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding:
+    18px
+    calc(var(--page-pad) + env(safe-area-inset-right))
+    calc(28px + env(safe-area-inset-bottom))
+    calc(var(--page-pad) + env(safe-area-inset-left));
+  text-align: center;
+  font-size: 14px;
+}
 
-    .footerLinks a{
-      color: var(--muted);
-      text-decoration:none;
-      font-weight:600;
-    }
+.footerLinks a{
+  color:#2563eb;
+  text-decoration:none;
+  font-weight: 500;
+  display: inline-block;
+  padding: 6px 2px;
+}
 
-    .footerLinks a:hover{
-      text-decoration:underline;
-    }
+.footerLinks a:hover{
+  text-decoration: underline;
+}
+
+/* Add the " | " separators like the home page */
+.footerLinks a + a::before{
+  content: " | ";
+  color:#94a3b8;
+  margin: 0 10px;
+  text-decoration: none;
+}
   </style>
 </head>
 
