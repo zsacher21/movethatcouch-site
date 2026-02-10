@@ -263,37 +263,36 @@
     }
 
     /* Footer links – match HOME page style (blue + pipe separators) */
-.footerLinks{
-  max-width: var(--max);
-  margin: 0 auto;
-  padding:
-    18px
-    calc(var(--page-pad) + env(safe-area-inset-right))
-    calc(28px + env(safe-area-inset-bottom))
-    calc(var(--page-pad) + env(safe-area-inset-left));
-  text-align: center;
-  font-size: 14px;
-}
+    .footerLinks{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding:
+        18px
+        calc(var(--page-pad) + env(safe-area-inset-right))
+        calc(28px + env(safe-area-inset-bottom))
+        calc(var(--page-pad) + env(safe-area-inset-left));
+      text-align: center;
+      font-size: 14px;
+    }
 
-.footerLinks a{
-  color:#2563eb;
-  text-decoration:none;
-  font-weight: 500;
-  display: inline-block;
-  padding: 6px 2px;
-}
+    .footerLinks a{
+      color:#2563eb;
+      text-decoration:none;
+      font-weight: 500;
+      display: inline-block;
+      padding: 6px 2px;
+    }
 
-.footerLinks a:hover{
-  text-decoration: underline;
-}
+    .footerLinks a:hover{
+      text-decoration: underline;
+    }
 
-/* Add the " | " separators like the home page */
-.footerLinks a + a::before{
-  content: " | ";
-  color:#94a3b8;
-  margin: 0 10px;
-  text-decoration: none;
-}
+    .footerLinks a + a::before{
+      content: " | ";
+      color:#94a3b8;
+      margin: 0 10px;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -320,10 +319,6 @@
   <div class="card">
     <label for="refInput">Paste your referral link (or just the code)</label>
     <input id="refInput" placeholder="Example: V2Z9JE  OR  https://app.movethatcouch.com/?ref=V2Z9JE" />
-
-    <div class="primaryActions">
-      <button class="btn-blue primaryBtn" id="downloadBtn">Download QR (PNG)</button>
-    </div>
 
     <div class="error" id="errorMsg"></div>
     <div class="success" id="successMsg"></div>
@@ -354,6 +349,11 @@
       <div class="qrBox">
         <canvas id="qrCanvas" width="240" height="240"></canvas>
         <div class="small" id="finalLinkText"></div>
+
+        <!-- ✅ MOVED: Download button now lives under the QR -->
+        <div class="primaryActions">
+          <button class="btn-blue primaryBtn" id="downloadBtn">Download QR (PNG)</button>
+        </div>
       </div>
     </div>
   </div>
