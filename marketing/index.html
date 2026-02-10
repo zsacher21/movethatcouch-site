@@ -287,6 +287,27 @@
       :root{ --btn-h: 52px; }
       .flyerBtn, .primaryBtn{ border-radius: 12px; font-size: 16px; }
     }
+    /* Footer links – match home page */
+.footerLinks{
+  margin-top: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.footerLinks a{
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footerLinks a:hover{
+  text-decoration: underline;
+}
   </style>
 </head>
 
@@ -357,14 +378,11 @@
     </div>
   </div>
 
-  <div class="card">
-    <div class="sectionTitle">Legal</div>
-    <div class="note" style="margin-top:8px;">
-      <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-      &nbsp;•&nbsp;
-      <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
-    </div>
-  </div>
+  <div class="footerLinks">
+  <a href="/about">About</a>
+  <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+  <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
+</div>
 </main>
 
 <!-- ✅ ORIGINAL QR GENERATION LOGIC (restored) -->
