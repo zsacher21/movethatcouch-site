@@ -516,11 +516,19 @@
   }
 
   function renderGeneric(message){
-    clearMessages();
-    setCurrentLink(GENERIC_LINK);
-    const ok = drawQr(GENERIC_LINK);
-    if(ok) showSuccess(message || "Showing generic MOVE THAT COUCH! QR.");
+  clearMessages();
+
+  // 🔁 Reset flyer copy to generic state
+  const flyerNote = document.getElementById("flyerNote");
+  if (flyerNote) {
+    flyerNote.textContent =
+      "We’ll embed your personalized QR directly into printable flyers.";
   }
+
+  setCurrentLink(GENERIC_LINK);
+  const ok = drawQr(GENERIC_LINK);
+  if(ok) showSuccess(message || "Showing generic MOVE THAT COUCH! QR.");
+}
 
   async function generate(){
     if (inFlight) return;
