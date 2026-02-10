@@ -246,7 +246,7 @@
       <div class="actionRow">
         <div class="brand">
           <img
-            id="brandLogo"  data-role="logo"
+            id="brandLogo" data-role="logo"
             alt="MOVE THAT COUCH! logo"
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
@@ -312,123 +312,127 @@
   </div>
 
   <script>
-    // --- Robust asset injection for export tools (iframe/srcdoc/html2canvas safe) ---
+    // === FlyerExport handshake: flyerExport.js waits for window.__flyerReady Promise ===
+    window.__flyerReady = (async () => {
 
-    const logoEl = document.querySelector(
-  '#brandLogo, #logo, #brand, #flyerLogo, img[data-role="logo"]'
-);
+      // Pick up elements robustly
+      const logoEl = document.querySelector('#brandLogo, #logo, #brand, #flyerLogo, img[data-role="logo"]');
+      const qrEl   = document.querySelector('#qrImage, #qr, #qrCode, #qrImg, img[data-role="qr"]');
+      const qrFallback = document.getElementById("qrFallback");
 
-const qrEl = document.querySelector(
-  '#qrImage, #qr, #qrCode, #qrImg, img[data-role="qr"]'
-);
+      function setLogo(src) {
+        if (!src || !logoEl) return;
+        logoEl.src = src;
+      }
 
-const qrFallback = document.getElementById("qrFallback");
+      function setQR(dataUrl) {
+        if (!dataUrl || !qrEl) return;
+        qrEl.src = dataUrl;
+        if (qrFallback) qrFallback.classList.add("hidden");
+      }
 
-    function setLogo(src) {
-      if (!src || !logoEl) return;
-      logoEl.src = src;
-    }
+      function loadScript(src){
+        return new Promise((resolve, reject) => {
+          const existing = document.querySelector(`script[data-src="${src}"]`);
+          if (existing) return resolve();
 
-    function setQR(src) {
-      if (!src || !qrEl) return;
-      qrEl.src = src;
-      // hide fallback once QR has something
-      if (qrFallback) qrFallback.classList.add("hidden");
-    }
+          const s = document.createElement("script");
+          s.src = src;
+          s.async = true;
+          s.dataset.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
 
-    // 1) Prefer data-urls/globals (best for exports)
-    // Your exporter can set any of these before snapshot:
-    //   window.MTC_FLYER_LOGO_SRC = "data:image/png;base64,..."
-    //   window.MTC_FLYER_QR_SRC   = "data:image/png;base64,..."
-    // or:
-    //   window.MTC_FLYER_QR_PNG_DATA_URL (legacy)
-    (function bootFromGlobals(){
+      function waitImg(img){
+        return new Promise((resolve) => {
+          if (!img) return resolve();
+          if (img.complete && img.naturalWidth > 0) return resolve();
+          const done = () => resolve();
+          img.addEventListener("load", done, { once:true });
+          img.addEventListener("error", done, { once:true });
+        });
+      }
+
+      // 1) Always set logo to the real known path first (your repo has /logo.png)
+      if (logoEl && !logoEl.src) setLogo("/logo.png");
+
+      // 2) Accept injected globals if you ever use them (optional)
       const g = window;
+      const injectedLogo =
+        g.MTC_FLYER_LOGO_SRC || g.FLYER_LOGO_SRC || g.__FLYER_LOGO_SRC || null;
+      const injectedQr =
+        g.MTC_FLYER_QR_SRC || g.FLYER_QR_SRC || g.__FLYER_QR_SRC || g.MTC_FLYER_QR_PNG_DATA_URL || null;
 
-      const logoSrc =
-        g.MTC_FLYER_LOGO_SRC ||
-        g.FLYER_LOGO_SRC ||
-        g.__FLYER_LOGO_SRC ||
-        null;
+      if (injectedLogo) setLogo(injectedLogo);
+      if (injectedQr) setQR(injectedQr);
 
-      const qrSrc =
-        g.MTC_FLYER_QR_SRC ||
-        g.FLYER_QR_SRC ||
-        g.__FLYER_QR_SRC ||
-        g.MTC_FLYER_QR_PNG_DATA_URL || // legacy name
-        null;
+      // 3) Primary path: generate QR from ?qr=... (this is how your exporter passes it)
+      const params = new URLSearchParams(window.location.search);
+      const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
 
-      if (logoSrc) setLogo(logoSrc);
-      if (qrSrc) setQR(qrSrc);
-    })();
+      // Only generate if we don't already have an injected QR
+      const needsGeneratedQR = !(qrEl && qrEl.src && qrEl.src.startsWith("data:image/"));
 
-    // 2) Fallback logo paths (for normal browsing if globals not injected)
-    // IMPORTANT: edit these paths to match YOUR repo if needed.
-    (function logoFallbacks(){
-      if (!logoEl || logoEl.src) return;
+      if (needsGeneratedQR) {
+        await loadScript("https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js");
 
-      const candidates = [
-        "/assets/logo-mtc.png",
-        "/marketing/assets/logo-mtc.png",
-        "/marketing/assets/mtc-logo.png",
-        "./assets/logo-mtc.png",
-        "./logo-mtc.png"
-      ];
+        if (typeof window.qrcode === "function") {
+          const size = 1400; // high-res -> downscaled into 520px box
+          const canvas = document.createElement("canvas");
+          canvas.width = size;
+          canvas.height = size;
 
-      let i = 0;
-      const tryNext = () => {
-        if (i >= candidates.length) return;
-        const url = candidates[i++];
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => setLogo(url);
-        img.onerror = tryNext;
-        img.src = url;
-      };
-      tryNext();
-    })();
+          const qr = window.qrcode(0, "M");
+          qr.addData(qrLink);
+          qr.make();
 
-    // 3) postMessage support (best for iframe export without touching paths)
-    // Parent can send:
-    //   iframe.contentWindow.postMessage({type:"MTC_SET_FLYER_ASSETS", logoSrc:"...", qrSrc:"..."}, "*")
-    window.addEventListener("message", (e) => {
-      const data = e && e.data ? e.data : null;
-      if (!data || typeof data !== "object") return;
+          const ctx = canvas.getContext("2d");
+          const cells = qr.getModuleCount();
+          const tile = size / cells;
 
-      if (data.type === "MTC_SET_FLYER_ASSETS") {
-        if (data.logoSrc) setLogo(data.logoSrc);
-        if (data.qrSrc) setQR(data.qrSrc);
-      }
-      if (data.type === "MTC_SET_FLYER_QR" && data.qrSrc) setQR(data.qrSrc);
-      if (data.type === "MTC_SET_FLYER_LOGO" && data.logoSrc) setLogo(data.logoSrc);
-    });
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, size, size);
 
-    // 4) Let exporter know when images are actually loaded (prevents blank snapshots)
-    // Exporter can wait for window.__MTC_FLYER_READY === true
-    (function readyHandshake(){
-      const targets = [logoEl, qrEl].filter(Boolean);
+          ctx.fillStyle = "#000000";
+          for (let r = 0; r < cells; r++) {
+            for (let c = 0; c < cells; c++) {
+              if (qr.isDark(r, c)) {
+                ctx.fillRect(
+                  Math.floor(c * tile),
+                  Math.floor(r * tile),
+                  Math.ceil(tile),
+                  Math.ceil(tile)
+                );
+              }
+            }
+          }
 
-      function isLoaded(img){
-        return img && img.complete && img.naturalWidth > 0;
-      }
-
-      function checkReady(){
-        const ok = targets.every(isLoaded);
-        if (ok) {
-          window.__MTC_FLYER_READY = true;
-          document.documentElement.setAttribute("data-flyer-ready", "true");
+          setQR(canvas.toDataURL("image/png"));
         }
       }
 
-      targets.forEach(img => {
-        img.addEventListener("load", checkReady);
-        img.addEventListener("error", checkReady);
+      // 4) postMessage support still available (optional)
+      window.addEventListener("message", (e) => {
+        const data = e && e.data ? e.data : null;
+        if (!data || typeof data !== "object") return;
+
+        if (data.type === "MTC_SET_FLYER_ASSETS") {
+          if (data.logoSrc) setLogo(data.logoSrc);
+          if (data.qrSrc) setQR(data.qrSrc);
+        }
+        if (data.type === "MTC_SET_FLYER_QR" && data.qrSrc) setQR(data.qrSrc);
+        if (data.type === "MTC_SET_FLYER_LOGO" && data.logoSrc) setLogo(data.logoSrc);
       });
 
-      // also check soon after load in case already cached
-      setTimeout(checkReady, 50);
-      setTimeout(checkReady, 300);
-      setTimeout(checkReady, 800);
+      // 5) Wait for images to load before snapshot
+      await Promise.all([waitImg(logoEl), waitImg(qrEl)]);
+
+      // Optional flag (harmless) for debugging
+      window.__MTC_FLYER_READY = true;
+      document.documentElement.setAttribute("data-flyer-ready", "true");
     })();
   </script>
 </body>
