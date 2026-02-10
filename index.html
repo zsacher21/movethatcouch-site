@@ -5,91 +5,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MOVE THAT COUCH!</title>
   <style>
+    :root{
+      --bg: #f7f7f7;
+      --ink: #111;
+
+      --green: #22c55e;
+      --blue: #2563eb;
+      --slate: #475569;
+
+      /* Mobile-first spacing knobs */
+      --pad: clamp(16px, 4.5vw, 28px);
+      --contentMax: 680px;
+      --btnMax: 520px;
+
+      --radius: 14px;
+      --gap: clamp(10px, 2.8vw, 14px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f7f7f7;
-      color: #111;
+      background: var(--bg);
+      color: var(--ink);
       text-align: center;
     }
 
+    /* Center content nicely and respect iPhone safe areas */
     main {
-      padding: 48px 16px 40px;
-      max-width: 640px;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding:
+        calc(var(--pad) + env(safe-area-inset-top))
+        calc(var(--pad) + env(safe-area-inset-right))
+        calc(var(--pad) + env(safe-area-inset-bottom))
+        calc(var(--pad) + env(safe-area-inset-left));
+    }
+
+    .container{
+      width: 100%;
+      max-width: var(--contentMax);
       margin: 0 auto;
     }
 
     .logo-container {
       display: flex;
       justify-content: center;
-      margin-bottom: 32px;
+      margin-bottom: clamp(18px, 4vw, 28px);
     }
 
     .logo-link { display: inline-block; }
+
     .logo {
-      max-width: 280px;
-      width: 85%;
+      width: min(300px, 70vw);
       height: auto;
+      display: block;
+    }
+
+    .button-stack{
+      display: grid;
+      gap: var(--gap);
+      justify-items: center;
     }
 
     .button {
-      display: block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
       width: 100%;
-      max-width: 360px;
-      margin: 12px auto;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 8px;
+      max-width: var(--btnMax);
+
+      padding: clamp(12px, 3.6vw, 16px) clamp(14px, 4.2vw, 20px);
+      font-size: clamp(15px, 4.2vw, 18px);
+      font-weight: 700;
+      line-height: 1.1;
+
+      border-radius: var(--radius);
       text-decoration: none;
       color: white;
-      background: #22c55e;
+      background: var(--green);
+
+      /* Optional polish */
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
-    .button.secondary { background: #2563eb; }
-    .button.gray { background: #475569; }
+    .button:active { transform: translateY(1px); }
+
+    .button.secondary { background: var(--blue); }
+    .button.gray { background: var(--slate); }
 
     footer {
-      margin-top: 48px;
+      margin-top: clamp(22px, 5vw, 40px);
       font-size: 14px;
       color: #555;
     }
 
     footer a {
-      color: #2563eb;
+      color: var(--blue);
       text-decoration: none;
       margin: 0 8px;
+      white-space: nowrap;
+    }
+
+    /* Slightly tighter on very small phones */
+    @media (max-width: 360px){
+      .logo { width: min(280px, 74vw); }
+      footer { font-size: 13px; }
     }
   </style>
 </head>
 <body>
 
   <main>
-    <div class="logo-container">
-      <a class="logo-link" href="/about" aria-label="About MOVE THAT COUCH!">
-        <img src="/logo.png" alt="MOVE THAT COUCH!" class="logo" />
-      </a>
+    <div class="container">
+      <div class="logo-container">
+        <a class="logo-link" href="/about" aria-label="About MOVE THAT COUCH!">
+          <img src="/logo.png" alt="MOVE THAT COUCH!" class="logo" />
+        </a>
+      </div>
+
+      <div class="button-stack">
+        <a class="button" href="#" target="_blank" rel="noopener">
+          Download on the App Store
+        </a>
+
+        <a class="button secondary" href="#" target="_blank" rel="noopener">
+          Get it on Google Play
+        </a>
+
+        <a class="button gray" href="/marketing">
+          Marketing Materials
+        </a>
+      </div>
+
+      <footer>
+        <a href="/about">About</a>
+        |
+        <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+        |
+        <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
+      </footer>
     </div>
-
-    <a class="button" href="#" target="_blank" rel="noopener">
-      Download on the App Store
-    </a>
-
-    <a class="button secondary" href="#" target="_blank" rel="noopener">
-      Get it on Google Play
-    </a>
-
-    <a class="button gray" href="/marketing">
-      Marketing Materials
-    </a>
-
-    <footer>
-      <a href="/about">About</a>
-      |
-      <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-      |
-      <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
-    </footer>
   </main>
 
 </body>
