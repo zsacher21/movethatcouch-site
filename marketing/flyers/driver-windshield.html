@@ -1,269 +1,292 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>MTC Driver Windshield Flyer</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MOVE THAT COUCH! — Driver Windshield Flyer</title>
 
   <style>
-    html, body { margin: 0; padding: 0; background: #ffffff; }
-    body { font-family: Arial, Helvetica, sans-serif; }
-
     :root{
-      --mtc-green: #39AD54;
-      --black: #000000;
-      --muted: #444;
-      --light: #e5e7eb;
+      --black:#111;
+      --gray:#6b7280;
+      --light:#f3f4f6;
+      --green:#29b34a; /* adjust if you have an official hex */
+      --page-w: 2550px;
+      --page-h: 3300px;
+      --pad: 160px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
 
-    /* Root required by flyerExport.js */
-    #flyer{
-      width: 2550px;
-      height: 3300px;
-      display: flex;
-      flex-direction: column;
-      background: #ffffff;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:#ddd;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:var(--font);
+      color:var(--black);
     }
 
-    .panel{
-      width: 100%;
-      box-sizing: border-box;
-      padding: 140px;
+    /* Print canvas (8.5x11 @ 300dpi) */
+    .page{
+      width:var(--page-w);
+      height:var(--page-h);
+      background:#fff;
+      position:relative;
+      overflow:hidden;
     }
 
-    /* ================= TOP HALF (windshield-facing) ================= */
-    .front{
-      height: 1650px;
-      background: #ffffff;
-      color: var(--black);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+    .wrap{
+      position:absolute;
+      inset:0;
+      padding:var(--pad);
+      display:flex;
+      flex-direction:column;
+      gap:70px;
     }
 
+    /* Header */
     .headline{
-      font-weight: 900;
-      font-size: 130px;
-      line-height: 1.02;
-      letter-spacing: -1px;
-      text-transform: uppercase;
-      margin: 0;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .headline h1{
+      margin:0;
+      font-size:150px;
+      line-height:0.95;
+      letter-spacing:-1px;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+    .headline .sub{
+      font-size:46px;
+      font-weight:700;
+      color:var(--black);
+      line-height:1.25;
     }
 
-    .subhead{
-      margin-top: 34px;
-      font-size: 40px;
-      font-weight: 750;
-      line-height: 1.25;
-      color: var(--black);
+    /* Action Row: LOGO | QR | CTA */
+    .actionRow{
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items:center;
+      gap:90px;
+      padding:20px 0 10px;
     }
 
-    /* Full logo centered below the subhead */
-    .logo-center{
-      margin-top: 70px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* Left: Logo */
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      min-height:520px;
     }
-    .logo-center img{
-      width: 900px;   /* adjust if you want bigger/smaller */
-      height: auto;
-      display: block;
-    }
-
-    /* Optional: a clean little green accent line so it still feels branded
-       (not a background flood). Remove if you want pure black/white. */
-    .accent-line{
-      margin-top: 80px;
-      height: 16px;
-      width: 360px;
-      background: var(--mtc-green);
-      border-radius: 999px;
+    .brand img{
+      max-height:520px;
+      max-width:100%;
+      height:auto;
+      width:auto;
+      display:block;
     }
 
-    /* Divider / fold cue */
-    .fold-divider{
-      height: 14px;
-      background: var(--light);
+    /* Center: QR */
+    .qrBlock{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .qrBox{
+      width:520px;
+      height:520px;
+      background:#fff;
+      border-radius:26px;
+      padding:18px; /* quiet zone */
+      /* optional subtle shadow to lift on print */
+      box-shadow:0 12px 30px rgba(0,0,0,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .qrBox img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      image-rendering:pixelated;
+      display:block;
     }
 
-    /* ================= BOTTOM HALF ================= */
-    .inside{
-      height: 1650px;
-      background: #ffffff;
-      color: var(--black);
-      position: relative;
-      padding-bottom: 200px;
-      display: flex;
-      flex-direction: column;
-      gap: 80px;
+    /* Right: CTA */
+    .cta{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:center;
+      min-height:520px;
+      gap:18px;
+    }
+    .cta .scanTo{
+      font-size:64px;
+      font-weight:900;
+      letter-spacing:0.5px;
+      text-transform:uppercase;
+      line-height:1;
+      margin:0;
+    }
+    .cta .startDriving{
+      font-size:94px;
+      font-weight:900;
+      text-transform:uppercase;
+      line-height:1;
+      margin:0;
+      color:var(--green);
+    }
+    .cta .meta{
+      font-size:44px;
+      font-weight:700;
+      color:var(--gray);
     }
 
-    /* QR moved to bottom half, made impossible to miss */
-    .qr-row{
-      display: flex;
-      align-items: center;
-      gap: 70px;
+    /* Divider band between top and bottom */
+    .divider{
+      height:16px;
+      background:#e5e7eb;
+      width:calc(100% + (var(--pad) * 2));
+      margin-left:calc(var(--pad) * -1);
+      margin-right:calc(var(--pad) * -1);
     }
 
-    .qr-box{
-      width: 520px;
-      height: 520px;
-      background: #ffffff;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      box-shadow: 0 0 0 10px rgba(0,0,0,0.06);
-      border: 6px solid #111;
-      flex: 0 0 auto;
-    }
-
-    #qrImg{
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .qr-copy{
-      flex: 1;
-      min-width: 0;
-    }
-
-    .qr-copy .cta{
-      font-size: 78px;
-      font-weight: 900;
-      line-height: 1.02;
-      text-transform: uppercase;
-      margin: 0;
-    }
-
-    .qr-copy .cta span{
-      color: var(--mtc-green);
-    }
-
-    .qr-copy .micro{
-      margin-top: 18px;
-      font-size: 34px;
-      font-weight: 800;
-      color: var(--muted);
-    }
-
-    /* Two-column info area below QR */
-    .columns{
-      display: grid;
+    /* Bottom: two columns */
+    .bottom{
+      display:grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: 180px;
-      align-items: start;
+      gap:110px;
+      align-items:start;
+      margin-top:10px;
     }
 
-    .inside h2{
-      font-size: 42px;
-      font-weight: 900;
-      margin: 0 0 18px 0;
-      letter-spacing: -0.2px;
-    }
-
-    .inside p{
-      font-size: 28px;
-      margin: 0 0 18px 0;
-      line-height: 1.35;
+    .sectionTitle{
+      font-size:56px;          /* increased */
+      font-weight:900;
+      margin:0 0 24px 0;
     }
 
     .bullets{
-      margin: 0 0 26px 34px;
-      padding: 0;
-      font-size: 28px;
-      line-height: 1.35;
+      margin:0;
+      padding-left:44px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      color:var(--black);
+      font-size:44px;          /* increased */
+      line-height:1.35;
+      font-weight:600;
     }
-    .bullets li{ margin-bottom: 14px; }
+    .bullets li{ margin:0; }
 
-    .expansion{
-      margin-top: 22px;
-      font-size: 26px;
-      font-weight: 900;
-      line-height: 1.25;
+    .miniTitle{
+      margin:42px 0 16px 0;
+      font-size:50px;          /* increased */
+      font-weight:900;
+    }
+    .miniBullets{
+      margin:0;
+      padding-left:44px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      font-size:44px;          /* increased */
+      line-height:1.35;
+      font-weight:600;
     }
 
-    .referral{
-      margin-top: 20px;
-      font-size: 28px;
-      line-height: 1.25;
+    .whatIs p{
+      margin:0 0 18px 0;
+      font-size:44px;          /* increased */
+      line-height:1.45;
+      font-weight:600;
+      color:var(--black);
+    }
+    .whatIs .strong{
+      font-weight:900;
     }
 
-    .legal{
-      position: absolute;
-      left: 140px;
-      bottom: 70px;
-      font-size: 18px;
-      color: var(--muted);
-      line-height: 1.25;
+    .footerNote{
+      position:absolute;
+      left:var(--pad);
+      right:var(--pad);
+      bottom:80px;
+      font-size:26px;
+      color:#9ca3af;
+      display:flex;
+      justify-content:space-between;
+      gap:40px;
     }
+
+    /* Small helpers for bold inline */
+    .green{ color:var(--green); font-weight:900; }
+
+    /* If you want a more “poster” feel, uncomment:
+    .page { box-shadow:0 40px 120px rgba(0,0,0,.25); }
+    */
   </style>
 </head>
 
 <body>
-  <div id="flyer">
-
-    <!-- TOP HALF (white, black text, logo centered) -->
-    <div class="panel front">
+  <div class="page" id="flyer">
+    <div class="wrap">
+      <!-- TOP HEADLINE -->
       <div class="headline">
-        GOT A TRUCK?<br />
-        GET PAID TO USE IT.
-      </div>
-
-      <div class="subhead">
-        Single-item &amp; small-load deliveries<br />
-        Furniture • Appliances • Marketplace pickups
-      </div>
-
-      <!-- Full logo centered below "Marketplace pickups" -->
-      <div class="logo-center">
-        <img src="/logo.png" alt="MOVE THAT COUCH logo" />
-      </div>
-
-      <!-- Optional subtle brand accent (keep or delete) -->
-      <div class="accent-line"></div>
-    </div>
-
-    <!-- Fold cue divider -->
-    <div class="fold-divider"></div>
-
-    <!-- BOTTOM HALF (QR lives here) -->
-    <div class="panel inside">
-
-      <!-- Big QR + CTA -->
-      <div class="qr-row">
-        <div class="qr-box">
-          <img id="qrImg" alt="QR Code" />
-        </div>
-
-        <div class="qr-copy">
-          <div class="cta">
-            SCAN TO<br />
-            <span>START DRIVING</span>
-          </div>
-          <div class="micro">
-            Free to join • Takes ~2 minutes
-          </div>
+        <h1>GOT A TRUCK?<br/>GET PAID TO USE IT.</h1>
+        <div class="sub">
+          Single-item &amp; small-load deliveries<br/>
+          Furniture &bull; Appliances &bull; Marketplace pickups
         </div>
       </div>
 
-      <!-- Info columns -->
-      <div class="columns">
+      <!-- ACTION ROW: LOGO | QR | CTA -->
+      <div class="actionRow">
+        <!-- Left: Logo -->
+        <div class="brand">
+          <!-- Update this path to your real logo file -->
+          <img src="./assets/logo-mtc.png" alt="MOVE THAT COUCH! logo" />
+        </div>
+
+        <!-- Center: QR -->
+        <div class="qrBlock">
+          <div class="qrBox">
+            <!-- Your JS can replace this src dynamically -->
+            <img id="qrImage" src="./assets/qr-placeholder.png" alt="QR code to start driving" />
+          </div>
+        </div>
+
+        <!-- Right: CTA -->
+        <div class="cta">
+          <div class="scanTo">SCAN TO</div>
+          <div class="startDriving">START DRIVING</div>
+          <div class="meta">Free to join &bull; Takes ~2 minutes</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- BOTTOM CONTENT -->
+      <div class="bottom">
+        <!-- Left column -->
         <div>
-          <h2>You’re in Control.</h2>
+          <div class="sectionTitle">You&rsquo;re in Control.</div>
           <ul class="bullets">
             <li>Set your own quotes</li>
             <li>Accept only the jobs you want</li>
             <li>Work when it fits your schedule</li>
-            <li>Customers pay a <strong>20% booking deposit</strong> in-app</li>
-            <li><strong>You’re paid directly</strong> for the rest</li>
+            <li>Customers pay a <span class="strong">20%</span> booking deposit in-app</li>
+            <li>You&rsquo;re paid directly for the rest</li>
           </ul>
 
-          <h2>Perfect If You Have:</h2>
-          <ul class="bullets">
+          <div class="miniTitle">Perfect If You Have:</div>
+          <ul class="miniBullets">
             <li>Pickup truck</li>
             <li>Cargo van</li>
             <li>Box truck</li>
@@ -271,95 +294,49 @@
           </ul>
         </div>
 
-        <div>
-          <h2>What Is MOVE THAT COUCH!?</h2>
+        <!-- Right column -->
+        <div class="whatIs">
+          <div class="sectionTitle">What Is MOVE THAT COUCH!?</div>
           <p>
-            MOVE THAT COUCH! connects people who need a single item or small
-            load delivered with nearby independent drivers.
+            MOVE THAT COUCH! connects people who need a single item or small load delivered with nearby independent drivers.
           </p>
           <p>
-            You quote the job.<br />
-            They book it.<br />
+            You quote the job.<br/>
+            They book it.<br/>
             You deliver.
           </p>
-
-          <div class="expansion">
-            Built for independent drivers. Scales with you.<br />
-            Sign up as a solo driver — or operate under a business or fleet
-            account if you have one.
-          </div>
-
-          <div class="referral">
-            <strong>Refer drivers or customers.</strong><br />
+          <p class="strong">
+            Built for independent drivers. Scales with you.
+          </p>
+          <p>
+            Sign up as a solo driver &mdash; or operate under a business or fleet account if you have one.
+          </p>
+          <p>
+            <span class="strong">Refer drivers or customers.</span><br/>
             Earn cash when jobs are completed.
-          </div>
+          </p>
         </div>
       </div>
+    </div>
 
-      <div class="legal">
-        Independent drivers and businesses are not employees.<br />
-        Platform facilitates bookings only.
-      </div>
+    <div class="footerNote">
+      <div>Independent drivers and businesses are not employees.</div>
+      <div>Platform facilitates bookings only.</div>
     </div>
   </div>
 
-  <!-- QR generation + exporter handshake -->
+  <!-- OPTIONAL: simple helper to set QR dynamically -->
   <script>
-    window.__flyerReady = (async () => {
-      function loadScript(src){
-        return new Promise((resolve, reject) => {
-          const s = document.createElement("script");
-          s.src = src;
-          s.async = true;
-          s.onload = resolve;
-          s.onerror = reject;
-          document.head.appendChild(s);
-        });
-      }
-
-      const params = new URLSearchParams(window.location.search);
-      const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
-
-      await loadScript("https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js");
-      if (typeof window.qrcode !== "function") return;
-
-      const img = document.getElementById("qrImg");
+    // If your existing QR generator sets a global, adapt here.
+    // Example: window.MTC_FLYER_QR_PNG_DATA_URL = "data:image/png;base64,...";
+    (function () {
+      const img = document.getElementById("qrImage");
       if (!img) return;
 
-      // High-res QR -> downscaled by CSS for crisp print
-      const size = 1400;
-      const canvas = document.createElement("canvas");
-      canvas.width = size;
-      canvas.height = size;
-
-      const qr = window.qrcode(0, "M");
-      qr.addData(qrLink);
-      qr.make();
-
-      const ctx = canvas.getContext("2d");
-      const cells = qr.getModuleCount();
-      const tile = size / cells;
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, size, size);
-
-      ctx.fillStyle = "#000000";
-      for (let r = 0; r < cells; r++) {
-        for (let c = 0; c < cells; c++) {
-          if (qr.isDark(r, c)) {
-            ctx.fillRect(
-              Math.floor(c * tile),
-              Math.floor(r * tile),
-              Math.ceil(tile),
-              Math.ceil(tile)
-            );
-          }
-        }
+      if (window.MTC_FLYER_QR_PNG_DATA_URL && typeof window.MTC_FLYER_QR_PNG_DATA_URL === "string") {
+        img.src = window.MTC_FLYER_QR_PNG_DATA_URL;
       }
-
-      img.src = canvas.toDataURL("image/png");
     })();
   </script>
-
 </body>
 </html>
