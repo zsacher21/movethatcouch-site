@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marketing Materials • MOVE THAT COUCH!</title>
 
+  <!-- Optional: stop favicon 404 noise -->
   <link rel="icon" href="data:," />
 
   <style>
@@ -45,7 +46,7 @@
 
     .headerInner{
       max-width: var(--max);
-      margin:0 auto;
+      margin: 0 auto;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -56,6 +57,7 @@
       display:flex;
       flex-direction:column;
       gap:8px;
+      min-width:0;
     }
 
     header a{
@@ -63,7 +65,7 @@
       text-decoration:none;
       opacity:0.9;
       font-weight:600;
-      width:fit-content;
+      width: fit-content;
     }
     header a:hover{ opacity:1; }
 
@@ -73,28 +75,32 @@
       line-height:1.15;
     }
 
+    /* Make logo clickable + tap-friendly */
     .logoLink{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      border-radius:16px;
+      border-radius: 16px;
+      -webkit-tap-highlight-color: transparent;
       text-decoration:none;
+      flex-shrink:0;
     }
 
     .headerLogo{
-      height:56px;
+      height: 56px;
+      width:auto;
+      display:block;
+      border-radius: 14px;
       background:#fff;
       padding:6px;
-      border-radius:14px;
     }
-
-    @media (min-width:768px){
-      .headerLogo{ height:64px; }
+    @media (min-width: 768px){
+      .headerLogo{ height: 64px; }
     }
 
     main{
       max-width: var(--max);
-      margin:0 auto;
+      margin: 0 auto;
       padding:
         18px
         calc(var(--page-pad) + env(safe-area-inset-right))
@@ -106,18 +112,14 @@
       background:#fff;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding:16px;
-      margin-top:14px;
+      padding: 16px;
+      margin-top: 14px;
     }
 
-    label{
-      font-weight:800;
-      display:block;
-      margin-bottom:8px;
-    }
-
+    label { display:block; font-weight:800; margin-bottom:8px; }
     input{
       width:100%;
+      box-sizing:border-box;
       padding:12px;
       border-radius:10px;
       border:1px solid #cbd5e1;
@@ -125,86 +127,145 @@
     }
 
     button{
-      border:0;
-      border-radius:14px;
-      font-weight:800;
-      cursor:pointer;
+      border: 0;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:disabled{
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
-    .btn-blue{ background:#2563eb; color:#fff; }
-    .btn-gray{ background:#475569; color:#fff; }
+    .btn-green { background:#22c55e; color:white; }
+    .btn-blue  { background:#2563eb; color:white; }
+    .btn-gray  { background:#475569; color:white; }
 
-    .primaryActions,
-    .flyerActions{
+    .note{
+      color: var(--muted);
+      font-size:14px;
+      margin-top:10px;
+      line-height:1.35;
+    }
+    .error { color:#b91c1c; font-weight:800; margin-top:10px; display:none; }
+    .success { color:#166534; font-weight:800; margin-top:10px; display:none; }
+    .greeting { margin-top:10px; font-weight:900; color: var(--ink); display:none; }
+
+    .divider { height:1px; background: var(--line); margin:16px 0; }
+    .sectionTitle { font-weight:900; margin-top:6px; color: var(--ink); }
+
+    /* Mobile-first layout adjustments:
+       Flyers appear sooner. QR smaller and de-emphasized. */
+    .qrWrap{
       display:grid;
-      gap:12px;
-      justify-items:center;
-      margin-top:12px;
+      gap: 14px;
+      margin-top:14px;
+      align-items:start;
     }
 
-    .primaryBtn,
+    /* Desktop side-by-side */
+    @media (min-width: 900px){
+      .qrWrap{
+        grid-template-columns: 1fr 320px;
+        gap: 18px;
+      }
+    }
+
+    .notePanel{ padding-top:2px; }
+
+    .qrBox{
+      width:100%;
+      max-width: 260px;
+      background:#fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      text-align:center;
+      justify-self: center;
+    }
+
+    /* QR size: smaller on phones (canvas drawing still uses 240x240 internal res) */
+    canvas{
+      width: 180px;
+      height: 180px;
+      image-rendering: pixelated;
+      display:block;
+      margin: 0 auto;
+      background:#fff;
+    }
+    #qrCanvas{ width:180px; height:180px; }
+
+    @media (min-width: 480px){
+      canvas, #qrCanvas{ width:200px; height:200px; }
+    }
+    @media (min-width: 900px){
+      canvas, #qrCanvas{ width:220px; height:220px; }
+      .qrBox{ max-width: 280px; }
+    }
+
+    .small{
+      font-size:12px;
+      color: var(--muted);
+      word-break: break-all;
+      margin-top: 8px;
+    }
+
+    /* Uniform centered buttons */
+    .primaryActions{
+      margin-top: 12px;
+      display:grid;
+      gap: 12px;
+      justify-items:center;
+    }
+
+    .primaryBtn{
+      width:100%;
+      max-width: var(--btn-max);
+      height: var(--btn-h);
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: clamp(16px, 4.2vw, 18px);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0 18px;
+      -webkit-tap-highlight-color: transparent;
+      text-align:center;
+    }
+
+    .flyerActions{
+      margin-top: 10px;
+      display:grid;
+      gap: 12px;
+      justify-items:center;
+    }
+
     .flyerBtn{
       width:100%;
       max-width: var(--btn-max);
       height: var(--btn-h);
+      border-radius: 14px;
+      font-weight: 800;
       font-size: clamp(16px, 4.2vw, 18px);
-      display:flex;
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding:0 18px;
-    }
-
-    .note{
-      font-size:14px;
-      color:var(--muted);
-      line-height:1.35;
-      margin-top:10px;
-    }
-
-    .divider{
-      height:1px;
-      background:var(--line);
-      margin:16px 0;
-    }
-
-    .qrWrap{
-      display:grid;
-      gap:14px;
-      margin-top:14px;
-    }
-
-    @media (min-width:900px){
-      .qrWrap{
-        grid-template-columns:320px 1fr;
-      }
-    }
-
-    .qrBox{
-      max-width:260px;
-      margin:0 auto;
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding:12px;
+      padding: 0 18px;
       text-align:center;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    canvas{
-      width:180px;
-      height:180px;
-      display:block;
-      margin:0 auto;
+    @media (max-width: 360px){
+      :root{ --btn-h: 52px; }
+      .flyerBtn, .primaryBtn{ border-radius: 12px; font-size: 16px; }
     }
 
-    @media (min-width:480px){
-      canvas{ width:200px; height:200px; }
-    }
-
-    @media (min-width:900px){
-      canvas{ width:220px; height:220px; }
-    }
-
-    /* ✅ Footer now truly matches home page */
+    /* Footer links – match home page */
     .footerLinks{
+      max-width: var(--max);
+      margin: 0 auto;
       padding:
         18px
         calc(var(--page-pad) + env(safe-area-inset-right))
@@ -215,11 +276,11 @@
       gap:18px;
       flex-wrap:wrap;
       font-size:14px;
-      color:var(--muted);
+      color: var(--muted);
     }
 
     .footerLinks a{
-      color:var(--muted);
+      color: var(--muted);
       text-decoration:none;
       font-weight:600;
     }
@@ -231,7 +292,6 @@
 </head>
 
 <body>
-
 <header>
   <div class="headerInner">
     <div class="headerLeft">
@@ -239,22 +299,417 @@
       <h1>Marketing Materials</h1>
     </div>
 
+    <!-- Clickable logo back to home -->
     <a class="logoLink" href="/" aria-label="Back to home">
-      <img class="headerLogo" src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH!" />
+      <img
+        class="headerLogo"
+        src="/mtc_couch_appicon_white_1024_adjusted.png"
+        alt="MOVE THAT COUCH! logo"
+      />
     </a>
   </div>
 </header>
 
 <main>
-  <!-- CONTENT UNCHANGED -->
+  <div class="card">
+    <label for="refInput">Paste your referral link (or just the code)</label>
+    <input id="refInput" placeholder="Example: V2Z9JE  OR  https://app.movethatcouch.com/?ref=V2Z9JE" />
+
+    <div class="primaryActions">
+      <button class="btn-blue primaryBtn" id="downloadBtn">Download QR (PNG)</button>
+    </div>
+
+    <div class="error" id="errorMsg"></div>
+    <div class="success" id="successMsg"></div>
+    <div class="greeting" id="greetingMsg"></div>
+
+    <div class="qrWrap">
+      <div class="notePanel">
+        <div class="note">
+          <b>How it works:</b> This page generates a QR code that points to your referral link.
+          <div class="divider"></div>
+          <b>Tip:</b> If no referral is entered (or it’s invalid), a generic MOVE THAT COUCH! QR is shown.
+          <div class="divider"></div>
+
+          <div class="sectionTitle">Flyers</div>
+          <div class="note" style="margin-top:6px;">
+            We’ll embed your personalized QR directly into printable flyers.
+          </div>
+
+          <div class="flyerActions">
+            <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
+            <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
+            <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
+            <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="qrBox">
+        <canvas id="qrCanvas" width="240" height="240"></canvas>
+        <div class="small" id="finalLinkText"></div>
+      </div>
+    </div>
+  </div>
 </main>
 
-<!-- ✅ Footer moved OUTSIDE main -->
+<!-- Footer (outside main) -->
 <div class="footerLinks">
   <a href="/about">About</a>
-  <a href="https://legal.movethatcouch.com/privacy.html" target="_blank">Privacy Policy</a>
-  <a href="https://legal.movethatcouch.com/tos.html" target="_blank">Terms of Service</a>
+  <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+  <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
 </div>
+
+<!-- QR GENERATION LOGIC -->
+<script>
+  const refInput = document.getElementById('refInput');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+  const greetingMsg = document.getElementById('greetingMsg');
+  const qrCanvas = document.getElementById('qrCanvas');
+  const finalLinkText = document.getElementById('finalLinkText');
+
+  const GENERIC_LINK = "https://www.movethatcouch.com/";
+  const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
+
+  let currentFinalLink = GENERIC_LINK;
+  window.currentFinalLink = currentFinalLink;
+
+  let autoTimer = null;
+  let lastAutoCode = "";
+  let inFlight = false;
+
+  function showError(text){
+    errorMsg.textContent = text;
+    errorMsg.style.display = 'block';
+    successMsg.style.display = 'none';
+    greetingMsg.style.display = 'none';
+    greetingMsg.textContent = '';
+  }
+  function showSuccess(text){
+    successMsg.textContent = text;
+    successMsg.style.display = 'block';
+    errorMsg.style.display = 'none';
+  }
+  function clearMessages(){
+    errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
+    greetingMsg.style.display = 'none';
+    greetingMsg.textContent = '';
+  }
+
+  function extractReferralCode(input){
+    const s = (input || "").trim();
+    if(!s) return "";
+
+    if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
+
+    try {
+      const u = new URL(s);
+
+      const ref = u.searchParams.get("ref");
+      if(ref && /^[A-Za-z0-9]{4,20}$/.test(ref)) return ref;
+
+      const pathMatch = u.pathname.match(/^\/r\/([A-Za-z0-9]{4,20})\/?$/);
+      if(pathMatch) return pathMatch[1];
+
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function setCurrentLink(link){
+    currentFinalLink = link;
+    window.currentFinalLink = link;
+    finalLinkText.textContent = link;
+    downloadBtn.disabled = false;
+  }
+
+  function clearCanvas(){
+    const ctx = qrCanvas.getContext('2d');
+    ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+  }
+
+  function drawQr(text){
+    clearCanvas();
+
+    if (typeof window.qrcode !== "function") {
+      showError("QR library failed to load.");
+      return false;
+    }
+
+    try {
+      const qr = window.qrcode(0, 'M');
+      qr.addData(text);
+      qr.make();
+
+      const ctx = qrCanvas.getContext("2d");
+      const size = qrCanvas.width;
+      const cells = qr.getModuleCount();
+      const tileSize = size / cells;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+
+      ctx.fillStyle = "#000000";
+      for (let row = 0; row < cells; row++) {
+        for (let col = 0; col < cells; col++) {
+          if (qr.isDark(row, col)) {
+            ctx.fillRect(
+              Math.floor(col * tileSize),
+              Math.floor(row * tileSize),
+              Math.ceil(tileSize),
+              Math.ceil(tileSize)
+            );
+          }
+        }
+      }
+
+      return true;
+    } catch (err) {
+      console.error(err);
+      showError("QR rendering failed (unexpected). Check console.");
+      return false;
+    }
+  }
+
+  async function validateReferralCode(code){
+    const url = `https://app.movethatcouch.com/api/public/referral-name?code=${encodeURIComponent(code)}`;
+
+    try {
+      const res = await fetch(url, { method: "GET" });
+      if (!res.ok) return null;
+
+      const data = await res.json();
+
+      const display =
+        (data && typeof data.display === "string" && data.display.trim()) ? data.display.trim() :
+        (data && data.firstName && data.lastInitial) ? `${data.firstName} ${data.lastInitial}` :
+        (data && data.firstName) ? `${data.firstName}` :
+        null;
+
+      return display;
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function renderGeneric(message){
+    clearMessages();
+    setCurrentLink(GENERIC_LINK);
+    const ok = drawQr(GENERIC_LINK);
+    if(ok) showSuccess(message || "Showing generic MOVE THAT COUCH! QR.");
+  }
+
+  async function generate(){
+    if (inFlight) return;
+    inFlight = true;
+
+    clearMessages();
+
+    const raw = refInput.value;
+    const code = extractReferralCode(raw);
+
+    if(!raw.trim() || !code){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      inFlight = false;
+      return;
+    }
+
+    if(!/^[A-Za-z0-9]{4,20}$/.test(code)){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      showError("That doesn’t look like a valid referral code. Please paste your referral link or code.");
+      inFlight = false;
+      return;
+    }
+
+    showSuccess("Checking referral code…");
+
+    const displayName = await validateReferralCode(code);
+
+    if(!displayName){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+      showError("Referral code not found. Please check the code and try again.");
+      inFlight = false;
+      return;
+    }
+
+    const finalLink = APP_REF_BASE + encodeURIComponent(code);
+
+    setCurrentLink(finalLink);
+
+    const ok = drawQr(finalLink);
+    if(ok){
+      showSuccess(`Personalized QR generated! (Hi ${displayName} 👋)`);
+    }
+
+    inFlight = false;
+  }
+
+  function scheduleAutoGenerate(){
+    clearTimeout(autoTimer);
+
+    autoTimer = setTimeout(async () => {
+      const raw = refInput.value || "";
+      const code = extractReferralCode(raw);
+
+      if (!raw.trim()) {
+        lastAutoCode = "";
+        renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+        return;
+      }
+
+      if (!code) return;
+      if (code === lastAutoCode) return;
+
+      lastAutoCode = code;
+      await generate();
+    }, 450);
+  }
+
+  refInput.addEventListener("input", scheduleAutoGenerate);
+  refInput.addEventListener("paste", scheduleAutoGenerate);
+
+  downloadBtn.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.download = 'movethatcouch-qr.png';
+    a.href = qrCanvas.toDataURL('image/png');
+    a.click();
+  });
+
+  (function boot(){
+    function loadScript(src, onload, onerror){
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = onload;
+      s.onerror = onerror;
+      document.head.appendChild(s);
+    }
+
+    loadScript(
+      "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js",
+      () => start(),
+      () => {
+        renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+        showError("QR library failed to load (CDN blocked).");
+      }
+    );
+
+    function start(){
+      renderGeneric("Showing generic MOVE THAT COUCH! QR.");
+
+      const params = new URLSearchParams(window.location.search);
+      const refParam = params.get('ref');
+      if(refParam){
+        refInput.value = decodeURIComponent(refParam);
+        setTimeout(() => {
+          lastAutoCode = "";
+          generate();
+        }, 50);
+      }
+    }
+  })();
+</script>
+
+<!-- Flyer export wiring (module) -->
+<script type="module">
+  import { exportFlyerPng } from "./js/flyerExport.js";
+
+  const flyer1Btn = document.getElementById("flyer1Btn");
+  const flyer2Btn = document.getElementById("flyer2Btn");
+  const flyer3Btn = document.getElementById("flyer3Btn");
+  const flyer4Btn = document.getElementById("flyer4Btn");
+
+  function status(msg){
+    const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+    successMsg.textContent = msg;
+    successMsg.style.display = "block";
+    errorMsg.style.display = "none";
+  }
+
+  function showExportError(){
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.textContent = "Flyer export failed. Check the console for details.";
+    errorMsg.style.display = "block";
+    document.getElementById("successMsg").style.display = "none";
+  }
+
+  function getQrLinkForFlyers(){
+    return (window.currentFinalLink && String(window.currentFinalLink).trim())
+      ? String(window.currentFinalLink).trim()
+      : "https://www.movethatcouch.com/";
+  }
+
+  flyer1Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Shop Flyer…");
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/shop.html",
+        qrLink,
+        filename: "MTC-Shop-Flyer.png",
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
+  flyer2Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Countertop Tents…");
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/countertop-tent.html",
+        qrLink,
+        filename: "MTC-Countertop-Tent.png",
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
+  flyer3Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Tear-off Tabs…");
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/tear-off.html",
+        qrLink,
+        filename: "MTC-Tear-Off-Flyer.png",
+        print: { width: 3300, height: 2550 },
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
+  flyer4Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Driver Windshield…");
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/driver-windshield.html",
+        qrLink,
+        filename: "MTC-Driver-Windshield-Flyer.png",
+        print: { width: 2550, height: 3300 },
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+</script>
 
 </body>
 </html>
