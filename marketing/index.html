@@ -13,7 +13,9 @@
 .success{
   text-align: center;
 }
-
+.nowrap {
+  white-space: nowrap;
+}    
 .successSub{
   display: inline-block;
   margin-top: 6px;
@@ -527,7 +529,12 @@
 
   setCurrentLink(GENERIC_LINK);
   const ok = drawQr(GENERIC_LINK);
-  if(ok) showSuccess(message || "Showing generic MOVE THAT COUCH! QR.");
+  if (ok) {
+  showSuccess(
+    message ||
+    'Showing generic <span class="nowrap">MOVE THAT COUCH! QR</span>.'
+  );
+}
 }
 
   async function generate(){
