@@ -10,17 +10,18 @@
 
   <style>
     /* Success message: put the "Hi Name 👋" on its own centered line */
-.success{
-  text-align: center;
-}
-.nowrap {
-  white-space: nowrap;
-}    
-.successSub{
-  display: inline-block;
-  margin-top: 6px;
-  font-weight: 800;
-}
+    .success{
+      text-align: center;
+    }
+    .nowrap {
+      white-space: nowrap;
+    }
+    .successSub{
+      display: inline-block;
+      margin-top: 6px;
+      font-weight: 800;
+    }
+
     :root{
       --page-pad: clamp(16px, 4.5vw, 28px);
       --max: 900px;
@@ -218,14 +219,14 @@
     }
 
     .small{
-  font-size: 11px;          /* slightly smaller */
-  color: var(--muted);
-  margin-top: 8px;
+      font-size: 11px;          /* slightly smaller */
+      color: var(--muted);
+      margin-top: 8px;
 
-  white-space: nowrap;      /* keep on one line */
-  overflow: hidden;         /* prevent overflow */
-  text-overflow: ellipsis;  /* graceful truncation if ever needed */
-}
+      white-space: nowrap;      /* keep on one line */
+      overflow: hidden;         /* prevent overflow */
+      text-overflow: ellipsis;  /* graceful truncation if ever needed */
+    }
 
     /* Uniform centered buttons */
     .primaryActions{
@@ -349,8 +350,8 @@
 
           <div class="sectionTitle">Flyers</div>
           <div class="note" id="flyerNote" style="margin-top:6px;">
-  We’ll embed your personalized QR directly into printable flyers.
-</div>
+            We’ll embed your personalized QR directly into printable flyers.
+          </div>
 
           <div class="flyerActions">
             <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
@@ -365,7 +366,7 @@
         <canvas id="qrCanvas" width="240" height="240"></canvas>
         <div class="small" id="finalLinkText"></div>
 
-        <!-- ✅ MOVED: Download button now lives under the QR -->
+        <!-- Download button under the QR -->
         <div class="primaryActions">
           <button class="btn-blue primaryBtn" id="downloadBtn">Download QR (PNG)</button>
         </div>
@@ -408,11 +409,13 @@
     greetingMsg.style.display = 'none';
     greetingMsg.textContent = '';
   }
+
   function showSuccess(html){
-  successMsg.innerHTML = html;
-  successMsg.style.display = 'block';
-  errorMsg.style.display = 'none';
-}
+    successMsg.innerHTML = html;
+    successMsg.style.display = 'block';
+    errorMsg.style.display = 'none';
+  }
+
   function clearMessages(){
     errorMsg.style.display = 'none';
     successMsg.style.display = 'none';
@@ -518,24 +521,31 @@
   }
 
   function renderGeneric(message){
-  clearMessages();
+    clearMessages();
 
-  // 🔁 Reset flyer copy to generic state
-  const flyerNote = document.getElementById("flyerNote");
-  if (flyerNote) {
-    flyerNote.textContent =
-      "We’ll embed your personalized QR directly into printable flyers.";
+    // Reset flyer copy to generic state
+    const flyerNote = document.getElementById("flyerNote");
+    if (flyerNote) {
+      flyerNote.textContent =
+        "We’ll embed your personalized QR directly into printable flyers.";
+    }
+
+    setCurrentLink(GENERIC_LINK);
+    const ok = drawQr(GENERIC_LINK);
+
+    // ✅ IMPORTANT FIX:
+    // Even when callers pass a message string, force "MOVE THAT COUCH! QR" to be non-breaking.
+    const baseText = (message && String(message).trim())
+      ? String(message).trim()
+      : "Showing generic MOVE THAT COUCH! QR.";
+
+    const html = baseText.replace(
+      /MOVE THAT COUCH!\s*QR/g,
+      '<span class="nowrap">MOVE THAT COUCH! QR</span>'
+    );
+
+    if (ok) showSuccess(html);
   }
-
-  setCurrentLink(GENERIC_LINK);
-  const ok = drawQr(GENERIC_LINK);
-  if (ok) {
-  showSuccess(
-    message ||
-    'Showing generic <span class="nowrap">MOVE THAT COUCH! QR</span>.'
-  );
-}
-}
 
   async function generate(){
     if (inFlight) return;
@@ -578,11 +588,12 @@
     if(ok){
       showSuccess(`Personalized QR generated!<br><span class="successSub">Hi ${displayName} 👋</span>`);
     }
+
     const flyerNote = document.getElementById("flyerNote");
-if (flyerNote) {
-  flyerNote.textContent =
-    "Your personalized QR has been embedded into these flyers. Tap to download — then print!";
-}
+    if (flyerNote) {
+      flyerNote.textContent =
+        "Your personalized QR has been embedded into these flyers. Tap to download — then print!";
+    }
 
     inFlight = false;
   }
