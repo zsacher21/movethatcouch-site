@@ -17,11 +17,12 @@
 
     /* Root required by flyerExport.js */
     #flyer {
-  width: 2550px;
-  height: 3300px;
-  display: flex;
-  flex-direction: column;
-}
+      width: 2550px;
+      height: 3300px;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+    }
 
     .panel {
       width: 100%;
@@ -31,23 +32,24 @@
 
     /* ================= FRONT (visible under wiper) ================= */
     .front {
-      height: 5.5in;
+      /* Use pixel height to match 2550x3300 layout */
+      height: 1650px;
       background: var(--mtc-green);
       color: var(--white);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
     }
 
     .brand-row {
       display: flex;
       justify-content: center;
-      margin-top: 0.05in;
-      margin-bottom: 0.2in;
+      margin-top: 10px;
+      margin-bottom: 40px;
     }
 
     .couch-icon {
-      height: 1.35in;
+      height: 170px;
       width: auto;
       display: block;
     }
@@ -62,28 +64,32 @@
     }
 
     .subhead {
-      margin-top: 0.22in;
-      font-size: 20px;
+      margin-top: 26px;
+      font-size: 34px;
       font-weight: 650;
       line-height: 1.25;
+      opacity: 0.98;
     }
 
-    .qr-block {
+    /* NEW: Front QR block inside green band */
+    .front-qr {
+      margin-top: 70px;
       display: flex;
       align-items: center;
-      gap: 0.4in;
+      gap: 50px;
     }
 
     .qr-box {
       width: 420px;
       height: 420px;
       background: #ffffff;
-      border-radius: 10px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 0 6px rgba(255,255,255,0.25);
+      box-shadow: 0 0 0 10px rgba(255,255,255,0.25);
       overflow: hidden;
+      flex: 0 0 auto;
     }
 
     #qrImg {
@@ -93,85 +99,95 @@
       display: block;
     }
 
-    .qr-text {
-      font-size: 24px;
+    .qr-label {
+      font-size: 50px;
       font-weight: 900;
-      line-height: 1.1;
+      line-height: 1.08;
       text-transform: uppercase;
+      margin: 0;
     }
 
-    .qr-text small {
+    .qr-label small {
       display: block;
-      font-size: 14px;
-      font-weight: 600;
-      margin-top: 8px;
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 14px;
       text-transform: none;
       opacity: 0.95;
     }
 
+    /* Fold divider cue */
+    .fold-divider {
+      height: 14px;
+      background: #e5e7eb;
+    }
+
     /* ================= INSIDE (unfolded) ================= */
     .inside {
-      height: 5.5in;
+      height: 1650px;
       background: var(--white);
       color: var(--black);
       position: relative;
-      padding-bottom: 0.7in;
+      padding-bottom: 180px;
     }
 
     .columns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      column-gap: 0.42in;
+      column-gap: 160px;
+      align-items: start;
     }
 
+    /* Bigger inside type for readability */
     .inside h2 {
-      font-size: 26px;
+      font-size: 42px;
       font-weight: 900;
-      margin: 0 0 10px 0;
+      margin: 0 0 18px 0;
+      letter-spacing: -0.2px;
     }
 
     .inside p {
-      font-size: 16px;
-      margin: 0 0 12px 0;
+      font-size: 28px;
+      margin: 0 0 18px 0;
       line-height: 1.35;
     }
 
     .bullets {
-      margin: 0 0 16px 18px;
+      margin: 0 0 26px 34px;
       padding: 0;
-      font-size: 16px;
+      font-size: 28px;
       line-height: 1.35;
     }
 
-    .bullets li { margin-bottom: 6px; }
+    .bullets li { margin-bottom: 14px; }
 
     .expansion {
-      margin-top: 14px;
-      font-size: 15px;
-      font-weight: 800;
+      margin-top: 22px;
+      font-size: 26px;
+      font-weight: 900;
       line-height: 1.25;
     }
 
     .referral {
-      margin-top: 14px;
-      font-size: 16px;
+      margin-top: 20px;
+      font-size: 28px;
       line-height: 1.25;
     }
 
     .legal {
       position: absolute;
-      left: 0.5in;
-      bottom: 0.35in;
-      font-size: 10px;
+      left: 140px;
+      bottom: 70px;
+      font-size: 18px;
       color: var(--muted);
       line-height: 1.25;
     }
 
     .full-logo {
       position: absolute;
-      right: 0.5in;
-      bottom: 0.35in;
-      height: 0.55in;
+      right: 140px;
+      bottom: 62px;
+      height: 90px;
       width: auto;
       opacity: 0.95;
     }
@@ -183,37 +199,39 @@
 
     <!-- FRONT -->
     <div class="panel front">
-      <div>
-        <div class="brand-row">
-          <img
-            class="couch-icon"
-            src="/mtc_couch_appicon_white_1024_adjusted.png"
-            alt="MOVE THAT COUCH couch icon"
-          />
-        </div>
-
-        <div class="headline">
-          GOT A TRUCK?<br />
-          GET PAID TO USE IT.
-        </div>
-
-        <div class="subhead">
-          Single-item &amp; small-load deliveries<br />
-          Furniture • Appliances • Marketplace pickups
-        </div>
+      <div class="brand-row">
+        <img
+          class="couch-icon"
+          src="/mtc_couch_appicon_white_1024_adjusted.png"
+          alt="MOVE THAT COUCH couch icon"
+        />
       </div>
 
-      <div class="qr-block">
+      <div class="headline">
+        GOT A TRUCK?<br />
+        GET PAID TO USE IT.
+      </div>
+
+      <div class="subhead">
+        Single-item &amp; small-load deliveries<br />
+        Furniture • Appliances • Marketplace pickups
+      </div>
+
+      <!-- NEW: QR inside green band -->
+      <div class="front-qr">
         <div class="qr-box">
           <img id="qrImg" alt="QR Code" />
         </div>
 
-        <div class="qr-text">
+        <div class="qr-label">
           SCAN TO START DRIVING
           <small>Free to join • Takes ~2 minutes</small>
         </div>
       </div>
     </div>
+
+    <!-- Fold cue divider -->
+    <div class="fold-divider"></div>
 
     <!-- INSIDE -->
     <div class="panel inside">
@@ -299,7 +317,7 @@
       const img = document.getElementById("qrImg");
       if (!img) return;
 
-      const size = 900;
+      const size = 1100; // a bit higher for extra crispness at 420px
       const canvas = document.createElement("canvas");
       canvas.width = size;
       canvas.height = size;
