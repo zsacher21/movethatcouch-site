@@ -34,40 +34,43 @@
       background: #fff;
     }
 
-    /* Header slightly taller to help fill page */
+    /* ✅ HEADER: same height, bigger content inside */
     .header{
-      height: 380px;
-      padding: 92px 120px 0 120px;
+      height: 380px; /* unchanged */
+      padding: 66px 110px 0 110px; /* was 92px 120px 0 120px */
       background: linear-gradient(90deg, var(--green1), #34d399);
       color: #fff;
       display: flex;
       align-items: flex-start;
-      gap: 42px;
+      gap: 48px; /* was 42px */
     }
+
     .logoBox{
-      width: 148px; height: 148px;
-      border-radius: 30px;
+      width: 176px; height: 176px;   /* was 148px */
+      border-radius: 34px;           /* was 30px */
       background: #fff;
       display:flex; align-items:center; justify-content:center;
       overflow:hidden;
       flex: 0 0 auto;
     }
     .logoBox img{
-      width: 138px; height: 138px;
+      width: 160px; height: 160px;   /* was 138px */
       object-fit: contain;
       display:block;
     }
-    .titleWrap{ padding-top: 6px; }
+
+    .titleWrap{ padding-top: 2px; }  /* was 6px */
+
     .title{
-      font-size: calc(78px * var(--scaleText));
+      font-size: calc(92px * var(--scaleText)); /* was 78px */
       font-weight: 900;
       letter-spacing: 2px;
       margin: 0;
       line-height: 1.05;
     }
     .subtitle{
-      margin-top: 12px;
-      font-size: calc(34px * var(--scaleText));
+      margin-top: 14px; /* was 12px */
+      font-size: calc(40px * var(--scaleText)); /* was 34px */
       font-weight: 750;
       opacity: 0.96;
     }
@@ -213,7 +216,7 @@
       border: 3px dashed #cbd5e1;
       border-radius: 28px;
       padding: 38px;
-      height: 820px; /* taller */
+      height: 820px;
       display:flex;
       flex-direction: column;
       justify-content: center;
@@ -246,7 +249,7 @@
       background: #eafff0;
       border-radius: 28px;
       padding: 60px 60px;
-      height: 820px; /* match QR card */
+      height: 820px;
       box-sizing: border-box;
     }
     .refTitle{
@@ -278,10 +281,7 @@
       text-align: center;
     }
 
-    /* Icon sizes used in top sections */
     svg.iconMd { width: calc(54px * var(--scaleIcons)); height: calc(54px * var(--scaleIcons)); }
-
-    /* Keep canvas actual pixel size aligned with CSS size for export crispness */
     canvas { display:block; }
   </style>
 </head>
@@ -452,7 +452,6 @@
       const link = getQrParam();
       const canvas = document.getElementById("qrCanvas");
 
-      // Match canvas pixel size to CSS size for crisp export
       const cssW = Math.round(parseFloat(getComputedStyle(canvas).width));
       const cssH = Math.round(parseFloat(getComputedStyle(canvas).height));
       canvas.width = cssW;
