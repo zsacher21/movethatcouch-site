@@ -153,6 +153,22 @@
   color:#6b7280;
 }
 
+    /* Mobile: match Home page footer (vertical list, no pipes) */
+@media (max-width: 420px){
+  .footer-links{
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer .sep{
+    display: none;
+  }
+
+  .footer a{
+    padding: 6px 0;
+  }
+}
+
     @media (max-width: 360px){
       .button{
         height: 52px;
