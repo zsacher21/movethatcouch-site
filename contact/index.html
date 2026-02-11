@@ -150,17 +150,51 @@
       margin-top: clamp(22px, 5vw, 40px);
       font-size: 14px;
       color: #555;
+      text-align: center;
+    }
+
+    /* Footer link layout (match Home) */
+    .footer-links{
+      display:flex;
+      flex-wrap: wrap;
+      justify-content:center;
+      align-items:center;
+      gap: 12px;
+    }
+
+    .footer-sep{
+      color:#9ca3af;
     }
 
     footer a {
       color: var(--blue);
       text-decoration: none;
-      margin: 0 8px;
       white-space: nowrap;
       font-weight: 500;
     }
 
     footer a:hover{ text-decoration: underline; }
+
+    .footer-copy{
+      margin-top: 10px;
+      font-size: 13px;
+      color:#6b7280;
+      text-align:center;
+    }
+
+    /* Mobile: stack footer links for safe tap targets */
+    @media (max-width: 420px) {
+      .footer-links{
+        flex-direction: column;
+        gap: 10px;
+      }
+      .footer-sep{
+        display:none;
+      }
+      footer a{
+        padding: 6px 0;
+      }
+    }
 
     /* Slightly tighter on very small phones (match Home pattern) */
     @media (max-width: 360px){
@@ -239,11 +273,17 @@
       </div>
 
       <footer>
-        <a href="/">Home</a>
-        |
-        <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-        |
-        <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <span class="footer-sep">|</span>
+          <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
+          <span class="footer-sep">|</span>
+          <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
+        </div>
+
+        <div class="footer-copy">
+          © 2026 ZM Platforms LLC. All rights reserved.
+        </div>
       </footer>
     </div>
   </main>
