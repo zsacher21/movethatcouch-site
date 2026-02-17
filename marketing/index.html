@@ -9,6 +9,23 @@
   <link rel="icon" href="data:," />
 
   <style>
+    /* Logo header (matches Home/About) */
+.logoHeader{
+  display: flex;
+  justify-content: center;
+  margin: 22px 0 10px;
+}
+
+.logoHeader a{
+  display: inline-flex;
+}
+
+.logoImg{
+  max-width: 220px;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
     /* Success message: put the "Hi Name 👋" on its own centered line */
     .success{
       text-align: center;
@@ -322,21 +339,16 @@
 
 <body>
 <header>
-  <div class="headerInner">
-    <div class="headerLeft">
-      <a href="/">← Home</a>
-      <h1>Marketing Materials</h1>
-    </div>
-
-    <!-- Clickable logo back to home -->
-    <a class="logoLink" href="/" aria-label="Back to home">
-      <img
-        class="headerLogo"
-        src="/mtc_couch_appicon_white_1024_adjusted.png"
-        alt="MOVE THAT COUCH! logo"
-      />
-    </a>
-  </div>
+<!-- Logo Header -->
+<div class="logoHeader">
+  <a href="/" aria-label="Move That Couch home">
+    <img
+      src="/logo.png"
+      alt="MOVE THAT COUCH!"
+      class="logoImg"
+    />
+  </a>
+</div>
 </header>
 
 <main>
