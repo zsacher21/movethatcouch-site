@@ -390,6 +390,8 @@
             <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
             <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
             <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
+            <button class="btn-gray flyerBtn" id="flyer5Btn">Shop Flyer 2</button>
+            <button class="btn-gray flyerBtn" id="flyer6Btn">Neighborhood</button>
           </div>
         </div>
       </div>
@@ -710,6 +712,8 @@
   const flyer2Btn = document.getElementById("flyer2Btn");
   const flyer3Btn = document.getElementById("flyer3Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
+  const flyer5Btn = document.getElementById("flyer5Btn");
+  const flyer6Btn = document.getElementById("flyer6Btn");
 
   function status(msg){
     const successMsg = document.getElementById("successMsg");
@@ -790,6 +794,38 @@
         qrLink,
         filename: "MTC-Driver-Windshield-Flyer.png",
         print: { width: 2550, height: 3300 },
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
+  flyer5Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Shop Flyer…");
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/customer-shop.html",
+        qrLink,
+        filename: "MTC-Shop-Flyer-2.png",
+        onStatus: status
+      });
+    } catch (e) {
+      console.error(e);
+      showExportError();
+    }
+  });
+
+  flyer6Btn.addEventListener("click", async () => {
+    const qrLink = getQrLinkForFlyers();
+    status("Preparing Shop Flyer…");
+    try {
+      await exportFlyerPng({
+        templatePath: "/marketing/flyers/neighborhood.html",
+        qrLink,
+        filename: "MTC-Neighborhood.png",
         onStatus: status
       });
     } catch (e) {
