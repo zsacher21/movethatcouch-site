@@ -6,13 +6,13 @@
 
 <style>
 :root{
+  --black:#111;
+  --gray:#6b7280;
+  --green:#29b34a;
+  --line:#e5e7eb;
   --page-w:2550px;
   --page-h:3300px;
-  --pad:90px;
-  --green:#29b34a;
-  --gray:#6b7280;
-  --black:#111;
-  --line:#e5e7eb;
+  --pad:160px;
   --font:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
 }
 
@@ -24,6 +24,7 @@ body{
   align-items:center;
   justify-content:center;
   font-family:var(--font);
+  color:var(--black);
 }
 
 #flyer{
@@ -32,309 +33,208 @@ body{
   background:#fff;
   position:relative;
   overflow:hidden;
-}
-
-/* 4 quarter panels */
-.grid{
-  position:absolute;
-  inset:0;
-  padding:var(--pad);
+  padding:120px 140px;
   display:grid;
-  grid-template-rows:1fr 1fr 1fr 1fr;
-  gap:56px;
+  grid-template-rows:1fr auto 1fr auto;
+  gap:90px;
 }
 
-/* Guides */
-.guide{position:absolute;left:0;right:0;height:0;pointer-events:none;}
-.fold25{top:25%;border-top:6px dashed #cbd5e1;}
-.cut50{top:50%;border-top:8px dashed #94a3b8;}
-.fold75{top:75%;border-top:6px dashed #cbd5e1;}
+/* ---------- PANEL ---------- */
 
-.cutLabel{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  background:#fff;
-  padding:8px 20px;
-  border-radius:999px;
-  font-size:22px;
-  font-weight:900;
-  color:#475569;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
-/* Quarter panel container */
 .panel{
   border-radius:34px;
   border:4px solid var(--line);
-  background:#fff;
-  padding:56px 62px;
-  overflow:hidden;
+  padding:70px 80px;
 }
-  .panelGrid{
+
+.panelGrid{
   display:grid;
   grid-template-columns: 1fr 520px 440px; /* INFO | LOGO | QR */
   align-items:center;
-  gap:44px;
+  gap:60px;
 }
 
-/* rotate ONLY the contents for fold direction */
-.panel.flip180 .panelGrid{
+/* Flip top panel for proper tent fold */
+.panel.flip .panelGrid{
   transform:rotate(180deg);
 }
 
-/* Rotate THIS for your fold direction (currently correct) */
-.flip180{ transform:rotate(180deg); }
+/* ---------- INFO COLUMN ---------- */
 
-/* LEFT info */
-.info .hook{
-  font-size:56px;
-  font-weight:1000;
-  line-height:0.98;
-  letter-spacing:-.8px;
-  text-transform:uppercase;
-  color:var(--black);
-}
-
-.info .sub{
-  margin-top:14px;
-  font-size:26px;
-  font-weight:850;
-  line-height:1.25;
-}
-
-.ctaRow{
-  margin-top:16px;
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-}
-
-.pill{
-  padding:10px 16px;
-  border-radius:999px;
-  border:3px solid rgba(41,179,74,.28);
-  background:#f0fff4;
-  font-size:22px;
+.headline{
+  font-size:88px;
   font-weight:900;
-  color:#0b3d1a;
+  line-height:1.05;
+  margin-bottom:24px;
 }
 
-.tiny{
-  margin-top:14px;
-  font-size:18px;
+.sub{
+  font-size:44px;
+  font-weight:700;
+  margin-bottom:20px;
+}
+
+.bullets{
+  font-size:40px;
+  font-weight:600;
+  line-height:1.35;
+}
+
+.note{
+  margin-top:28px;
+  font-size:28px;
   color:var(--gray);
-  font-weight:650;
 }
 
-/* CENTER LOGO */
+/* ---------- LOGO ---------- */
+
 .logoWrap{
   display:flex;
   align-items:center;
   justify-content:center;
 }
+
 .logoWrap img{
-  width:520px;
-  height:520px;
+  width:360px;
+  height:360px;
   object-fit:contain;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,.08));
 }
 
-/* QR */
+/* ---------- QR ---------- */
+
 .qrWrap{
-  width:440px;
-  border-radius:28px;
-  border:4px solid rgba(41,179,74,.25);
-  background:#f0fff4;
-  padding:22px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:14px;
+  text-align:center;
 }
 
-.qr{
+.qrBox{
   width:380px;
   height:380px;
-  background:#fff;
-  border-radius:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  padding:18px;
+  border-radius:26px;
+  border:3px solid #b7e3c2;
   display:flex;
   align-items:center;
   justify-content:center;
-  position:relative;
+  background:#f6fbf8;
 }
 
-.qr img{width:100%;height:100%;image-rendering:pixelated;}
+.qrBox img{
+  width:100%;
+  height:100%;
+  image-rendering:pixelated;
+}
 
 .qrFallback{
   position:absolute;
-  inset:16px;
-  border:3px dashed #d1d5db;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  font-weight:900;
+  font-size:28px;
+  font-weight:700;
   color:#9ca3af;
 }
 
-.qrCaption{
+.qrLabel{
+  margin-top:18px;
+  font-size:34px;
+  font-weight:800;
+}
+
+/* ---------- CUT LINE ---------- */
+
+.cutLine{
+  text-align:center;
   font-size:30px;
-  font-weight:900;
+  font-weight:700;
+  color:#9ca3af;
+  border-top:6px dashed #cbd5e1;
+  padding-top:18px;
+  letter-spacing:.5px;
 }
-
-/* Referral styling */
-.refHook{
-  font-size:52px;
-  font-weight:1000;
-  text-transform:uppercase;
-}
-.bullets{
-  margin-top:12px;
-  padding-left:24px;
-  font-size:24px;
-  font-weight:850;
-}
-.kicker{
-  margin-top:12px;
-  font-size:24px;
-  font-weight:850;
-  color:var(--gray);
-}
-
 </style>
 </head>
 
 <body>
+
 <div id="flyer">
 
-<div class="guide fold25"></div>
-<div class="guide cut50"></div>
-<div class="guide fold75"></div>
-<div class="cutLabel">✂ Cut here</div>
+  <!-- TOP PANEL (FLIPPED) -->
+  <div class="panel flip">
+    <div class="panelGrid">
 
-<div class="grid">
+      <div>
+        <div class="headline">
+          NEED IT DELIVERED?<br>
+          GET COMPETING QUOTES.
+        </div>
 
-<!-- PANEL 1 -->
-<div class="panel flip180">
-  <div class="info">
-    <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
-    <div class="sub">
-      Single-item & small-load deliveries<br>
-      Furniture • Appliances • Marketplace pickups
-    </div>
-    <div class="ctaRow">
-      <div class="pill">✓ Get delivery quotes</div>
-      <div class="pill">✓ Book a driver</div>
-    </div>
-    <div class="tiny">
-      MOVE THAT COUCH! connects customers and independent drivers.<br>Drivers are not employees; platform facilitates bookings only.
+        <div class="sub">
+          Single-item & small-load deliveries<br>
+          Furniture • Appliances • Marketplace pickups
+        </div>
+
+        <div class="bullets">
+          ✓ Get delivery quotes<br>
+          ✓ Book a driver
+        </div>
+
+        <div class="note">
+          MOVE THAT COUCH! connects customers and independent drivers.
+          Drivers are not employees; platform facilitates bookings only.
+        </div>
+      </div>
+
+      <div class="logoWrap">
+        <img src="https://www.movethatcouch.com/logo.png" alt="MOVE THAT COUCH logo">
+      </div>
+
+      <div class="qrWrap">
+        <div class="qrBox">
+          <img id="qrImg1" alt="QR code">
+        </div>
+        <div class="qrLabel">Scan to get started</div>
+      </div>
+
     </div>
   </div>
 
-  <div class="logoWrap">
-    <img src="https://www.movethatcouch.com/logo.png">
+  <!-- CUT LINE -->
+  <div class="cutLine">✂ Cut here</div>
+
+  <!-- BOTTOM PANEL -->
+  <div class="panel">
+    <div class="panelGrid">
+
+      <div>
+        <div class="headline">
+          EARN A REFERRAL BONUS.
+        </div>
+
+        <div class="bullets">
+          • 25% of the booking deposit on their first completed delivery<br>
+          • 5% on every delivery after that — forever
+        </div>
+
+        <div class="note">
+          Scan to sign up — you’ll get your own referral link + QR code.
+        </div>
+      </div>
+
+      <div class="logoWrap">
+        <img src="https://www.movethatcouch.com/logo.png" alt="MOVE THAT COUCH logo">
+      </div>
+
+      <div class="qrWrap">
+        <div class="qrBox">
+          <img id="qrImg2" alt="QR code">
+        </div>
+        <div class="qrLabel">Scan to sign up</div>
+      </div>
+
+    </div>
   </div>
 
-  <div class="qrWrap">
-    <div class="qr">
-      <img id="qr1">
-      <div id="fb1" class="qrFallback">QR WILL APPEAR HERE</div>
-    </div>
-    <div class="qrCaption">Scan to get started</div>
-  </div>
 </div>
 
-<!-- PANEL 2 -->
-<div class="panel">
-  <div class="info">
-    <div class="refHook">EARN A REFERRAL BONUS.</div>
-    <div class="sub">Share your link and earn:</div>
-    <ul class="bullets">
-      <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
-      <li><strong>5%</strong> on every delivery after that — forever</li>
-    </ul>
-    <div class="kicker">
-      Scan to sign up — get your own referral link + QR code.
-    </div>
-  </div>
-
-  <div class="logoWrap">
-    <img src="https://www.movethatcouch.com/logo.png">
-  </div>
-
-  <div class="qrWrap">
-    <div class="qr">
-      <img id="qr2">
-      <div id="fb2" class="qrFallback">QR WILL APPEAR HERE</div>
-    </div>
-    <div class="qrCaption">Scan to sign up</div>
-  </div>
-</div>
-
-<!-- PANEL 3 -->
-<div class="panel flip180">
-  <div class="info">
-    <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
-    <div class="sub">
-      Single-item & small-load deliveries<br>
-      Furniture • Appliances • Marketplace pickups
-    </div>
-    <div class="ctaRow">
-      <div class="pill">✓ Get delivery quotes</div>
-      <div class="pill">✓ Book a driver</div>
-    </div>
-    <div class="tiny">
-      MOVE THAT COUCH! connects customers and independent drivers.<br>Drivers are not employees; platform facilitates bookings only.
-    </div>
-  </div>
-
-  <div class="logoWrap">
-    <img src="https://www.movethatcouch.com/logo.png">
-  </div>
-
-  <div class="qrWrap">
-    <div class="qr">
-      <img id="qr3">
-      <div id="fb3" class="qrFallback">QR WILL APPEAR HERE</div>
-    </div>
-    <div class="qrCaption">Scan to get started</div>
-  </div>
-</div>
-
-<!-- PANEL 4 -->
-<div class="panel">
-  <div class="info">
-    <div class="refHook">EARN A REFERRAL BONUS.</div>
-    <div class="sub">Share your link and earn:</div>
-    <ul class="bullets">
-      <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
-      <li><strong>5%</strong> on every delivery after that — forever</li>
-    </ul>
-    <div class="kicker">
-      Scan to sign up — get your own referral link + QR code.
-    </div>
-  </div>
-
-  <div class="logoWrap">
-    <img src="https://www.movethatcouch.com/logo.png">
-  </div>
-
-  <div class="qrWrap">
-    <div class="qr">
-      <img id="qr4">
-      <div id="fb4" class="qrFallback">QR WILL APPEAR HERE</div>
-    </div>
-    <div class="qrCaption">Scan to sign up</div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<!-- QR logic unchanged -->
+<!-- QR GENERATION (DO NOT MODIFY) -->
 <script>
 window.__flyerReady = (async () => {
   const params = new URLSearchParams(window.location.search);
@@ -345,38 +245,38 @@ window.__flyerReady = (async () => {
   document.head.appendChild(s);
   await new Promise(r => s.onload = r);
 
-  const qr = window.qrcode(0, "M");
-  qr.addData(qrLink);
-  qr.make();
+  function makeQR(imgId){
+    const qr = window.qrcode(0, "M");
+    qr.addData(qrLink);
+    qr.make();
 
-  const size = 900;
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext("2d");
+    const size = 900;
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext("2d");
 
-  const cells = qr.getModuleCount();
-  const tile = size / cells;
+    const cells = qr.getModuleCount();
+    const tile = size / cells;
 
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0,0,size,size);
-  ctx.fillStyle = "#000";
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0,0,size,size);
+    ctx.fillStyle = "#000";
 
-  for(let r=0;r<cells;r++){
-    for(let c=0;c<cells;c++){
-      if(qr.isDark(r,c)){
-        ctx.fillRect(c*tile,r*tile,tile,tile);
+    for(let r=0;r<cells;r++){
+      for(let c=0;c<cells;c++){
+        if(qr.isDark(r,c)){
+          ctx.fillRect(c*tile,r*tile,tile,tile);
+        }
       }
     }
+
+    document.getElementById(imgId).src = canvas.toDataURL("image/png");
   }
 
-  const dataUrl = canvas.toDataURL("image/png");
-  ["qr1","qr2","qr3","qr4"].forEach(id=>{
-    document.getElementById(id).src = dataUrl;
-  });
-  ["fb1","fb2","fb3","fb4"].forEach(id=>{
-    document.getElementById(id).style.display="none";
-  });
+  makeQR("qrImg1");
+  makeQR("qrImg2");
 })();
 </script>
+
 </body>
 </html>
