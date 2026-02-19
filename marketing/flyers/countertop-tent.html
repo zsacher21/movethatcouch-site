@@ -47,20 +47,20 @@ body{
 /* Guides */
 .guide{
   position:absolute;
-  left:0;
-  right:0;
+  left:var(--pad);
+  right:var(--pad);
   height:0;
   pointer-events:none;
-  z-index:50;            /* ✅ lines render above panels */
 }
-.fold25{top:25%;border-top:6px dashed #cbd5e1;}
-.cut50{top:50%;border-top:8px dashed #94a3b8;}
-.fold75{top:75%;border-top:6px dashed #cbd5e1;}
+
+.fold25{ top: calc(var(--pad) + ( (var(--page-h) - (var(--pad) * 2)) * 0.25 )); border-top:6px dashed #cbd5e1; }
+.cut50 { top: calc(var(--pad) + ( (var(--page-h) - (var(--pad) * 2)) * 0.50 )); border-top:8px dashed #94a3b8; }
+.fold75{ top: calc(var(--pad) + ( (var(--page-h) - (var(--pad) * 2)) * 0.75 )); border-top:6px dashed #cbd5e1; }
 
 .cutLabel{
   position:absolute;
   left:50%;
-  top:50%;
+  top: calc(var(--pad) + ( (var(--page-h) - (var(--pad) * 2)) * 0.50 ));
   transform:translate(-50%,-50%);
   background:#fff;
   padding:8px 20px;
@@ -69,7 +69,6 @@ body{
   font-weight:900;
   color:#475569;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
-  z-index:51;            /* ✅ above the cut line too */
 }
 
 /* Quarter panel container */
