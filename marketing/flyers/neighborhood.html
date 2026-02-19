@@ -93,8 +93,8 @@
     }
 
     .logoFrame img{
-      width:670px;
-      height:670px;
+      width:520px;
+      height:520px;
       object-fit:cover;
       transform:scale(1.22);
     }
@@ -193,35 +193,11 @@
       margin-bottom:18px;
     }
 
-    .howPay{
-      margin-top:60px;
-      padding:46px 54px;
-      border:4px solid #e5e7eb;
-      border-radius:28px;
-      background:#fff;
-    }
-
-    .howPay .payTitle{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      font-size:50px;
-      font-weight:900;
-      margin:0 0 18px;
-    }
-
-    .payIcon{
-      width:56px;
-      height:56px;
-      border-radius:18px;
-      border:4px solid rgba(41,179,74,.25);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--green);
-      font-weight:900;
-      font-size:34px;
-      line-height:1;
+    .smallNote{
+      font-size:40px;
+      font-weight:700;
+      color:var(--gray);
+      margin-top:28px;
     }
 
     /* readable footer */
@@ -243,7 +219,7 @@
 
       <div class="topHalf">
         <div class="headline">
-          <h1>NEED IT DELIVERED?</h1>
+          <h1>NEED IT DELIVERED?<br>GET COMPETING QUOTES.</h1>
           <div class="sub">
             Single-item &amp; small-load deliveries<br>
             Furniture • Appliances • Marketplace pickups
@@ -276,10 +252,17 @@
         <div class="bottom">
           <div class="whatIs">
             <div class="sectionTitle">How It Works</div>
-            <p><strong>1)</strong> Snap a photo and enter pickup + dropoff.</p>
+            <p><strong>1)</strong> Post your request (photo + pickup + dropoff).</p>
             <p><strong>2)</strong> Nearby drivers send quotes.</p>
             <p><strong>3)</strong> Book a delivery and message your driver for updates.</p>
-            <p><strong>No truck? No problem.</strong></p>
+
+            <div class="miniTitle">How payment works</div>
+            <ul class="miniBullets" style="margin:0;">
+              <li>Pay a <strong>20%</strong> booking deposit in-app to lock it in</li>
+              <li>Pay the rest to the driver at delivery</li>
+            </ul>
+
+            <div class="smallNote">Simple. Transparent. No surprises.</div>
           </div>
 
           <div>
@@ -291,30 +274,18 @@
               <li>Helping a friend or family member</li>
             </ul>
 
-            <div class="howPay">
-              <div class="payTitle"><span class="payIcon">$</span>How payment works</div>
-              <ul class="miniBullets" style="margin:0;">
-                <li>Post a request — nearby drivers send quotes</li>
-                <li>Pay a <strong>20%</strong> deposit to book</li>
-                <li>Pay the rest to the driver at delivery</li>
-              </ul>
-            </div>
+            <div class="miniTitle">Earn a Referral Bonus.</div>
+            <p style="font-size:44px;font-weight:600;line-height:1.45;margin:0 0 18px;">
+              Share your link with friends, family, and neighbors — and earn:
+              <br>
+              • <strong>25% of the booking deposit</strong> on their first completed delivery
+              <br>
+              • <strong>5% on every delivery after that — forever</strong>
+            </p>
+            <p style="font-size:44px;font-weight:600;line-height:1.45;margin:0;">
+              <strong>Scan to sign up</strong> — you’ll get your own personal referral link and QR code.
+            </p>
           </div>
-        </div>
-
-        <!-- Referral section (more visible for canvasing) -->
-        <div class="referralSection" style="margin-top:70px;">
-          <div class="sectionTitle">Earn a Referral Bonus.</div>
-          <p style="font-size:44px;font-weight:600;line-height:1.45;margin:0 0 18px;">
-            Share your link with friends, family, and neighbors — and earn:
-            <br>
-            • <strong>25% of the booking deposit</strong> on their first completed delivery
-            <br>
-            • <strong>5% on every delivery after that — forever</strong>
-          </p>
-          <p style="font-size:44px;font-weight:600;line-height:1.45;margin:0;">
-            <strong>Scan to sign up</strong> — you’ll get your own personal referral link and QR code.
-          </p>
         </div>
       </div>
     </div>
