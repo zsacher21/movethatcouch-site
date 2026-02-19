@@ -45,7 +45,14 @@ body{
 }
 
 /* Guides */
-.guide{position:absolute;left:0;right:0;height:0;pointer-events:none;}
+.guide{
+  position:absolute;
+  left:0;
+  right:0;
+  height:0;
+  pointer-events:none;
+  z-index:50;            /* ✅ lines render above panels */
+}
 .fold25{top:25%;border-top:6px dashed #cbd5e1;}
 .cut50{top:50%;border-top:8px dashed #94a3b8;}
 .fold75{top:75%;border-top:6px dashed #cbd5e1;}
@@ -62,6 +69,7 @@ body{
   font-weight:900;
   color:#475569;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
+  z-index:51;            /* ✅ above the cut line too */
 }
 
 /* Quarter panel container */
@@ -74,6 +82,7 @@ body{
   grid-template-columns:1fr 1fr 1fr;
   align-items:center;
   gap:44px;
+  position:relative; z-index:1;
 }
 
 /* Rotate THIS for your fold direction (currently correct) */
