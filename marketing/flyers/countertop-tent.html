@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>MOVE THAT COUCH! — Countertop Tent (2-up)</title>
+  <title>MOVE THAT COUCH! — Countertop Tent (Portrait, 2-up)</title>
 
   <style>
     :root{
       --black:#111;
       --gray:#6b7280;
       --green:#29b34a;
-      --paper-w:3300px; /* 11" at 300dpi */
-      --paper-h:2550px; /* 8.5" at 300dpi */
-      --pad:120px;
+      --page-w:2550px;
+      --page-h:3300px;
+      --pad:140px;
       --font:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       --line:#e5e7eb;
     }
@@ -27,31 +27,30 @@
       color:var(--black);
     }
 
-    /* Paper */
     #flyer{
-      width:var(--paper-w);
-      height:var(--paper-h);
+      width:var(--page-w);
+      height:var(--page-h);
       background:#fff;
       position:relative;
       overflow:hidden;
     }
 
-    /* Two halves (left/right) */
-    .halves{
+    /* Two tents stacked (top/bottom) */
+    .stack{
       position:absolute;
       inset:0;
       display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-rows:1fr 1fr;
     }
 
-    /* Cut line down the center */
+    /* Cut line across the middle */
     .cutLine{
       position:absolute;
-      top:0; bottom:0;
-      left:50%;
-      width:0;
-      border-left:6px dashed #cbd5e1;
-      transform:translateX(-3px);
+      left:0; right:0;
+      top:50%;
+      height:0;
+      border-top:6px dashed #cbd5e1;
+      transform:translateY(-3px);
       pointer-events:none;
     }
 
@@ -61,7 +60,7 @@
       padding:var(--pad);
       display:grid;
       grid-template-rows:1fr 1fr;
-      gap:46px;
+      gap:44px;
     }
 
     /* Fold guide within each half */
@@ -80,7 +79,7 @@
     .panel{
       border-radius:34px;
       border:4px solid var(--line);
-      padding:70px 70px;
+      padding:80px 86px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -93,7 +92,7 @@
       transform:rotate(180deg);
     }
 
-    /* Left content block */
+    /* Left content */
     .left{
       flex:1;
       min-width:0;
@@ -101,8 +100,8 @@
 
     /* Right QR block */
     .qrWrap{
-      width:560px;
-      flex:0 0 560px;
+      width:600px;
+      flex:0 0 600px;
       border-radius:30px;
       border:4px solid rgba(41,179,74,.25);
       background:#f0fff4;
@@ -115,8 +114,8 @@
     }
 
     .qr{
-      width:480px;
-      height:480px;
+      width:520px;
+      height:520px;
       border-radius:22px;
       background:#fff;
       box-shadow:0 12px 30px rgba(0,0,0,.08);
@@ -144,26 +143,26 @@
       font-weight:800;
       color:#9ca3af;
       text-transform:uppercase;
-      background:rgba(255,255,255,.8);
+      background:rgba(255,255,255,.85);
     }
     .qrFallback.hidden{display:none}
 
     .qrCaption{
-      font-size:40px;
+      font-size:44px;
       font-weight:900;
       text-align:center;
     }
 
-    /* Brand header (matches your newer style) */
+    /* Brand header */
     .brandRow{
       display:flex;
       align-items:center;
       gap:24px;
-      margin-bottom:18px;
+      margin-bottom:16px;
     }
     .brandIcon{
-      width:86px;
-      height:86px;
+      width:92px;
+      height:92px;
       border-radius:22px;
       border:3px solid #e5e7eb;
       display:flex;
@@ -173,12 +172,12 @@
       background:#fff;
     }
     .brandIcon img{
-      width:66px;
-      height:66px;
+      width:70px;
+      height:70px;
       object-fit:contain;
     }
     .brandText .name{
-      font-size:60px;
+      font-size:64px;
       font-weight:1000;
       letter-spacing:-1px;
       line-height:1.0;
@@ -190,10 +189,10 @@
       color:var(--gray);
     }
 
-    /* Big hook headline */
+    /* Hook */
     .hook{
-      margin-top:18px;
-      font-size:78px;
+      margin-top:16px;
+      font-size:86px;
       font-weight:1000;
       letter-spacing:-1px;
       line-height:0.98;
@@ -202,17 +201,10 @@
 
     .sub{
       margin-top:22px;
-      font-size:36px;
-      font-weight:750;
+      font-size:38px;
+      font-weight:800;
       color:#111;
       line-height:1.25;
-    }
-
-    .kicker{
-      margin-top:18px;
-      font-size:34px;
-      font-weight:700;
-      color:var(--gray);
     }
 
     .ctaRow{
@@ -248,22 +240,28 @@
       margin-top:18px;
       padding-left:34px;
       font-size:34px;
-      font-weight:750;
+      font-weight:800;
       line-height:1.25;
+    }
+
+    .kicker{
+      margin-top:18px;
+      font-size:34px;
+      font-weight:800;
+      color:var(--gray);
     }
 
     @media print{
       body{background:#fff}
-      #flyer{box-shadow:none}
     }
   </style>
 </head>
 
 <body>
   <div id="flyer">
-    <div class="halves">
+    <div class="stack">
 
-      <!-- LEFT HALF (Tent #1) -->
+      <!-- TOP TENT -->
       <div class="half">
         <div class="foldGuide"></div>
 
@@ -281,14 +279,15 @@
             </div>
 
             <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
+
             <div class="sub">
               Single-item &amp; small-load deliveries<br>
               Furniture • Appliances • Marketplace pickups
             </div>
 
             <div class="ctaRow">
-              <span class="pill">✔ Get delivery quotes</span>
-              <span class="pill">✔ Book a driver</span>
+              <span class="pill">✓ Get delivery quotes</span>
+              <span class="pill">✓ Book a driver</span>
             </div>
 
             <div class="tiny">
@@ -298,8 +297,8 @@
 
           <div class="qrWrap">
             <div class="qr">
-              <img id="qrImgFrontLeft" alt="QR code">
-              <div id="qrFallbackFrontLeft" class="qrFallback">QR WILL APPEAR HERE</div>
+              <img id="qrImgFrontTop" alt="QR code">
+              <div id="qrFallbackFrontTop" class="qrFallback">QR WILL APPEAR HERE</div>
             </div>
             <div class="qrCaption">Scan to get started</div>
           </div>
@@ -309,9 +308,7 @@
         <div class="panel back">
           <div class="left">
             <div class="hook">EARN A REFERRAL BONUS.</div>
-            <div class="sub">
-              Share your link and earn:
-            </div>
+            <div class="sub">Share your link and earn:</div>
             <ul class="bullets">
               <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
               <li><strong>5%</strong> on every delivery after that — forever</li>
@@ -326,15 +323,15 @@
 
           <div class="qrWrap">
             <div class="qr">
-              <img id="qrImgBackLeft" alt="QR code">
-              <div id="qrFallbackBackLeft" class="qrFallback">QR WILL APPEAR HERE</div>
+              <img id="qrImgBackTop" alt="QR code">
+              <div id="qrFallbackBackTop" class="qrFallback">QR WILL APPEAR HERE</div>
             </div>
             <div class="qrCaption">Scan to sign up</div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT HALF (Tent #2) -->
+      <!-- BOTTOM TENT -->
       <div class="half">
         <div class="foldGuide"></div>
 
@@ -352,14 +349,15 @@
             </div>
 
             <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
+
             <div class="sub">
               Single-item &amp; small-load deliveries<br>
               Furniture • Appliances • Marketplace pickups
             </div>
 
             <div class="ctaRow">
-              <span class="pill">✔ Get delivery quotes</span>
-              <span class="pill">✔ Book a driver</span>
+              <span class="pill">✓ Get delivery quotes</span>
+              <span class="pill">✓ Book a driver</span>
             </div>
 
             <div class="tiny">
@@ -369,8 +367,8 @@
 
           <div class="qrWrap">
             <div class="qr">
-              <img id="qrImgFrontRight" alt="QR code">
-              <div id="qrFallbackFrontRight" class="qrFallback">QR WILL APPEAR HERE</div>
+              <img id="qrImgFrontBottom" alt="QR code">
+              <div id="qrFallbackFrontBottom" class="qrFallback">QR WILL APPEAR HERE</div>
             </div>
             <div class="qrCaption">Scan to get started</div>
           </div>
@@ -380,9 +378,7 @@
         <div class="panel back">
           <div class="left">
             <div class="hook">EARN A REFERRAL BONUS.</div>
-            <div class="sub">
-              Share your link and earn:
-            </div>
+            <div class="sub">Share your link and earn:</div>
             <ul class="bullets">
               <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
               <li><strong>5%</strong> on every delivery after that — forever</li>
@@ -397,8 +393,8 @@
 
           <div class="qrWrap">
             <div class="qr">
-              <img id="qrImgBackRight" alt="QR code">
-              <div id="qrFallbackBackRight" class="qrFallback">QR WILL APPEAR HERE</div>
+              <img id="qrImgBackBottom" alt="QR code">
+              <div id="qrFallbackBackBottom" class="qrFallback">QR WILL APPEAR HERE</div>
             </div>
             <div class="qrCaption">Scan to sign up</div>
           </div>
@@ -407,6 +403,7 @@
 
     </div>
 
+    <!-- Cut line between top and bottom tents -->
     <div class="cutLine"></div>
   </div>
 
@@ -448,10 +445,10 @@
       const dataUrl = canvas.toDataURL("image/png");
 
       const targets = [
-        ["qrImgFrontLeft","qrFallbackFrontLeft"],
-        ["qrImgBackLeft","qrFallbackBackLeft"],
-        ["qrImgFrontRight","qrFallbackFrontRight"],
-        ["qrImgBackRight","qrFallbackBackRight"]
+        ["qrImgFrontTop","qrFallbackFrontTop"],
+        ["qrImgBackTop","qrFallbackBackTop"],
+        ["qrImgFrontBottom","qrFallbackFrontBottom"],
+        ["qrImgBackBottom","qrFallbackBackBottom"]
       ];
 
       for(const [imgId, fbId] of targets){
