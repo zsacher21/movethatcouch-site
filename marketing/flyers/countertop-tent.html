@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>MOVE THAT COUCH! — Countertop Tent (Portrait, 2-up)</title>
+  <title>MOVE THAT COUCH! — Countertop Tent (Portrait, correct fold)</title>
 
   <style>
     :root{
@@ -35,15 +35,15 @@
       overflow:hidden;
     }
 
-    /* Two tents stacked (top/bottom) */
-    .stack{
+    /* Two tents per page (top/bottom) */
+    .page{
       position:absolute;
       inset:0;
       display:grid;
       grid-template-rows:1fr 1fr;
     }
 
-    /* Cut line across the middle */
+    /* Cut line between the two tent pieces */
     .cutLine{
       position:absolute;
       left:0; right:0;
@@ -54,17 +54,14 @@
       pointer-events:none;
     }
 
-    /* Each half becomes one tent after cutting */
-    .half{
+    /* Each half is one tent print piece */
+    .tentPiece{
       position:relative;
       padding:var(--pad);
-      display:grid;
-      grid-template-rows:1fr 1fr;
-      gap:44px;
     }
 
-    /* Fold guide within each half */
-    .foldGuide{
+    /* Fold line within each tent piece */
+    .foldLine{
       position:absolute;
       left:var(--pad);
       right:var(--pad);
@@ -76,10 +73,18 @@
       opacity:.9;
     }
 
+    /* The tent piece contains FRONT (top) and BACK (bottom) */
+    .tentGrid{
+      height:100%;
+      display:grid;
+      grid-template-rows:1fr 1fr;
+      gap:46px;
+    }
+
     .panel{
       border-radius:34px;
       border:4px solid var(--line);
-      padding:80px 86px;
+      padding:78px 86px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -87,21 +92,16 @@
       background:#fff;
     }
 
-    /* BACK panel must be rotated so it reads correctly after folding */
+    /* Back is rotated in the file so it becomes upright after folding */
     .panel.back{
       transform:rotate(180deg);
     }
 
-    /* Left content */
-    .left{
-      flex:1;
-      min-width:0;
-    }
+    .left{flex:1; min-width:0;}
 
-    /* Right QR block */
     .qrWrap{
-      width:600px;
-      flex:0 0 600px;
+      width:560px;
+      flex:0 0 560px;
       border-radius:30px;
       border:4px solid rgba(41,179,74,.25);
       background:#f0fff4;
@@ -114,8 +114,8 @@
     }
 
     .qr{
-      width:520px;
-      height:520px;
+      width:480px;
+      height:480px;
       border-radius:22px;
       background:#fff;
       box-shadow:0 12px 30px rgba(0,0,0,.08);
@@ -125,11 +125,7 @@
       position:relative;
       overflow:hidden;
     }
-    .qr img{
-      width:100%;
-      height:100%;
-      image-rendering:pixelated;
-    }
+    .qr img{width:100%;height:100%;image-rendering:pixelated;}
 
     .qrFallback{
       position:absolute;
@@ -147,85 +143,39 @@
     }
     .qrFallback.hidden{display:none}
 
-    .qrCaption{
-      font-size:44px;
-      font-weight:900;
-      text-align:center;
-    }
+    .qrCaption{font-size:40px;font-weight:900;text-align:center;}
 
-    /* Brand header */
-    .brandRow{
-      display:flex;
-      align-items:center;
-      gap:24px;
-      margin-bottom:16px;
-    }
+    .brandRow{display:flex;align-items:center;gap:24px;margin-bottom:14px;}
     .brandIcon{
-      width:92px;
-      height:92px;
-      border-radius:22px;
-      border:3px solid #e5e7eb;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      background:#fff;
+      width:86px;height:86px;border-radius:22px;border:3px solid #e5e7eb;
+      display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff;
     }
-    .brandIcon img{
-      width:70px;
-      height:70px;
-      object-fit:contain;
-    }
-    .brandText .name{
-      font-size:64px;
-      font-weight:1000;
-      letter-spacing:-1px;
-      line-height:1.0;
-    }
-    .brandText .tag{
-      margin-top:6px;
-      font-size:34px;
-      font-weight:700;
-      color:var(--gray);
-    }
+    .brandIcon img{width:66px;height:66px;object-fit:contain;}
+    .brandText .name{font-size:60px;font-weight:1000;letter-spacing:-1px;line-height:1.0;}
+    .brandText .tag{margin-top:6px;font-size:34px;font-weight:700;color:var(--gray);}
 
-    /* Hook */
     .hook{
-      margin-top:16px;
+      margin-top:14px;
       font-size:86px;
       font-weight:1000;
       letter-spacing:-1px;
       line-height:0.98;
       text-transform:uppercase;
     }
-
     .sub{
       margin-top:22px;
       font-size:38px;
       font-weight:800;
-      color:#111;
       line-height:1.25;
     }
 
-    .ctaRow{
-      margin-top:26px;
-      display:flex;
-      gap:22px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
+    .ctaRow{margin-top:26px;display:flex;gap:22px;flex-wrap:wrap;align-items:center;}
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap:12px;
-      padding:14px 22px;
-      border-radius:999px;
+      display:inline-flex;align-items:center;gap:12px;
+      padding:14px 22px;border-radius:999px;
       border:3px solid rgba(41,179,74,.28);
       background:#f0fff4;
-      font-size:30px;
-      font-weight:900;
-      color:#0b3d1a;
-      white-space:nowrap;
+      font-size:30px;font-weight:900;color:#0b3d1a;white-space:nowrap;
     }
 
     .tiny{
@@ -243,167 +193,158 @@
       font-weight:800;
       line-height:1.25;
     }
-
     .kicker{
       margin-top:18px;
       font-size:34px;
       font-weight:800;
       color:var(--gray);
     }
-
-    @media print{
-      body{background:#fff}
-    }
   </style>
 </head>
 
 <body>
   <div id="flyer">
-    <div class="stack">
+    <div class="page">
 
-      <!-- TOP TENT -->
-      <div class="half">
-        <div class="foldGuide"></div>
+      <!-- TENT A (top half of page) -->
+      <div class="tentPiece">
+        <div class="foldLine"></div>
+        <div class="tentGrid">
 
-        <!-- FRONT (upright) -->
-        <div class="panel front">
-          <div class="left">
-            <div class="brandRow">
-              <div class="brandIcon">
-                <img src="/couch-icon.png" alt="MTC icon">
+          <!-- FRONT (upright) -->
+          <div class="panel front">
+            <div class="left">
+              <div class="brandRow">
+                <div class="brandIcon"><img src="/couch-icon.png" alt="MTC icon"></div>
+                <div class="brandText">
+                  <div class="name">MOVE THAT COUCH!</div>
+                  <div class="tag">Furniture delivery, made easy.</div>
+                </div>
               </div>
-              <div class="brandText">
-                <div class="name">MOVE THAT COUCH!</div>
-                <div class="tag">Furniture delivery, made easy.</div>
+
+              <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
+
+              <div class="sub">
+                Single-item &amp; small-load deliveries<br>
+                Furniture • Appliances • Marketplace pickups
               </div>
-            </div>
 
-            <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
-
-            <div class="sub">
-              Single-item &amp; small-load deliveries<br>
-              Furniture • Appliances • Marketplace pickups
-            </div>
-
-            <div class="ctaRow">
-              <span class="pill">✓ Get delivery quotes</span>
-              <span class="pill">✓ Book a driver</span>
-            </div>
-
-            <div class="tiny">
-              MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
-            </div>
-          </div>
-
-          <div class="qrWrap">
-            <div class="qr">
-              <img id="qrImgFrontTop" alt="QR code">
-              <div id="qrFallbackFrontTop" class="qrFallback">QR WILL APPEAR HERE</div>
-            </div>
-            <div class="qrCaption">Scan to get started</div>
-          </div>
-        </div>
-
-        <!-- BACK (rotated 180° for folding) -->
-        <div class="panel back">
-          <div class="left">
-            <div class="hook">EARN A REFERRAL BONUS.</div>
-            <div class="sub">Share your link and earn:</div>
-            <ul class="bullets">
-              <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
-              <li><strong>5%</strong> on every delivery after that — forever</li>
-            </ul>
-            <div class="kicker">
-              Scan to sign up — you’ll get your own referral link + QR code.
-            </div>
-            <div class="tiny">
-              MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
-            </div>
-          </div>
-
-          <div class="qrWrap">
-            <div class="qr">
-              <img id="qrImgBackTop" alt="QR code">
-              <div id="qrFallbackBackTop" class="qrFallback">QR WILL APPEAR HERE</div>
-            </div>
-            <div class="qrCaption">Scan to sign up</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BOTTOM TENT -->
-      <div class="half">
-        <div class="foldGuide"></div>
-
-        <!-- FRONT (upright) -->
-        <div class="panel front">
-          <div class="left">
-            <div class="brandRow">
-              <div class="brandIcon">
-                <img src="/couch-icon.png" alt="MTC icon">
+              <div class="ctaRow">
+                <span class="pill">✓ Get delivery quotes</span>
+                <span class="pill">✓ Book a driver</span>
               </div>
-              <div class="brandText">
-                <div class="name">MOVE THAT COUCH!</div>
-                <div class="tag">Furniture delivery, made easy.</div>
+
+              <div class="tiny">
+                MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
               </div>
             </div>
 
-            <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
-
-            <div class="sub">
-              Single-item &amp; small-load deliveries<br>
-              Furniture • Appliances • Marketplace pickups
-            </div>
-
-            <div class="ctaRow">
-              <span class="pill">✓ Get delivery quotes</span>
-              <span class="pill">✓ Book a driver</span>
-            </div>
-
-            <div class="tiny">
-              MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
+            <div class="qrWrap">
+              <div class="qr">
+                <img id="qrImgFrontA" alt="QR code">
+                <div id="qrFallbackFrontA" class="qrFallback">QR WILL APPEAR HERE</div>
+              </div>
+              <div class="qrCaption">Scan to get started</div>
             </div>
           </div>
 
-          <div class="qrWrap">
-            <div class="qr">
-              <img id="qrImgFrontBottom" alt="QR code">
-              <div id="qrFallbackFrontBottom" class="qrFallback">QR WILL APPEAR HERE</div>
+          <!-- BACK (ROTATED IN FILE) -->
+          <div class="panel back">
+            <div class="left">
+              <div class="hook">EARN A REFERRAL BONUS.</div>
+              <div class="sub">Share your link and earn:</div>
+              <ul class="bullets">
+                <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
+                <li><strong>5%</strong> on every delivery after that — forever</li>
+              </ul>
+              <div class="kicker">Scan to sign up — you’ll get your own referral link + QR code.</div>
+              <div class="tiny">
+                MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
+              </div>
             </div>
-            <div class="qrCaption">Scan to get started</div>
-          </div>
-        </div>
 
-        <!-- BACK (rotated 180° for folding) -->
-        <div class="panel back">
-          <div class="left">
-            <div class="hook">EARN A REFERRAL BONUS.</div>
-            <div class="sub">Share your link and earn:</div>
-            <ul class="bullets">
-              <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
-              <li><strong>5%</strong> on every delivery after that — forever</li>
-            </ul>
-            <div class="kicker">
-              Scan to sign up — you’ll get your own referral link + QR code.
-            </div>
-            <div class="tiny">
-              MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
+            <div class="qrWrap">
+              <div class="qr">
+                <img id="qrImgBackA" alt="QR code">
+                <div id="qrFallbackBackA" class="qrFallback">QR WILL APPEAR HERE</div>
+              </div>
+              <div class="qrCaption">Scan to sign up</div>
             </div>
           </div>
 
-          <div class="qrWrap">
-            <div class="qr">
-              <img id="qrImgBackBottom" alt="QR code">
-              <div id="qrFallbackBackBottom" class="qrFallback">QR WILL APPEAR HERE</div>
-            </div>
-            <div class="qrCaption">Scan to sign up</div>
-          </div>
         </div>
       </div>
 
+      <!-- TENT B (bottom half of page) -->
+      <div class="tentPiece">
+        <div class="foldLine"></div>
+        <div class="tentGrid">
+
+          <!-- FRONT (upright) -->
+          <div class="panel front">
+            <div class="left">
+              <div class="brandRow">
+                <div class="brandIcon"><img src="/couch-icon.png" alt="MTC icon"></div>
+                <div class="brandText">
+                  <div class="name">MOVE THAT COUCH!</div>
+                  <div class="tag">Furniture delivery, made easy.</div>
+                </div>
+              </div>
+
+              <div class="hook">NEED IT DELIVERED?<br>GET COMPETING QUOTES.</div>
+
+              <div class="sub">
+                Single-item &amp; small-load deliveries<br>
+                Furniture • Appliances • Marketplace pickups
+              </div>
+
+              <div class="ctaRow">
+                <span class="pill">✓ Get delivery quotes</span>
+                <span class="pill">✓ Book a driver</span>
+              </div>
+
+              <div class="tiny">
+                MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
+              </div>
+            </div>
+
+            <div class="qrWrap">
+              <div class="qr">
+                <img id="qrImgFrontB" alt="QR code">
+                <div id="qrFallbackFrontB" class="qrFallback">QR WILL APPEAR HERE</div>
+              </div>
+              <div class="qrCaption">Scan to get started</div>
+            </div>
+          </div>
+
+          <!-- BACK (ROTATED IN FILE) -->
+          <div class="panel back">
+            <div class="left">
+              <div class="hook">EARN A REFERRAL BONUS.</div>
+              <div class="sub">Share your link and earn:</div>
+              <ul class="bullets">
+                <li><strong>25%</strong> of the booking deposit on their first completed delivery</li>
+                <li><strong>5%</strong> on every delivery after that — forever</li>
+              </ul>
+              <div class="kicker">Scan to sign up — you’ll get your own referral link + QR code.</div>
+              <div class="tiny">
+                MOVE THAT COUCH! connects customers and independent drivers. Drivers are not employees; platform facilitates bookings only.
+              </div>
+            </div>
+
+            <div class="qrWrap">
+              <div class="qr">
+                <img id="qrImgBackB" alt="QR code">
+                <div id="qrFallbackBackB" class="qrFallback">QR WILL APPEAR HERE</div>
+              </div>
+              <div class="qrCaption">Scan to sign up</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
-    <!-- Cut line between top and bottom tents -->
     <div class="cutLine"></div>
   </div>
 
@@ -445,10 +386,10 @@
       const dataUrl = canvas.toDataURL("image/png");
 
       const targets = [
-        ["qrImgFrontTop","qrFallbackFrontTop"],
-        ["qrImgBackTop","qrFallbackBackTop"],
-        ["qrImgFrontBottom","qrFallbackFrontBottom"],
-        ["qrImgBackBottom","qrFallbackBackBottom"]
+        ["qrImgFrontA","qrFallbackFrontA"],
+        ["qrImgBackA","qrFallbackBackA"],
+        ["qrImgFrontB","qrFallbackFrontB"],
+        ["qrImgBackB","qrFallbackBackB"]
       ];
 
       for(const [imgId, fbId] of targets){
