@@ -800,37 +800,6 @@
     }
   });
 
-  flyer5Btn.addEventListener("click", async () => {
-    const qrLink = getQrLinkForFlyers();
-    status("Preparing Shop Flyer…");
-    try {
-      await exportFlyerPng({
-        templatePath: "/marketing/flyers/customer-shop.html",
-        qrLink,
-        filename: "MTC-Shop-Flyer-2.png",
-        onStatus: status
-      });
-    } catch (e) {
-      console.error(e);
-      showExportError();
-    }
-  });
-
-  flyer6Btn.addEventListener("click", async () => {
-    const qrLink = getQrLinkForFlyers();
-    status("Preparing Shop Flyer…");
-    try {
-      await exportFlyerPng({
-        templatePath: "/marketing/flyers/neighborhood.html",
-        qrLink,
-        filename: "MTC-Neighborhood.png",
-        onStatus: status
-      });
-    } catch (e) {
-      console.error(e);
-      showExportError();
-    }
-  });
 </script>
 
 </body>
