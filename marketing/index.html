@@ -169,6 +169,10 @@
       opacity: 0.55;
       cursor: not-allowed;
     }
+    a.primaryBtn{
+  text-decoration: none;
+  color: white;
+}
 
     .btn-green { background:#22c55e; color:white; }
     .btn-blue  { background:#2563eb; color:white; }
@@ -405,8 +409,9 @@
   <button class="btn-blue primaryBtn" id="downloadBtn">Download QR (PNG)</button>
 
   <!-- NEW: Return to App -->
-  <button class="btn-green primaryBtn" id="returnToAppBtn">Return to App</button>
-</div>
+  <a class="btn-green primaryBtn" id="returnToAppLink" href="https://app.movethatcouch.com/open-app">
+  Return to App
+</a>
       </div>
     </div>
   </div>
@@ -715,7 +720,6 @@
   const flyer2Btn = document.getElementById("flyer2Btn");
   const flyer3Btn = document.getElementById("flyer3Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
-  const returnToAppBtn = document.getElementById("returnToAppBtn");
 
   function status(msg){
     const successMsg = document.getElementById("successMsg");
