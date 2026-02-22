@@ -805,30 +805,7 @@
   });
 
   returnToAppBtn.addEventListener("click", () => {
-  const appUrl = "https://app.movethatcouch.com/";
-  const fallbackUrl = "https://www.movethatcouch.com/";
-
-  let didHide = false;
-
-  const visibilityHandler = () => {
-    if (document.visibilityState === "hidden") {
-      didHide = true;
-    }
-  };
-
-  document.addEventListener("visibilitychange", visibilityHandler);
-
-  // Try to open app
-  window.location.href = appUrl;
-
-  setTimeout(() => {
-    document.removeEventListener("visibilitychange", visibilityHandler);
-
-    // If page never became hidden, app did NOT open
-    if (!didHide) {
-      window.location.href = fallbackUrl;
-    }
-  }, 1200);
+  window.location.href = "https://app.movethatcouch.com/open-app";
 });
 
 </script>
