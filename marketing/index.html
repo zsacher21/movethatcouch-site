@@ -386,11 +386,14 @@
       </div>
 
           <div class="flyerActions">
-            <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
-            <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
-            <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
-            <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
-          </div>
+  <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
+  <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
+  <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
+  <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
+
+  <!-- NEW: Return to App -->
+  <button class="btn-blue flyerBtn" id="returnToAppBtn">Return to App</button>
+</div>
         </div>
       </div>
 
@@ -710,6 +713,7 @@
   const flyer2Btn = document.getElementById("flyer2Btn");
   const flyer3Btn = document.getElementById("flyer3Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
+  const returnToAppBtn = document.getElementById("returnToAppBtn");
 
   function status(msg){
     const successMsg = document.getElementById("successMsg");
@@ -797,6 +801,19 @@
       showExportError();
     }
   });
+
+  returnToAppBtn.addEventListener("click", () => {
+  const appUrl = "https://app.movethatcouch.com/";
+  const fallbackUrl = "https://www.movethatcouch.com/";
+
+  // Try to open the app (Android App Links / iOS Universal Links will intercept if installed)
+  window.location.href = appUrl;
+
+  // If the app isn't installed, the browser stays open — so send them to Home
+  setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 1200);
+});
 
 </script>
 
