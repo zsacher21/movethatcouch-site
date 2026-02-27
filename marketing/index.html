@@ -450,7 +450,7 @@
   const finalLinkText = document.getElementById('finalLinkText');
 
   const GENERIC_LINK = "https://www.movethatcouch.com/";
-  const APP_REF_BASE = "https://app.movethatcouch.com/?ref=";
+  const APP_REF_BASE = "https://movethatcouch.com/";
 
   let currentFinalLink = GENERIC_LINK;
   window.currentFinalLink = currentFinalLink;
@@ -637,7 +637,7 @@
       return;
     }
 
-    const finalLink = APP_REF_BASE + encodeURIComponent(code);
+    const finalLink = APP_REF_BASE + encodeURIComponent(code.toLowerCase());
 
     setCurrentLink(finalLink);
 
