@@ -481,25 +481,38 @@
   }
 
   function extractReferralCode(input){
-    const s = (input || "").trim();
-    if(!s) return "";
+  const s = (input || "").trim();
+  if(!s) return "";
 
-    if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s;
+  // Direct raw code (letters/numbers only)
+  if(/^[A-Za-z0-9]{4,20}$/.test(s)) return s.toLowerCase();
 
-    try {
-      const u = new URL(s);
+  try {
+    const u = new URL(s);
 
-      const ref = u.searchParams.get("ref");
-      if(ref && /^[A-Za-z0-9]{4,20}$/.test(ref)) return ref;
-
-      const pathMatch = u.pathname.match(/^\/r\/([A-Za-z0-9]{4,20})\/?$/);
-      if(pathMatch) return pathMatch[1];
-
-      return "";
-    } catch (e) {
-      return "";
+    // 1️⃣ Support legacy ?ref=
+    const ref = u.searchParams.get("ref");
+    if(ref && /^[A-Za-z0-9]{4,20}$/.test(ref)) {
+      return ref.toLowerCase();
     }
+
+    // 2️⃣ Support clean path-based slug: /i6sm7v or /alley
+    const path = u.pathname.replace(/^\/+|\/+$/g, ""); // trim slashes
+    if(/^[A-Za-z0-9]{4,20}$/.test(path)) {
+      return path.toLowerCase();
+    }
+
+    // 3️⃣ Keep support for old /r/code style (just in case)
+    const rMatch = u.pathname.match(/^\/r\/([A-Za-z0-9]{4,20})\/?$/);
+    if(rMatch) {
+      return rMatch[1].toLowerCase();
+    }
+
+    return "";
+  } catch (e) {
+    return "";
   }
+}
 
   function setCurrentLink(link){
     currentFinalLink = link;
