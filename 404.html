@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting…</title>
+  <meta name="robots" content="noindex" />
+  <script>
+    (function () {
+      // Pages that are real site routes and should NOT be treated as referral slugs
+      var known = [
+        '', 'index.html',
+        'marketing', 'marketing/',
+        'about', 'contact', 'privacy', 'terms', 'faq', 'pricing',
+        '404.html'
+      ];
+
+      var raw = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+
+      // If it's a known route, send to homepage (or keep them on-site)
+      if (!raw || known.indexOf(raw) !== -1) {
+        window.location.replace('https://movethatcouch.com/');
+        return;
+      }
+
+      // Otherwise treat as referral slug
+      window.location.replace('https://app.movethatcouch.com/' + encodeURIComponent(raw));
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting…</p>
+</body>
+</html>
