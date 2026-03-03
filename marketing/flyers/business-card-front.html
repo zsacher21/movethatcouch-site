@@ -4,40 +4,67 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Business Card Front • MOVE THAT COUCH!</title>
+
 <style>
-  :root{ --w:1050px; --h:600px; }
+  :root{
+    --w:1050px; /* 3.5" @ 300dpi */
+    --h:600px;  /* 2.0" @ 300dpi */
+  }
+
   html,body{ margin:0; padding:0; background:#fff; }
+
   #flyer{
     width:var(--w);
     height:var(--h);
     box-sizing:border-box;
     background:#fff;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+    /* Guarantee everything stays inside the export */
+    overflow:hidden;
+
+    /* Layout */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .stack{
+    width:100%;
+    padding: 44px 64px; /* safe margins */
+    box-sizing:border-box;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-start;
-    padding-top:64px;
+    justify-content:center;
+    gap: 20px;
     text-align:center;
   }
+
+  /* ✅ Critical: constrain by HEIGHT so it can’t push tagline off-canvas */
   .fullLogo{
-    width:540px;
-    height:auto;
+    max-height: 360px;   /* keeps logo + tagline within 600px */
+    width: auto;
+    max-width: 780px;
     display:block;
   }
+
   .tagline{
-    margin-top:24px;
-    font-size:36px;
-    font-weight:900;
+    font-size: 34px;
+    font-weight: 900;
     color:#1f2937;
-    letter-spacing:.2px;
+    letter-spacing: .2px;
+    line-height: 1.1;
   }
 </style>
 </head>
+
 <body>
   <div id="flyer">
-    <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
-    <div class="tagline">Furniture delivery, made easy.</div>
+    <div class="stack">
+      <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
+      <div class="tagline">Furniture delivery, made easy.</div>
+    </div>
   </div>
 
   <script>
