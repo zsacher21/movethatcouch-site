@@ -30,7 +30,7 @@
 
     .wrap{
       height:100%;
-      padding: 64px 74px 56px 74px;
+      padding: 72px 74px 70px 74px;
       display:flex;
       flex-direction: column;
       align-items: center;
@@ -39,30 +39,32 @@
       text-align:center;
     }
 
-    /* Full logo */
+    /* Full logo, but smaller */
     .fullLogo{
-      width: 760px;
+      width: 560px;  /* ✅ reduced from 760 */
       max-width: 100%;
       height: auto;
       display:block;
     }
 
-    .tag{
+    .tagline{
       margin-top: 6px;
-      font-size: 28px;
-      font-weight: 750;
-      color: var(--muted);
+      font-size: 34px;
+      font-weight: 850;
+      color: #1f2937;
+      letter-spacing: 0.2px;
     }
 
-    .site{
+    /* subtle footer micro-mark (optional, no URL) */
+    .micro{
       position:absolute;
       left: 0;
       right: 0;
-      bottom: 24px;
+      bottom: 26px;
       text-align:center;
-      font-size: 22px;
-      color: #64748b;
-      font-weight: 750;
+      font-size: 16px;
+      color: #94a3b8;
+      font-weight: 700;
       letter-spacing: 0.2px;
     }
   </style>
@@ -72,10 +74,10 @@
   <div id="flyer">
     <div class="wrap">
       <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
-      <div class="tag">Furniture delivery marketplace</div>
+      <div class="tagline">Furniture delivery, made easy.</div>
     </div>
 
-    <div class="site">movethatcouch.com</div>
+    <div class="micro">movethatcouch.com</div>
   </div>
 
   <script>
