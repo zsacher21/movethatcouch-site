@@ -1,72 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Business Card Front • MOVE THAT COUCH!</title>
-  <style>
-    :root{
-      /* 3.5" x 2" @ 300dpi */
-      --w: 1050px;
-      --h: 600px;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Business Card Front • MOVE THAT COUCH!</title>
 
-      --ink:#0f172a;
-      --muted:#475569;
-    }
+<style>
+:root{
+  --w:1050px;
+  --h:600px;
+}
 
-    html, body { margin:0; padding:0; background:#fff; }
+html,body{
+  margin:0;
+  padding:0;
+  background:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
 
-    #flyer{
-      width: var(--w);
-      height: var(--h);
-      box-sizing: border-box;
-      position: relative;
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background:#fff;
-      color: var(--ink);
-    }
+#flyer{
+  width:var(--w);
+  height:var(--h);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;   /* 👈 no vertical centering */
+  padding-top:80px;             /* 👈 controlled top spacing */
+  box-sizing:border-box;
+  text-align:center;
+}
 
-    .wrap{
-      height:100%;
-      padding: 86px 74px 86px 74px;
-      display:flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 26px;
-      text-align:center;
-    }
+/* Logo size */
+.fullLogo{
+  width:520px;   /* slightly smaller */
+  height:auto;
+  display:block;
+}
 
-    /* Full logo, sized for business card */
-    .fullLogo{
-      width: 540px;
-      max-width: 100%;
-      height: auto;
-      display:block;
-    }
-
-    .tagline{
-      font-size: 34px;
-      font-weight: 850;
-      color: #1f2937;
-      letter-spacing: 0.2px;
-    }
-  </style>
+/* Tagline */
+.tagline{
+  margin-top:28px;
+  font-size:34px;
+  font-weight:800;
+  color:#1f2937;
+  letter-spacing:.2px;
+}
+</style>
 </head>
 
 <body>
-  <div id="flyer">
-    <div class="wrap">
-      <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
-      <div class="tagline">Furniture delivery, made easy.</div>
-    </div>
+<div id="flyer">
+
+  <img src="/logo.png" alt="MOVE THAT COUCH!" class="fullLogo" />
+
+  <div class="tagline">
+    Furniture delivery, made easy.
   </div>
 
-  <script>
-    window.__flyerReady = (async function(){
-      await new Promise(r => setTimeout(r, 120));
-    })();
-  </script>
+</div>
+
+<script>
+window.__flyerReady = (async function(){
+  await new Promise(r => setTimeout(r,120));
+})();
+</script>
+
 </body>
 </html>
