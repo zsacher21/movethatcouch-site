@@ -11,7 +11,11 @@
     --h:600px;
   }
 
-  html,body{ margin:0; padding:0; background:#fff; }
+  html,body{
+    margin:0;
+    padding:0;
+    background:#fff;
+  }
 
   #flyer{
     width:var(--w);
@@ -19,59 +23,52 @@
     box-sizing:border-box;
     background:#fff;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    overflow:hidden;
-    position: relative;
-  }
 
-  /* Logo block (bigger, sits higher) */
-  .logoArea{
-    position:absolute;
-    left: 64px;
-    right: 64px;
-    top: 56px;
-    bottom: 120px;           /* leaves guaranteed room for tagline */
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
   }
 
+  .stack{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:18px;           /* 🔥 this controls logo ↔ tagline spacing */
+    padding: 40px 64px;
+    box-sizing:border-box;
+  }
+
   .fullLogo{
-    max-height: 660px;        /* ✅ bigger */
-    max-width: 860px;         /* ✅ bigger */
-    width: auto;
-    height: auto;
+    max-height: 420px;  /* keeps it balanced */
+    max-width: 860px;
+    width:auto;
+    height:auto;
     display:block;
   }
 
-  /* Tagline pinned near bottom */
   .tagline{
-    position:absolute;
-    left: 64px;
-    right: 64px;
-    bottom: 44px;             /* ✅ closer to bottom */
-    text-align:center;
     font-size: 36px;
     font-weight: 900;
     color:#1f2937;
-    letter-spacing: .2px;
-    line-height: 1.1;
+    letter-spacing:.2px;
+    line-height:1.1;
   }
 </style>
 </head>
 
 <body>
   <div id="flyer">
-    <div class="logoArea">
+    <div class="stack">
       <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
+      <div class="tagline">Furniture delivery, made easy.</div>
     </div>
-
-    <div class="tagline">Furniture delivery, made easy.</div>
   </div>
 
   <script>
     window.__flyerReady = (async function(){
-      await new Promise(r => setTimeout(r, 120));
+      await new Promise(r => setTimeout(r,120));
     })();
   </script>
 </body>
