@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Card Back • MOVE THAT COUCH!</title>
+  <style>
+    :root{
+      /* 3.5" x 2" @ 300dpi */
+      --w: 1050px;
+      --h: 600px;
+
+      --green1: #22c55e;
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #e2e8f0;
+    }
+
+    html, body { margin:0; padding:0; background:#fff; }
+
+    #card{
+      width: var(--w);
+      height: var(--h);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:#fff;
+      color: var(--ink);
+    }
+
+    .topAccent{
+      position:absolute;
+      left:0; top:0;
+      width:100%;
+      height:18px;
+      background: linear-gradient(90deg, var(--green1), #34d399);
+    }
+
+    .pad{
+      padding: 42px 56px 44px 56px;
+      height: 100%;
+      box-sizing: border-box;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap: 42px;
+      align-items:center;
+    }
+
+    .copy{
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      padding-top: 10px;
+    }
+
+    .headline{
+      font-size: 58px;
+      font-weight: 950;
+      line-height: 1.02;
+      letter-spacing: 0.2px;
+      margin:0;
+    }
+
+    .sub{
+      font-size: 24px;
+      font-weight: 750;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.25;
+    }
+
+    .bullets{
+      margin-top: 10px;
+      font-size: 22px;
+      color: var(--muted);
+      line-height: 1.4;
+      font-weight: 650;
+    }
+
+    .qrWrap{
+      border: 2px solid var(--line);
+      border-radius: 22px;
+      padding: 20px 20px 18px 20px;
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    #qrCanvas{
+      width: 360px;
+      height: 360px;
+      background:#fff;
+      image-rendering: pixelated;
+      display:block;
+      border-radius: 14px;
+    }
+
+    .url{
+      font-size: 20px;
+      font-weight: 800;
+      color: #0b1220;
+      text-align:center;
+      word-break: break-all;
+    }
+
+    .refLine{
+      font-size: 18px;
+      font-weight: 800;
+      color: #14532d;
+      text-align:center;
+      display:none;
+    }
+
+    .micro{
+      position:absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 18px;
+      font-size: 16px;
+      color: #64748b;
+      text-align:center;
+      font-weight: 650;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="card">
+    <div class="topAccent"></div>
+
+    <div class="pad">
+      <div class="copy">
+        <div class="headline">Need it delivered?<br/>Get competing quotes.</div>
+        <div class="sub">Single-item &amp; small-load deliveries</div>
+
+        <div class="bullets">
+          Furniture • Appliances • Marketplace pickups
+        </div>
+      </div>
+
+      <div class="qrWrap">
+        <canvas id="qrCanvas"></canvas>
+        <div class="url" id="urlText">movethatcouch.com</div>
+        <div class="refLine" id="refLine">Referral code: <span id="refCode"></span></div>
+      </div>
+    </div>
+
+    <div class="micro">Free to use • Pay 20% to book • Pay driver at delivery</div>
+  </div>
+
+  <script>
+    window.__cardReady = (async function(){
+      function getParams(){
+        const params = new URLSearchParams(window.location.search);
+        const qr = params.get("qr") || "https://movethatcouch.com";
+        const code = (params.get("code") || "").trim();
+        return { qr, code };
+      }
+
+      function normalizeDisplayUrl(url){
+        try{
+          const u = new URL(url);
+          // show host + path, strip trailing slash
+          const path = (u.pathname || "/").replace(/\/+$/, "") || "";
+          return (u.host + path) || "movethatcouch.com";
+        }catch(e){
+          // if it's not a valid URL, just display it
+          return (url || "movethatcouch.com").replace(/^https?:\/\//i, "");
+        }
+      }
+
+      await new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+        s.async = true;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+
+      const { qr, code } = getParams();
+
+      // URL display
+      const urlText = document.getElementById("urlText");
+      urlText.textContent = normalizeDisplayUrl(qr);
+
+      // Referral line (only if code exists and looks real)
+      const refLine = document.getElementById("refLine");
+      const refCode = document.getElementById("refCode");
+      const codeLooksValid = !!code && code.length >= 4 && !/movethatcouch\.com/i.test(code);
+      if(codeLooksValid){
+        refCode.textContent = code;
+        refLine.style.display = "block";
+      }
+
+      // QR canvas sizing
+      const canvas = document.getElementById("qrCanvas");
+      const cssW = Math.round(parseFloat(getComputedStyle(canvas).width));
+      const cssH = Math.round(parseFloat(getComputedStyle(canvas).height));
+      canvas.width = cssW;
+      canvas.height = cssH;
+
+      const ctx = canvas.getContext("2d");
+
+      function drawQr(text){
+        const qrObj = window.qrcode(0, "M");
+        qrObj.addData(text);
+        qrObj.make();
+
+        const size = canvas.width;
+        const cells = qrObj.getModuleCount();
+        const tile = size / cells;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, size, size);
+
+        ctx.fillStyle = "#000000";
+        for(let r=0; r<cells; r++){
+          for(let c=0; c<cells; c++){
+            if(qrObj.isDark(r,c)){
+              ctx.fillRect(
+                Math.floor(c*tile),
+                Math.floor(r*tile),
+                Math.ceil(tile),
+                Math.ceil(tile)
+              );
+            }
+          }
+        }
+      }
+
+      // small delay like your flyer (helps ensure layout computed)
+      await new Promise(r => setTimeout(r, 200));
+      drawQr(qr);
+      await new Promise(r => setTimeout(r, 120));
+    })();
+  </script>
+</body>
+</html>
