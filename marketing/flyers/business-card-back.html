@@ -10,15 +10,14 @@
       --w: 1050px;
       --h: 600px;
 
-      --green1: #22c55e;
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: #e2e8f0;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
     }
 
     html, body { margin:0; padding:0; background:#fff; }
 
-    #card{
+    #flyer{
       width: var(--w);
       height: var(--h);
       box-sizing: border-box;
@@ -29,16 +28,8 @@
       color: var(--ink);
     }
 
-    .topAccent{
-      position:absolute;
-      left:0; top:0;
-      width:100%;
-      height:18px;
-      background: linear-gradient(90deg, var(--green1), #34d399);
-    }
-
     .pad{
-      padding: 42px 56px 44px 56px;
+      padding: 56px 56px 64px 56px; /* more bottom room for legal */
       height: 100%;
       box-sizing: border-box;
       display:grid;
@@ -51,28 +42,35 @@
       display:flex;
       flex-direction: column;
       justify-content: center;
-      gap: 14px;
-      padding-top: 10px;
+      gap: 16px;
     }
 
     .headline{
-      font-size: 58px;
-      font-weight: 950;
-      line-height: 1.02;
-      letter-spacing: 0.2px;
       margin:0;
+      font-weight: 950;
+      letter-spacing: 0.2px;
+      color: var(--ink);
+    }
+    .headlineLine1{
+      font-size: 58px;
+      line-height: 1.05;
+    }
+    .headlineLine2{
+      font-size: 58px;
+      line-height: 1.05;
+      margin-top: 14px; /* ✅ adds space between lines */
     }
 
     .sub{
       font-size: 24px;
       font-weight: 750;
       color: var(--muted);
-      margin-top: 6px;
+      margin-top: 2px;
       line-height: 1.25;
     }
 
     .bullets{
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 22px;
       color: var(--muted);
       line-height: 1.4;
@@ -115,14 +113,16 @@
       display:none;
     }
 
-    .micro{
+    /* ✅ Legal line instead of “Free to use…” */
+    .legal{
       position:absolute;
       left: 56px;
       right: 56px;
       bottom: 18px;
-      font-size: 16px;
+      font-size: 14px;
       color: #64748b;
       text-align:center;
+      line-height: 1.2;
       font-weight: 650;
     }
   </style>
@@ -130,11 +130,13 @@
 
 <body>
   <div id="flyer">
-    <div class="topAccent"></div>
-
     <div class="pad">
       <div class="copy">
-        <div class="headline">Need it delivered?<br/>Get competing quotes.</div>
+        <div class="headline">
+          <div class="headlineLine1">Need it delivered?</div>
+          <div class="headlineLine2">Get competing quotes.</div>
+        </div>
+
         <div class="sub">Single-item &amp; small-load deliveries</div>
 
         <div class="bullets">
@@ -149,7 +151,9 @@
       </div>
     </div>
 
-    <div class="micro">Free to use • Pay 20% to book • Pay driver at delivery</div>
+    <div class="legal">
+      Drivers are independent contractors, not employees of MOVE THAT COUCH!
+    </div>
   </div>
 
   <script>
@@ -164,11 +168,9 @@
       function normalizeDisplayUrl(url){
         try{
           const u = new URL(url);
-          // show host + path, strip trailing slash
           const path = (u.pathname || "/").replace(/\/+$/, "") || "";
           return (u.host + path) || "movethatcouch.com";
         }catch(e){
-          // if it's not a valid URL, just display it
           return (url || "movethatcouch.com").replace(/^https?:\/\//i, "");
         }
       }
@@ -233,7 +235,6 @@
         }
       }
 
-      // small delay like your flyer (helps ensure layout computed)
       await new Promise(r => setTimeout(r, 200));
       drawQr(qr);
       await new Promise(r => setTimeout(r, 120));
