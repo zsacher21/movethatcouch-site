@@ -10,15 +10,14 @@
       --w: 1050px;
       --h: 600px;
 
-      --green1: #22c55e;
-      --ink: #0f172a;
-      --muted: #475569;
-      --line: #e2e8f0;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
     }
 
     html, body { margin:0; padding:0; background:#fff; }
 
-    #card{
+    #flyer{
       width: var(--w);
       height: var(--h);
       box-sizing: border-box;
@@ -27,15 +26,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background:#fff;
       color: var(--ink);
-    }
-
-    /* subtle top accent to match brand without overpowering */
-    .topAccent{
-      position:absolute;
-      left:0; top:0;
-      width:100%;
-      height:18px;
-      background: linear-gradient(90deg, var(--green1), #34d399);
     }
 
     .wrap{
@@ -49,36 +39,19 @@
       text-align:center;
     }
 
-    .logoBox{
-      width: 138px; height: 138px;
-      border-radius: 26px;
-      background:#fff;
-      border: 2px solid var(--line);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-    }
-    .logoBox img{
-      width: 122px; height: 122px;
-      object-fit: contain;
+    /* Full logo */
+    .fullLogo{
+      width: 760px;
+      max-width: 100%;
+      height: auto;
       display:block;
     }
 
-    .brand{
-      font-weight: 900;
-      letter-spacing: 1px;
-      font-size: 72px;
-      line-height: 1.0;
-      margin: 0;
-    }
-
     .tag{
+      margin-top: 6px;
       font-size: 28px;
       font-weight: 750;
       color: var(--muted);
-      margin-top: 2px;
     }
 
     .site{
@@ -97,24 +70,15 @@
 
 <body>
   <div id="flyer">
-    <div class="topAccent"></div>
-
     <div class="wrap">
-      <div class="logoBox">
-        <img src="/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH logo" />
-      </div>
-
-      <div>
-        <div class="brand">MOVE THAT COUCH!</div>
-        <div class="tag">Furniture delivery marketplace</div>
-      </div>
+      <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
+      <div class="tag">Furniture delivery marketplace</div>
     </div>
 
     <div class="site">movethatcouch.com</div>
   </div>
 
   <script>
-    // keep the same pattern as your flyer templates
     window.__flyerReady = (async function(){
       await new Promise(r => setTimeout(r, 120));
     })();
