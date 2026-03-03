@@ -12,7 +12,6 @@
 
       --ink:#0f172a;
       --muted:#475569;
-      --line:#e2e8f0;
     }
 
     html, body { margin:0; padding:0; background:#fff; }
@@ -30,41 +29,27 @@
 
     .wrap{
       height:100%;
-      padding: 72px 74px 70px 74px;
+      padding: 86px 74px 86px 74px;
       display:flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 22px;
+      gap: 26px;
       text-align:center;
     }
 
-    /* Full logo, but smaller */
+    /* Full logo, sized for business card */
     .fullLogo{
-      width: 560px;  /* ✅ reduced from 760 */
+      width: 540px;
       max-width: 100%;
       height: auto;
       display:block;
     }
 
     .tagline{
-      margin-top: 6px;
       font-size: 34px;
       font-weight: 850;
       color: #1f2937;
-      letter-spacing: 0.2px;
-    }
-
-    /* subtle footer micro-mark (optional, no URL) */
-    .micro{
-      position:absolute;
-      left: 0;
-      right: 0;
-      bottom: 26px;
-      text-align:center;
-      font-size: 16px;
-      color: #94a3b8;
-      font-weight: 700;
       letter-spacing: 0.2px;
     }
   </style>
@@ -76,8 +61,6 @@
       <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
       <div class="tagline">Furniture delivery, made easy.</div>
     </div>
-
-    <div class="micro">movethatcouch.com</div>
   </div>
 
   <script>
