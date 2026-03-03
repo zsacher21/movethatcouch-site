@@ -406,7 +406,14 @@
   <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
   <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
   <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
-        </div>
+
+  <!-- NEW: Business Cards -->
+  <div class="divider" style="margin:14px 0;"></div>
+  <div class="sectionTitle" style="text-align:center;">Business cards</div>
+
+  <button class="btn-gray flyerBtn" id="cardFrontBtn">Business Card (Front)</button>
+  <button class="btn-gray flyerBtn" id="cardBackBtn">Business Card (Back)</button>
+</div>
       </div>
 
       <div class="qrBox">
@@ -742,6 +749,9 @@
   const flyer2Btn = document.getElementById("flyer2Btn");
   const flyer3Btn = document.getElementById("flyer3Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
+  // NEW: Business card buttons
+const cardFrontBtn = document.getElementById("cardFrontBtn");
+const cardBackBtn = document.getElementById("cardBackBtn");
 
   function status(msg){
     const successMsg = document.getElementById("successMsg");
@@ -763,6 +773,12 @@
       ? String(window.currentFinalLink).trim()
       : "https://www.movethatcouch.com/";
   }
+  // NEW: used for Business Card back (optional “Referral code: ____” line)
+function getReferralCodeForExports(){
+  const raw = (refInput && refInput.value) ? String(refInput.value) : "";
+  const code = extractReferralCode(raw);
+  return (code && /^[a-z0-9]{4,20}$/.test(code)) ? code.toLowerCase() : "";
+}
 
   flyer1Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
@@ -829,6 +845,50 @@
       showExportError();
     }
   });
+
+  cardFrontBtn.addEventListener("click", async () => {
+  const qrLink = getQrLinkForFlyers();
+  status("Preparing Business Card (Front)…");
+  try {
+    await exportFlyerPng({
+      templatePath: "/marketing/flyers/business-card-front.html",
+      qrLink,
+      filename: "MTC-Business-Card-Front.png",
+      print: { width: 1050, height: 600 },
+      onStatus: status
+    });
+  } catch (e) {
+    console.error(e);
+    showExportError();
+  }
+});
+
+cardBackBtn.addEventListener("click", async () => {
+  const qrLink = getQrLinkForFlyers();
+  const code = (typeof getReferralCodeForExports === "function")
+    ? getReferralCodeForExports()
+    : "";
+
+  status("Preparing Business Card (Back)…");
+  try {
+    // We append both qr + code as query params so the template can show the referral line.
+    const templatePath =
+      "/marketing/flyers/business-card-back.html" +
+      "?qr=" + encodeURIComponent(qrLink) +
+      "&code=" + encodeURIComponent(code);
+
+    await exportFlyerPng({
+      templatePath,
+      qrLink, // (still passed in; exportFlyerPng may inject it too)
+      filename: "MTC-Business-Card-Back.png",
+      print: { width: 1050, height: 600 },
+      onStatus: status
+    });
+  } catch (e) {
+    console.error(e);
+    showExportError();
+  }
+});
 
   returnToAppBtn.addEventListener("click", () => {
   window.location.href = "https://app.movethatcouch.com/open-app";
