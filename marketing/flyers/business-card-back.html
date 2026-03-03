@@ -10,6 +10,10 @@
       --w: 1050px;
       --h: 600px;
 
+      --green:#22c55e;
+      --greenSoft:#eafff0;
+      --greenSoft2:#d9ffe7;
+
       --ink:#0f172a;
       --muted:#475569;
       --line:#e2e8f0;
@@ -29,12 +33,12 @@
     }
 
     .pad{
-      padding: 56px 56px 64px 56px; /* more bottom room for legal */
+      padding: 56px 56px 66px 56px;
       height: 100%;
       box-sizing: border-box;
       display:grid;
-      grid-template-columns: 1fr 420px;
-      gap: 42px;
+      grid-template-columns: 1fr 440px;
+      gap: 40px;
       align-items:center;
     }
 
@@ -58,34 +62,44 @@
     .headlineLine2{
       font-size: 58px;
       line-height: 1.05;
-      margin-top: 14px; /* ✅ adds space between lines */
+      margin-top: 14px;
     }
 
-    .sub{
-      font-size: 24px;
-      font-weight: 750;
-      color: var(--muted);
-      margin-top: 2px;
-      line-height: 1.25;
+    .greenWord{ color: #16a34a; } /* “quotes” emphasis */
+
+    .subPill{
+      display:inline-block;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--greenSoft), #ffffff);
+      border: 1px solid #b7f7c8;
+      color: #14532d;
+      font-size: 22px;
+      font-weight: 850;
+      margin-top: 4px;
     }
 
     .bullets{
-      margin-top: 8px;
+      margin-top: 10px;
       font-size: 22px;
       color: var(--muted);
       line-height: 1.4;
       font-weight: 650;
     }
 
+    /* ✅ Green presence lives here */
     .qrWrap{
-      border: 2px solid var(--line);
-      border-radius: 22px;
-      padding: 20px 20px 18px 20px;
+      border-radius: 26px;
+      padding: 18px 18px 16px 18px;
       display:flex;
       flex-direction: column;
       align-items:center;
       justify-content: center;
       gap: 12px;
+
+      background: linear-gradient(180deg, var(--greenSoft), #ffffff);
+      border: 2px solid #b7f7c8;
     }
 
     #qrCanvas{
@@ -95,11 +109,12 @@
       image-rendering: pixelated;
       display:block;
       border-radius: 14px;
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.10);
     }
 
     .url{
       font-size: 20px;
-      font-weight: 800;
+      font-weight: 900;
       color: #0b1220;
       text-align:center;
       word-break: break-all;
@@ -107,19 +122,18 @@
 
     .refLine{
       font-size: 18px;
-      font-weight: 800;
+      font-weight: 900;
       color: #14532d;
       text-align:center;
       display:none;
     }
 
-    /* ✅ Legal line instead of “Free to use…” */
     .legal{
       position:absolute;
       left: 56px;
       right: 56px;
       bottom: 18px;
-      font-size: 14px;
+      font-size: 13px;
       color: #64748b;
       text-align:center;
       line-height: 1.2;
@@ -134,10 +148,10 @@
       <div class="copy">
         <div class="headline">
           <div class="headlineLine1">Need it delivered?</div>
-          <div class="headlineLine2">Get competing quotes.</div>
+          <div class="headlineLine2">Get competing <span class="greenWord">quotes</span>.</div>
         </div>
 
-        <div class="sub">Single-item &amp; small-load deliveries</div>
+        <div class="subPill">Single-item &amp; small-load deliveries</div>
 
         <div class="bullets">
           Furniture • Appliances • Marketplace pickups
@@ -186,11 +200,9 @@
 
       const { qr, code } = getParams();
 
-      // URL display
       const urlText = document.getElementById("urlText");
       urlText.textContent = normalizeDisplayUrl(qr);
 
-      // Referral line (only if code exists and looks real)
       const refLine = document.getElementById("refLine");
       const refCode = document.getElementById("refCode");
       const codeLooksValid = !!code && code.length >= 4 && !/movethatcouch\.com/i.test(code);
@@ -199,7 +211,6 @@
         refLine.style.display = "block";
       }
 
-      // QR canvas sizing
       const canvas = document.getElementById("qrCanvas");
       const cssW = Math.round(parseFloat(getComputedStyle(canvas).width));
       const cssH = Math.round(parseFloat(getComputedStyle(canvas).height));
