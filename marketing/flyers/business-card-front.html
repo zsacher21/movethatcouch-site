@@ -7,8 +7,9 @@
 
 <style>
   :root{
-    --w:1050px;
-    --h:600px;
+    /* Portrait card size */
+    --w:600px;
+    --h:1050px;
   }
 
   html,body{
@@ -28,6 +29,16 @@
     align-items:center;
     justify-content:center;
     text-align:center;
+    overflow:hidden;
+  }
+
+  /* Rotates the design 90° while keeping the canvas portrait */
+  .rotate{
+    transform:rotate(90deg);
+    transform-origin:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
   .stack{
@@ -35,36 +46,37 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap: -42px;           /* 🔥 this controls logo ↔ tagline spacing */
-    padding: 5px 64px;
+    gap:-42px;
+    padding:5px 64px;
     box-sizing:border-box;
   }
 
   .fullLogo{
-    max-height: 550px;  /* keeps it balanced */
-    max-width: 860px;
+    max-height:550px;
+    max-width:860px;
     width:auto;
     height:auto;
     display:block;
   }
 
   .tagline{
-  font-size: 36px;
-  font-weight: 900;
-  color:#1f2937;
-  letter-spacing:.2px;
-  line-height:1.1;
-
-  margin-top: -78px;   /* 👈 pulls tagline upward into logo padding */
-}
+    font-size:36px;
+    font-weight:900;
+    color:#1f2937;
+    letter-spacing:.2px;
+    line-height:1.1;
+    margin-top:-78px;
+  }
 </style>
 </head>
 
 <body>
   <div id="flyer">
-    <div class="stack">
-      <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
-      <div class="tagline">Furniture delivery, made easy.</div>
+    <div class="rotate">
+      <div class="stack">
+        <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
+        <div class="tagline">Furniture delivery, made easy.</div>
+      </div>
     </div>
   </div>
 
