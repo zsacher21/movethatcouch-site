@@ -7,13 +7,13 @@
 
 <style>
   :root{
-    /* Portrait business card */
-    --w:600px;
-    --h:1050px;
+    /* LANDSCAPE business card */
+    --w:1050px;
+    --h:600px;
 
     /* Layout tuning */
     --pad:64px;
-    --gap:48px;
+    --gap:56px;
   }
 
   html,body{
@@ -32,6 +32,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
+    overflow:hidden;
   }
 
   .grid{
@@ -41,9 +42,9 @@
     box-sizing:border-box;
 
     display:grid;
-    grid-template-columns: 1.15fr 0.85fr; /* logo gets more room */
+    grid-template-columns: 1.2fr 0.8fr; /* logo gets more room */
     gap:var(--gap);
-    align-items:center; /* vertical centering of each column */
+    align-items:center; /* vertical centering */
   }
 
   /* LEFT: logo column */
@@ -55,7 +56,6 @@
   }
 
   .fullLogo{
-    /* Keep it centered and safely inside the card */
     max-height: calc(var(--h) - (var(--pad) * 2));
     max-width: 100%;
     width:auto;
@@ -68,16 +68,16 @@
     height:100%;
     display:flex;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
     text-align:left;
   }
 
   .tagline{
-    font-size:44px;
+    font-size:52px;
     font-weight:900;
     color:#1f2937;
     letter-spacing:.2px;
-    line-height:1.05;
+    line-height:1.04;
   }
 
   .tagline .line{
@@ -85,9 +85,9 @@
     white-space:nowrap;
   }
 
-  /* Optional: nudge for visual balance (tiny) */
+  /* tiny optical nudge */
   .tagWrapInner{
-    transform: translateY(-6px);
+    transform: translateY(-2px);
   }
 </style>
 </head>
