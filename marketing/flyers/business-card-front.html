@@ -7,7 +7,7 @@
 
 <style>
   :root{
-    /* Portrait card size */
+    /* Portrait business card */
     --w:600px;
     --h:1050px;
   }
@@ -29,16 +29,6 @@
     align-items:center;
     justify-content:center;
     text-align:center;
-    overflow:hidden;
-  }
-
-  /* Rotates the design 90° while keeping the canvas portrait */
-  .rotate{
-    transform:rotate(90deg);
-    transform-origin:center;
-    display:flex;
-    align-items:center;
-    justify-content:center;
   }
 
   .stack{
@@ -46,37 +36,37 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:-42px;
-    padding:5px 64px;
+
+    gap:8px;
+    padding:60px 60px;
     box-sizing:border-box;
   }
 
   .fullLogo{
-    max-height:550px;
-    max-width:860px;
+    max-height:720px;
+    max-width:480px;
     width:auto;
     height:auto;
     display:block;
   }
 
   .tagline{
-    font-size:36px;
+    font-size:40px;
     font-weight:900;
     color:#1f2937;
     letter-spacing:.2px;
     line-height:1.1;
-    margin-top:-78px;
+
+    margin-top:-40px;
   }
 </style>
 </head>
 
 <body>
   <div id="flyer">
-    <div class="rotate">
-      <div class="stack">
-        <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
-        <div class="tagline">Furniture delivery, made easy.</div>
-      </div>
+    <div class="stack">
+      <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
+      <div class="tagline">Furniture delivery, made easy.</div>
     </div>
   </div>
 
