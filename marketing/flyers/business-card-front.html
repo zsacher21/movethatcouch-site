@@ -10,6 +10,10 @@
     /* Portrait business card */
     --w:600px;
     --h:1050px;
+
+    /* Layout tuning */
+    --pad:64px;
+    --gap:48px;
   }
 
   html,body{
@@ -28,45 +32,81 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    text-align:center;
   }
 
-  .stack{
+  .grid{
+    width:100%;
+    height:100%;
+    padding:var(--pad);
+    box-sizing:border-box;
+
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr; /* logo gets more room */
+    gap:var(--gap);
+    align-items:center; /* vertical centering of each column */
+  }
+
+  /* LEFT: logo column */
+  .brand{
+    height:100%;
     display:flex;
-    flex-direction:column;
     align-items:center;
     justify-content:center;
-
-    gap:8px;
-    padding:60px 60px;
-    box-sizing:border-box;
   }
 
   .fullLogo{
-    max-height:720px;
-    max-width:480px;
+    /* Keep it centered and safely inside the card */
+    max-height: calc(var(--h) - (var(--pad) * 2));
+    max-width: 100%;
     width:auto;
     height:auto;
     display:block;
   }
 
+  /* RIGHT: tagline column */
+  .tagWrap{
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:left;
+  }
+
   .tagline{
-    font-size:40px;
+    font-size:44px;
     font-weight:900;
     color:#1f2937;
     letter-spacing:.2px;
-    line-height:1.1;
+    line-height:1.05;
+  }
 
-    margin-top:-40px;
+  .tagline .line{
+    display:block;
+    white-space:nowrap;
+  }
+
+  /* Optional: nudge for visual balance (tiny) */
+  .tagWrapInner{
+    transform: translateY(-6px);
   }
 </style>
 </head>
 
 <body>
   <div id="flyer">
-    <div class="stack">
-      <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
-      <div class="tagline">Furniture delivery, made easy.</div>
+    <div class="grid">
+      <div class="brand">
+        <img class="fullLogo" src="/logo.png" alt="MOVE THAT COUCH!" />
+      </div>
+
+      <div class="tagWrap">
+        <div class="tagWrapInner">
+          <div class="tagline">
+            <span class="line">Furniture delivery,</span>
+            <span class="line">made easy.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
