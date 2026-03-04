@@ -11,9 +11,8 @@
     --w:1050px;
     --h:600px;
 
-    /* Layout tuning */
-    --pad:64px;
-    --gap:56px;
+    --pad:60px;
+    --gap:40px;
   }
 
   html,body{
@@ -42,9 +41,9 @@
     box-sizing:border-box;
 
     display:grid;
-    grid-template-columns: 1.2fr 0.8fr; /* logo gets more room */
+    grid-template-columns: 1.45fr 0.55fr; /* give logo more room */
     gap:var(--gap);
-    align-items:center; /* vertical centering */
+    align-items:center;
   }
 
   /* LEFT: logo column */
@@ -56,7 +55,7 @@
   }
 
   .fullLogo{
-    max-height: calc(var(--h) - (var(--pad) * 2));
+    max-height: calc(var(--h) - (var(--pad) * 1.6)); /* slightly larger */
     max-width: 100%;
     width:auto;
     height:auto;
@@ -73,11 +72,11 @@
   }
 
   .tagline{
-    font-size:52px;
+    font-size:40px; /* smaller */
     font-weight:900;
     color:#1f2937;
     letter-spacing:.2px;
-    line-height:1.04;
+    line-height:1.1;
   }
 
   .tagline .line{
@@ -85,10 +84,6 @@
     white-space:nowrap;
   }
 
-  /* tiny optical nudge */
-  .tagWrapInner{
-    transform: translateY(-2px);
-  }
 </style>
 </head>
 
@@ -100,11 +95,9 @@
       </div>
 
       <div class="tagWrap">
-        <div class="tagWrapInner">
-          <div class="tagline">
-            <span class="line">Furniture delivery,</span>
-            <span class="line">made easy.</span>
-          </div>
+        <div class="tagline">
+          <span class="line">Furniture delivery,</span>
+          <span class="line">made easy.</span>
         </div>
       </div>
     </div>
