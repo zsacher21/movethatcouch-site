@@ -127,13 +127,6 @@ html,body{
   word-break:break-all;
 }
 
-.refLine{
-  font-size:18px;
-  font-weight:800;
-  color:#14532d;
-  text-align:center;
-  display:none;
-}
 
 /* LEGAL */
 
@@ -181,9 +174,6 @@ Single item • Small loads • Easy to&nbsp;book.
 movethatcouch.com
 </div>
 
-<div class="refLine" id="refLine">
-Referral code: <span id="refCode"></span>
-</div>
 </div>
 
 </div>
@@ -234,18 +224,6 @@ const {qr,code}=getParams();
 
 const urlText=document.getElementById("urlText");
 urlText.textContent=normalizeDisplayUrl(qr);
-
-/* referral */
-
-const refLine=document.getElementById("refLine");
-const refCode=document.getElementById("refCode");
-
-const codeLooksValid=!!code && code.length>=4 && !/movethatcouch\.com/i.test(code);
-
-if(codeLooksValid){
-  refCode.textContent=code;
-  refLine.style.display="block";
-}
 
 /* QR rendering */
 
