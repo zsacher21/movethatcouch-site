@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MOVE THAT COUCH!</title>
+
+<meta property="og:title" content="MOVE THAT COUCH!" />
+<meta property="og:description" content="Furniture delivery, made easy." />
+<meta property="og:image" content="https://movethatcouch.com/mtc_couch_appicon_white_1024_adjusted.png" />
+<meta property="og:url" content="https://movethatcouch.com" />
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+  background:#f5f7f6;
+}
+
+.container{
+  text-align:center;
+}
+
+img{
+  width:120px;
+  margin-bottom:20px;
+}
+
+h1{
+  margin:0;
+}
+
+p{
+  color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <img src="https://movethatcouch.com/mtc_couch_appicon_white_1024_adjusted.png">
+  <h1>MOVE THAT COUCH!</h1>
+  <p>Furniture delivery, made easy.</p>
+</div>
+
+<script>
+
+const path = window.location.pathname;
+const slug = path.split("/").pop();
+
+if(slug && slug !== "invite"){
+  localStorage.setItem("mtc_pending_slug", slug);
+}
+
+setTimeout(()=>{
+  window.location.href = "https://app.movethatcouch.com";
+},1000);
+
+</script>
+
+</body>
+</html>
