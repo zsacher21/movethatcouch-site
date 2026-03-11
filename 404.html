@@ -1,12 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Redirecting…</title>
+  <title>MOVE THAT COUCH!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
+
+  <meta property="og:title" content="MOVE THAT COUCH!" />
+  <meta property="og:description" content="Furniture delivery, made easy." />
+  <meta property="og:image" content="https://movethatcouch.com/mtc_couch_appicon_white_1024_adjusted.png" />
+  <meta property="og:url" content="https://movethatcouch.com/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f7f6;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .wrap {
+      max-width: 420px;
+    }
+
+    img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    p {
+      margin: 0;
+      color: #475569;
+      font-size: 18px;
+    }
+  </style>
+
   <script>
     (function () {
-      // Pages that are real site routes and should NOT be treated as referral slugs
       var known = [
         '', 'index.html',
         'marketing', 'marketing/',
@@ -16,18 +62,24 @@
 
       var raw = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
 
-      // If it's a known route, send to homepage (or keep them on-site)
       if (!raw || known.indexOf(raw) !== -1) {
         window.location.replace('https://movethatcouch.com/');
         return;
       }
 
-      // Otherwise treat as referral slug
-      window.location.replace('https://app.movethatcouch.com/' + encodeURIComponent(raw));
+      setTimeout(function () {
+        window.location.replace(
+          'https://app.movethatcouch.com/?slug=' + encodeURIComponent(raw)
+        );
+      }, 1000);
     })();
   </script>
 </head>
 <body>
-  <p>Redirecting…</p>
+  <div class="wrap">
+    <img src="https://movethatcouch.com/mtc_couch_appicon_white_1024_adjusted.png" alt="MOVE THAT COUCH!" />
+    <h1>MOVE THAT COUCH!</h1>
+    <p>Furniture delivery, made easy.</p>
+  </div>
 </body>
 </html>
