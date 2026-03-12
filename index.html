@@ -94,6 +94,20 @@
       justify-items: center;
     }
 
+    .store-badge {
+  display: inline-block;
+  width: 100%;
+  max-width: var(--btnMax);
+}
+
+.store-badge img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
     .button {
       display: inline-flex;
       align-items: center;
@@ -194,18 +208,22 @@
       </div>
 
       <div class="button-stack">
-        <a class="button" href="https://testflight.apple.com/join/PfdUU4W3" target="_blank" rel="noopener">
-          Download on the App Store
-        </a>
 
-        <a class="button secondary" href="https://play.google.com/apps/internaltest/4701477950102696189" target="_blank" rel="noopener">
-          Get it on Google Play
-        </a>
+  <a class="store-badge" href="https://testflight.apple.com/join/PfdUU4W3" target="_blank" rel="noopener">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+         alt="Download on the App Store">
+  </a>
 
-        <a class="button gray" href="/marketing">
-          Marketing Materials
-        </a>
-      </div>
+  <a class="store-badge" href="https://play.google.com/apps/internaltest/4701477950102696189" target="_blank" rel="noopener">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+         alt="Get it on Google Play">
+  </a>
+
+  <a class="button gray" href="/marketing">
+    Marketing Materials
+  </a>
+
+</div>
 
       <footer>
         <div class="footer-links">
