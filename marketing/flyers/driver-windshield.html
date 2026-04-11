@@ -202,6 +202,20 @@
       color:#9ca3af;
       white-space:nowrap;
     }
+
+    .url{
+  position:absolute;
+  bottom:-64px; /* pushes it just below the QR box */
+  left:0;
+  right:0;
+
+  font-size:32px;
+  font-weight:800;
+  color:#0b1220;
+
+  text-align:center;
+  word-break:break-all;
+}
   </style>
 </head>
 
@@ -226,9 +240,14 @@
           </div>
 
           <div class="qrBox">
-            <img id="qrImg" alt="QR code">
-            <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
-          </div>
+  <img id="qrImg" alt="QR code">
+  <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
+
+  <!-- NEW: URL under QR -->
+  <div class="url" id="urlText">
+    movethatcouch.com
+  </div>
+</div>
 
           <div class="cta">
             <div class="scanTo">SCAN TO</div>
@@ -298,9 +317,20 @@
 
   <!-- QR generation -->
   <script>
+    function normalizeDisplayUrl(url){
+  try{
+    const u = new URL(url);
+    const path = (u.pathname || "/").replace(/\/+$/,"") || "";
+    return (u.host + path) || "movethatcouch.com";
+  }catch(e){
+    return (url || "movethatcouch.com").replace(/^https?:\/\//i,"");
+  }
+}
     window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
+      const urlText = document.getElementById("urlText");
+urlText.textContent = normalizeDisplayUrl(qrLink);
 
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
