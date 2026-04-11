@@ -313,10 +313,20 @@
     function normalizeDisplayUrl(url){
   try{
     const u = new URL(url);
-    const path = (u.pathname || "/").replace(/\/+$/,"") || "";
-    return (u.host.replace(/^www\./,'') + path) || "movethatcouch.com";
+    const path = (u.pathname || "/").replace(/\/+$/,"");
+
+    // Detect if this is just the homepage (no referral)
+    const isRoot = !path || path === "";
+
+    if(isRoot){
+      return "www.movethatcouch.com";
+    }
+
+    // Referral or deeper path → drop www
+    return (u.host.replace(/^www\./,'') + path);
+
   }catch(e){
-    return (url || "movethatcouch.com").replace(/^https?:\/\//i,"");
+    return "www.movethatcouch.com";
   }
 }
     window.__flyerReady = (async () => {
