@@ -403,6 +403,7 @@
 
           <div class="flyerActions">
   <button class="btn-gray flyerBtn" id="flyer1Btn">Retail Shop Flyer</button>
+            <button class="btn-gray flyerBtn" id="flyerEstateSaleBtn">Estate Sale Flyer</button>
 <button class="btn-gray flyerBtn" id="flyerApartmentBtn">Apartment Community Flyer</button>
 <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Recruitment Flyer</button>
 
@@ -747,6 +748,7 @@
   const flyer1Btn = document.getElementById("flyer1Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
   const flyerApartmentBtn = document.getElementById("flyerApartmentBtn");
+  const flyerEstateSaleBtn = document.getElementById("flyerEstateSaleBtn");
   // NEW: Business card buttons
 const cardFrontBtn = document.getElementById("cardFrontBtn");
 const cardBackBtn = document.getElementById("cardBackBtn");
@@ -793,6 +795,23 @@ function getReferralCodeForExports(){
       showExportError();
     }
   });
+
+  flyerEstateSaleBtn.addEventListener("click", async () => {
+  const qrLink = getQrLinkForFlyers();
+  status("Preparing Estate Sale Flyer…");
+  try {
+    await exportFlyerPng({
+      templatePath: "/marketing/flyers/estate-sale.html",
+      qrLink,
+      filename: "MTC-Estate-Sale-Flyer.png",
+      print: { width: 2550, height: 3300 },
+      onStatus: status
+    });
+  } catch (e) {
+    console.error(e);
+    showExportError();
+  }
+});
 
   flyer4Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
