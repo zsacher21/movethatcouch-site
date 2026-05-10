@@ -402,10 +402,9 @@
       </div>
 
           <div class="flyerActions">
-  <button class="btn-gray flyerBtn" id="flyer1Btn">Shop Flyer</button>
-  <button class="btn-gray flyerBtn" id="flyer2Btn">Countertop Tents (2)</button>
-  <button class="btn-gray flyerBtn" id="flyer3Btn">Tear-off Tabs</button>
-  <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Windshield</button>
+  <button class="btn-gray flyerBtn" id="flyer1Btn">Retail Shop Flyer</button>
+<button class="btn-gray flyerBtn" id="flyerApartmentBtn">Apartment Community Flyer</button>
+<button class="btn-gray flyerBtn" id="flyer4Btn">Driver Recruitment Flyer</button>
 
   <!-- NEW: Business Cards -->
   <div class="divider" style="margin:14px 0;"></div>
@@ -746,9 +745,8 @@
   import { exportFlyerPng } from "./js/flyerExport.js";
 
   const flyer1Btn = document.getElementById("flyer1Btn");
-  const flyer2Btn = document.getElementById("flyer2Btn");
-  const flyer3Btn = document.getElementById("flyer3Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
+  const flyerApartmentBtn = document.getElementById("flyerApartmentBtn");
   // NEW: Business card buttons
 const cardFrontBtn = document.getElementById("cardFrontBtn");
 const cardBackBtn = document.getElementById("cardBackBtn");
@@ -782,45 +780,12 @@ function getReferralCodeForExports(){
 
   flyer1Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
-    status("Preparing Shop Flyer…");
+    status("Preparing Retail Shop Flyer…");
     try {
       await exportFlyerPng({
         templatePath: "/marketing/flyers/neighborhood.html",
         qrLink,
         filename: "MTC-Shop-Flyer.png",
-        onStatus: status
-      });
-    } catch (e) {
-      console.error(e);
-      showExportError();
-    }
-  });
-
-  flyer2Btn.addEventListener("click", async () => {
-    const qrLink = getQrLinkForFlyers();
-    status("Preparing Countertop Tents…");
-    try {
-      await exportFlyerPng({
-        templatePath: "/marketing/flyers/countertop-tent.html",
-        qrLink,
-        filename: "MTC-Countertop-Tent.png",
-        onStatus: status
-      });
-    } catch (e) {
-      console.error(e);
-      showExportError();
-    }
-  });
-
-  flyer3Btn.addEventListener("click", async () => {
-    const qrLink = getQrLinkForFlyers();
-    status("Preparing Tear-off Tabs…");
-    try {
-      await exportFlyerPng({
-        templatePath: "/marketing/flyers/tear-off.html",
-        qrLink,
-        filename: "MTC-Tear-Off-Flyer.png",
-        print: { width: 3300, height: 2550 },
         onStatus: status
       });
     } catch (e) {
@@ -845,6 +810,23 @@ function getReferralCodeForExports(){
       showExportError();
     }
   });
+
+  flyerApartmentBtn.addEventListener("click", async () => {
+  const qrLink = getQrLinkForFlyers();
+  status("Preparing Apartment Community Flyer…");
+  try {
+    await exportFlyerPng({
+      templatePath: "/marketing/flyers/apartment.html",
+      qrLink,
+      filename: "MTC-Apartment-Community-Flyer.png",
+      print: { width: 2550, height: 3300 },
+      onStatus: status
+    });
+  } catch (e) {
+    console.error(e);
+    showExportError();
+  }
+});
 
   cardFrontBtn.addEventListener("click", async () => {
   const qrLink = getQrLinkForFlyers();
