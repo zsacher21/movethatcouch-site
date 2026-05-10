@@ -796,12 +796,12 @@ function getReferralCodeForExports(){
 
   flyer4Btn.addEventListener("click", async () => {
     const qrLink = getQrLinkForFlyers();
-    status("Preparing Driver Windshield…");
+    status("Preparing Driver Recruitment…");
     try {
       await exportFlyerPng({
-        templatePath: "/marketing/flyers/driver-windshield.html",
+        templatePath: "/marketing/flyers/driver-recruitment.html",
         qrLink,
-        filename: "MTC-Driver-Windshield-Flyer.png",
+        filename: "MTC-Driver-Recruitment-Flyer.png",
         print: { width: 2550, height: 3300 },
         onStatus: status
       });
