@@ -405,6 +405,7 @@
   <button class="btn-gray flyerBtn" id="flyer1Btn">Retail Shop Flyer</button>
             <button class="btn-gray flyerBtn" id="flyerEstateSaleBtn">Estate Sale Flyer</button>
 <button class="btn-gray flyerBtn" id="flyerApartmentBtn">Apartment Community Flyer</button>
+            <button class="btn-gray flyerBtn" id="flyerStudentBtn">Student / Dorm Flyer</button>
 <button class="btn-gray flyerBtn" id="flyer4Btn">Driver Recruitment Flyer</button>
 
   <!-- NEW: Business Cards -->
@@ -748,6 +749,7 @@
   const flyer1Btn = document.getElementById("flyer1Btn");
   const flyer4Btn = document.getElementById("flyer4Btn");
   const flyerApartmentBtn = document.getElementById("flyerApartmentBtn");
+  const flyerStudentBtn = document.getElementById("flyerStudentBtn");
   const flyerEstateSaleBtn = document.getElementById("flyerEstateSaleBtn");
   // NEW: Business card buttons
 const cardFrontBtn = document.getElementById("cardFrontBtn");
@@ -838,6 +840,23 @@ function getReferralCodeForExports(){
       templatePath: "/marketing/flyers/apartment.html",
       qrLink,
       filename: "MTC-Apartment-Community-Flyer.png",
+      print: { width: 2550, height: 3300 },
+      onStatus: status
+    });
+  } catch (e) {
+    console.error(e);
+    showExportError();
+  }
+});
+
+  flyerStudentBtn.addEventListener("click", async () => {
+  const qrLink = getQrLinkForFlyers();
+  status("Preparing Student / Dorm Flyer…");
+  try {
+    await exportFlyerPng({
+      templatePath: "/marketing/flyers/student.html",
+      qrLink,
+      filename: "MTC-Student-Dorm-Flyer.png",
       print: { width: 2550, height: 3300 },
       onStatus: status
     });
