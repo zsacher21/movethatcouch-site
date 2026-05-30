@@ -37,14 +37,20 @@
     .url{
   position:absolute;
   bottom:-48px;
-  left:0;
-  right:0;
-  font-size:32px;
+  left:50%;
+  right:auto;
+  transform:translateX(-50%);
+  width:max-content;
+  max-width:none;
+
+  font-size:30px;
   font-weight:800;
   color:#0b1220;
   text-align:center;
+
   white-space:nowrap;
-  word-break:normal;
+  word-break:keep-all;
+  overflow:visible;
   letter-spacing:0;
   word-spacing:0;
 }
