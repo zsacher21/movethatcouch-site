@@ -35,21 +35,19 @@
     }
 
     .url{
-      position:absolute;
-      bottom:-48px;
-      left:0;
-      right:0;
-      font-family:Arial, Helvetica, sans-serif;
-      font-size:30px;
-      font-weight:800;
-      color:#0b1220;
-      text-align:center;
-      white-space:nowrap;
-      word-break:normal;
-      overflow:visible;
-      letter-spacing:-0.5px;
-      word-spacing:-6px;
-    }
+  position:absolute;
+  bottom:-48px;
+  left:0;
+  right:0;
+  font-size:32px;
+  font-weight:800;
+  color:#0b1220;
+  text-align:center;
+  white-space:nowrap;
+  word-break:normal;
+  letter-spacing:0;
+  word-spacing:0;
+}
 
     .wrap{
       position:absolute;
@@ -59,6 +57,7 @@
       grid-template-rows: 1fr 16px 1fr;
     }
 
+    /* ---------- TOP HALF ---------- */
     .topHalf{
       display:flex;
       flex-direction:column;
@@ -82,12 +81,13 @@
       line-height:1.3;
     }
 
+    /* LOGO | QR | CTA */
     .actionRow{
   display:grid;
   grid-template-columns:520px 460px 520px;
   justify-content:center;
   align-items:center;
-  gap:110px;
+  gap:70px;
   margin-top:80px;
 }
 
@@ -99,14 +99,14 @@
     }
 
     .logoFrame{
-  width:520px;
-  height:520px;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transform:translateX(10px);
-}
+      width:520px;
+      height:520px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform:translateX(10px);
+    }
 
     .logoFrame img{
       width:640px;
@@ -150,30 +150,27 @@
     .qrFallback.hidden{display:none}
 
     .cta{
-      width:520px;
-      max-width:520px;
-      overflow:visible;
-    }
-
+  width:520px;
+  max-width:520px;
+  overflow:visible;
+}
     .cta .scanTo{
       font-size:64px;
       font-weight:900;
     }
-
     .cta .startDriving{
-      font-size:78px;
-      font-weight:900;
-      color:var(--green);
-      white-space:nowrap;
-    }
-
+  font-size:78px;
+  font-weight:900;
+  color:var(--green);
+  white-space:nowrap;
+}
     .cta .meta{
-      margin-top:10px;
-      font-size:36px;
-      font-weight:700;
-      color:var(--gray);
-      white-space:nowrap;
-    }
+  margin-top:10px;
+  font-size:36px;
+  font-weight:700;
+  color:var(--gray);
+  white-space:nowrap;
+}
 
     .divider{
       height:16px;
@@ -182,6 +179,7 @@
       margin-left:calc(var(--pad) * -1);
     }
 
+    /* ---------- BOTTOM HALF ---------- */
     .bottomHalf{
       padding-top:160px;
     }
@@ -225,24 +223,23 @@
       margin-top:28px;
     }
 
+    /* readable footer */
     .footerNote{
-  position:absolute;
-  left:var(--pad);
-  right:var(--pad);
-  bottom:150px;
-  z-index:10;
-  font-size:30px;
-  font-weight:600;
-  color:#6b7280;
-  white-space:nowrap;
-  text-align:left;
-}
+      position:absolute;
+      left:var(--pad);
+      right:var(--pad);
+      bottom:70px;
+      font-size:32px;
+      color:#6b7280;
+      white-space:nowrap;
+    }
   </style>
 </head>
 
 <body>
   <div id="flyer">
     <div class="wrap">
+
       <div class="topHalf">
         <div class="headline">
           <h1>FURNITURE DELIVERY,<br>MADE EASY.</h1>
@@ -260,10 +257,10 @@
           </div>
 
           <div class="qrBox">
-            <img id="qrImg" alt="QR code">
-            <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
-            <div class="url" id="urlText">movethatcouch.com</div>
-          </div>
+  <img id="qrImg" alt="QR code">
+  <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
+  <div class="url" id="urlText">movethatcouch.com</div>
+</div>
 
           <div class="cta">
             <div class="scanTo">SCAN TO</div>
@@ -296,12 +293,13 @@
             <div class="sectionTitle">Perfect for:</div>
             <ul class="bullets">
               <li>Furniture store purchases</li>
-              <li>Vintage &amp; antique finds</li>
-              <li>Facebook Marketplace pickups</li>
-              <li>Mattresses &amp; appliances</li>
-              <li>Apartment move-ins &amp; move-outs</li>
-              <li>Large items that won’t fit in your vehicle</li>
+<li>Vintage &amp; antique finds</li>
+<li>Facebook Marketplace pickups</li>
+<li>Mattresses &amp; appliances</li>
+<li>Apartment move-ins &amp; move-outs</li>
+<li>Large items that won’t fit in your vehicle</li>
             </ul>
+
           </div>
         </div>
       </div>
@@ -312,37 +310,37 @@
     </div>
   </div>
 
+  <!-- QR generation (DO NOT CHANGE) -->
   <script>
     function normalizeDisplayUrl(url){
-      try{
-        const u = new URL(url);
-        const path = (u.pathname || "/").replace(/\/+$/,"");
-        const isRoot = !path || path === "";
+  try{
+    const u = new URL(url);
+    const path = (u.pathname || "/").replace(/\/+$/,"");
 
-        if(isRoot){
-          return "www.movethatcouch.com";
-        }
+    // Detect if this is just the homepage (no referral)
+    const isRoot = !path || path === "";
 
-        return (u.host.replace(/^www\./,'') + path).replace(/\s+/g, "");
-      }catch(e){
-        return "www.movethatcouch.com";
-      }
+    if(isRoot){
+      return "www.movethatcouch.com";
     }
 
+    // Referral or deeper path → drop www
+    return (u.host.replace(/^www\./,'') + path);
+
+  }catch(e){
+    return "www.movethatcouch.com";
+  }
+}
     window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
-
       const urlText = document.getElementById("urlText");
-      urlText.textContent = normalizeDisplayUrl(qrLink);
+urlText.textContent = normalizeDisplayUrl(qrLink);
 
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
       document.head.appendChild(s);
-      await new Promise((resolve, reject) => {
-        s.onload = resolve;
-        s.onerror = reject;
-      });
+      await new Promise(r => s.onload = r);
 
       const qr = window.qrcode(0, "M");
       qr.addData(qrLink);
