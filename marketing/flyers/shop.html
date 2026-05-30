@@ -37,14 +37,21 @@
     .url{
   position:absolute;
   bottom:-48px;
-  left:50%;
-  transform:translateX(-50%);
+  left:0;
+  right:0;
+
+  font-family:Arial, Helvetica, sans-serif;
   font-size:30px;
   font-weight:800;
   color:#0b1220;
   text-align:center;
+
   white-space:nowrap;
-  line-height:1;
+  word-break:normal;
+  overflow:visible;
+
+  letter-spacing:-0.5px;
+  word-spacing:-6px;
 }
 
 .url span{
@@ -266,9 +273,7 @@
           <div class="qrBox">
   <img id="qrImg" alt="QR code">
   <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
-  <div class="url" id="urlText">
-  <span id="urlDomain">movethatcouch.com</span><span id="urlPath"></span>
-</div>
+  <div class="url" id="urlText">movethatcouch.com</div>
 </div>
 
           <div class="cta">
@@ -343,11 +348,8 @@
     window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
-      const displayUrl = normalizeDisplayUrl(qrLink);
-const parts = displayUrl.split("/");
-
-const urlDomain = document.getElementById("urlDomain");
-const urlPath = document.getElementById("urlPath");
+      const urlText = document.getElementById("urlText");
+urlText.textContent = normalizeDisplayUrl(qrLink);
 
 urlDomain.textContent = parts[0] || "movethatcouch.com";
 urlPath.textContent = parts.length > 1 ? "/" + parts.slice(1).join("/") : "";
