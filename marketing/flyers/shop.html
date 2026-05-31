@@ -16,8 +16,13 @@
     }
 
     *{box-sizing:border-box}
-body, p, li, div{
-  text-align:left;
+
+body, p, li, div, ul{
+  text-align:left !important;
+  text-align-last:left !important;
+  text-justify:auto !important;
+  word-spacing:normal !important;
+  letter-spacing:normal;
 }
     html,body{margin:0;height:100%}
     body{
@@ -192,11 +197,17 @@ body, p, li, div{
     }
 
     .bullets,.miniBullets{
-      padding-left:44px;
-      font-size:44px;
-      font-weight:600;
-      line-height:1.35;
-    }
+  padding-left:34px;
+  margin-top:0;
+  font-size:44px;
+  font-weight:600;
+  line-height:1.35;
+}
+
+.bullets li,.miniBullets li{
+  margin-bottom:6px;
+  padding-left:0;
+}
 
     .miniTitle{
       margin:42px 0 16px;
@@ -223,7 +234,7 @@ body, p, li, div{
   position:absolute;
   left:var(--pad);
   right:var(--pad);
-  bottom:90px;
+  bottom:180px;
   font-size:28px;
       color:#6b7280;
       white-space:nowrap;
