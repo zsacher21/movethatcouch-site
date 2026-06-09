@@ -21,6 +21,22 @@
     #flyer{width:var(--page-w);height:var(--page-h);background:#fff;position:relative;overflow:hidden;}
 
     .url{position:absolute;bottom:-64px;left:0;right:0;font-size:32px;font-weight:800;color:#0b1220;text-align:center;word-break:break-all;}
+    .referralBonus{
+  margin-top:34px;
+  font-size:34px;
+  line-height:1.22;
+  font-weight:800;
+  color:#0b1220;
+}
+
+.referralBonus .credit{
+  color:var(--green);
+  font-weight:900;
+}
+
+.referralBonus.hidden{
+  display:none;
+}
     .wrap{position:absolute;inset:0;padding:var(--pad);display:grid;grid-template-rows:1fr 16px 1fr;}
     .topHalf{display:flex;flex-direction:column;justify-content:flex-start;gap:80px;}
     .headline h1{margin:0;font-size:150px;font-weight:900;letter-spacing:-1px;line-height:0.95;text-transform:uppercase;}
@@ -77,10 +93,16 @@
           </div>
 
           <div class="cta">
-            <div class="scanTo">SCAN TO</div>
-            <div class="startDriving">BOOK DELIVERY</div>
-            <div class="meta">Quick signup • Competing quotes</div>
-          </div>
+  <div class="scanTo">SCAN TO</div>
+  <div class="startDriving">BOOK DELIVERY</div>
+  <div class="meta">Quick signup • Competing quotes</div>
+
+  <div class="referralBonus hidden" id="referralCallout">
+    Referral code: <strong id="referralCodeText"></strong><br>
+    <span class="credit">Get $10 in MTC Credit</span><br>
+    after your first completed service
+  </div>
+</div>
         </div>
       </div>
 
@@ -130,21 +152,44 @@
 
   <script>
     function normalizeDisplayUrl(url){
-      try{
-        const u = new URL(url);
-        const path = (u.pathname || "/").replace(/\/+$/,"");
-        const isRoot = !path || path === "";
-        if(isRoot){ return "www.movethatcouch.com"; }
-        return (u.host.replace(/^www\./,'') + path);
-      }catch(e){
-        return "www.movethatcouch.com";
-      }
-    }
+  try{
+    const u = new URL(url);
+    const path = (u.pathname || "/").replace(/\/+$/,"");
+    const isRoot = !path || path === "";
+    if(isRoot){ return "www.movethatcouch.com"; }
+    return (u.host.replace(/^www\./,'') + path);
+  }catch(e){
+    return "www.movethatcouch.com";
+  }
+}
 
-    window.__flyerReady = (async () => {
+function getReferralCodeFromUrl(url){
+  try{
+    const u = new URL(url);
+    const path = (u.pathname || "").replace(/^\/+|\/+$/g,"");
+
+    if(!path) return "";
+
+    return decodeURIComponent(path.split("/")[0]);
+  }catch(e){
+    return "";
+  }
+}
+
+window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
-      document.getElementById("urlText").textContent = normalizeDisplayUrl(qrLink);
+
+document.getElementById("urlText").textContent = normalizeDisplayUrl(qrLink);
+
+const referralCode = getReferralCodeFromUrl(qrLink);
+const referralCallout = document.getElementById("referralCallout");
+const referralCodeText = document.getElementById("referralCodeText");
+
+if(referralCode){
+  referralCodeText.textContent = referralCode.toUpperCase();
+  referralCallout.classList.remove("hidden");
+}
 
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
