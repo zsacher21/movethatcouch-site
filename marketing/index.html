@@ -475,6 +475,67 @@ Share your referral link, QR code, or printed flyers.
   </div>
 </div>
 
+<script>
+  function isDesktopSafari(){
+    const ua = navigator.userAgent;
+
+    const isSafari =
+      /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
+
+    const isMobile =
+      /iphone|ipad|ipod|android/i.test(ua);
+
+    return isSafari && !isMobile;
+  }
+
+  if(isDesktopSafari()){
+    document.body.innerHTML = `
+      <div style="
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:#f7f7f7;
+        font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+        padding:24px;
+      ">
+        <div style="
+          max-width:650px;
+          background:white;
+          border-radius:16px;
+          padding:40px;
+          text-align:center;
+          box-shadow:0 1px 8px rgba(0,0,0,.06);
+        ">
+          <img
+            src="/logo.png"
+            alt="MOVE THAT COUCH!"
+            style="width:240px;max-width:80%;margin-bottom:24px;"
+          >
+
+          <h1 style="margin:0 0 16px;font-size:36px;">
+            Please use a different browser
+          </h1>
+
+          <p style="font-size:18px;line-height:1.5;color:#475569;">
+            Desktop Safari is not currently supported for flyer generation.
+          </p>
+
+          <p style="font-size:18px;line-height:1.5;color:#475569;">
+            Please open this page in
+            <strong>Chrome</strong>,
+            <strong>Edge</strong>, or
+            <strong>Firefox</strong>
+            to download marketing materials.
+          </p>
+        </div>
+      </div>
+    `;
+
+    throw new Error("Desktop Safari blocked");
+  }
+</script>
+
 <!-- QR GENERATION LOGIC -->
 <script>
   const refInput = document.getElementById('refInput');
