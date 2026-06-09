@@ -147,6 +147,23 @@
       word-break:break-all;
     }
 
+    .referralBonus{
+  margin-top:34px;
+  font-size:34px;
+  line-height:1.22;
+  font-weight:800;
+  color:#0b1220;
+}
+
+.referralBonus .credit{
+  color:var(--green);
+  font-weight:900;
+}
+
+.referralBonus.hidden{
+  display:none;
+}
+
     .cta .scanTo{
       font-size:64px;
       font-weight:900;
@@ -269,10 +286,16 @@
           </div>
 
           <div class="cta">
-            <div class="scanTo">SCAN TO</div>
-            <div class="bookHelp">BOOK HELP</div>
-            <div class="meta">Quick signup • Competing quotes</div>
-          </div>
+  <div class="scanTo">SCAN TO</div>
+  <div class="bookHelp">BOOK HELP</div>
+  <div class="meta">Quick signup • Competing quotes</div>
+
+  <div class="referralBonus hidden" id="referralCallout">
+    Referral code: <strong id="referralCodeText"></strong><br>
+    <span class="credit">Get $10 in MTC Credit</span><br>
+    after your first completed service
+  </div>
+</div>
         </div>
       </div>
 
@@ -328,22 +351,44 @@
   </div>
 
   <script>
-    function normalizeDisplayUrl(url){
-      try{
-        const u = new URL(url);
-        const path = (u.pathname || "/").replace(/\/+$/,"") || "";
-        return (u.host + path) || "movethatcouch.com";
-      }catch(e){
-        return (url || "movethatcouch.com").replace(/^https?:\/\//i,"");
-      }
+  function normalizeDisplayUrl(url){
+    try{
+      const u = new URL(url);
+      const path = (u.pathname || "/").replace(/\/+$/,"") || "";
+      return (u.host + path) || "movethatcouch.com";
+    }catch(e){
+      return (url || "movethatcouch.com").replace(/^https?:\/\//i,"");
     }
+  }
 
-    window.__flyerReady = (async () => {
+  function getReferralCodeFromUrl(url){
+    try{
+      const u = new URL(url);
+      const path = (u.pathname || "").replace(/^\/+|\/+$/g,"");
+
+      if(!path) return "";
+
+      return decodeURIComponent(path.split("/")[0]);
+    }catch(e){
+      return "";
+    }
+  }
+
+  window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
 
       const urlText = document.getElementById("urlText");
-      urlText.textContent = normalizeDisplayUrl(qrLink);
+urlText.textContent = normalizeDisplayUrl(qrLink);
+
+const referralCode = getReferralCodeFromUrl(qrLink);
+const referralCallout = document.getElementById("referralCallout");
+const referralCodeText = document.getElementById("referralCodeText");
+
+if(referralCode){
+  referralCodeText.textContent = referralCode.toUpperCase();
+  referralCallout.classList.remove("hidden");
+}
 
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
