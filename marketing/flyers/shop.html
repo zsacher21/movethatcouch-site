@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>MOVE THAT COUCH! — Neighborhood Flyer</title>
+  <title>MOVE THAT COUCH! — Shop Flyer</title>
 
   <style>
     :root{
@@ -44,6 +44,27 @@
   color:#0b1220;
   text-align:center;
   word-break:break-all;
+}
+
+    .referralCallout{
+  position:absolute;
+  top:500px;
+  left:-20px;
+  right:-20px;
+  text-align:center;
+  font-size:30px;
+  line-height:1.22;
+  font-weight:800;
+  color:#0b1220;
+}
+
+.referralCallout .credit{
+  color:var(--green);
+  font-weight:900;
+}
+
+.referralCallout.hidden{
+  display:none;
 }
 
     .wrap{
@@ -249,6 +270,12 @@
   <img id="qrImg" alt="QR code">
   <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
   <div class="url" id="urlText">movethatcouch.com</div>
+
+<div class="referralCallout hidden" id="referralCallout">
+  Referral code: <span id="referralCodeText"></span><br>
+  Scan the QR or enter this code at signup.<br>
+  <span class="credit">Get $10 in MTC Credit</span> after your first completed service.
+</div>
 </div>
 
           <div class="cta">
@@ -301,30 +328,54 @@
 
   <!-- QR generation (DO NOT CHANGE) -->
   <script>
-    function normalizeDisplayUrl(url){
-  try{
-    const u = new URL(url);
-    const path = (u.pathname || "/").replace(/\/+$/,"");
+  function normalizeDisplayUrl(url){
+    try{
+      const u = new URL(url);
+      const path = (u.pathname || "/").replace(/\/+$/,"");
 
-    // Detect if this is just the homepage (no referral)
-    const isRoot = !path || path === "";
+      // Detect if this is just the homepage (no referral)
+      const isRoot = !path || path === "";
 
-    if(isRoot){
+      if(isRoot){
+        return "www.movethatcouch.com";
+      }
+
+      // Referral or deeper path → drop www
+      return (u.host.replace(/^www\./,'') + path);
+
+    }catch(e){
       return "www.movethatcouch.com";
     }
-
-    // Referral or deeper path → drop www
-    return (u.host.replace(/^www\./,'') + path);
-
-  }catch(e){
-    return "www.movethatcouch.com";
   }
-}
-    window.__flyerReady = (async () => {
+
+  function getReferralCodeFromUrl(url){
+    try{
+      const u = new URL(url);
+      const path = (u.pathname || "").replace(/^\/+|\/+$/g,"");
+
+      // Homepage / generic flyer
+      if(!path) return "";
+
+      return decodeURIComponent(path.split("/")[0]);
+    }catch(e){
+      return "";
+    }
+  }
+
+  window.__flyerReady = (async () => {
       const params = new URLSearchParams(window.location.search);
       const qrLink = params.get("qr") || "https://www.movethatcouch.com/";
-      const urlText = document.getElementById("urlText");
+const urlText = document.getElementById("urlText");
 urlText.textContent = normalizeDisplayUrl(qrLink);
+
+const referralCode = getReferralCodeFromUrl(qrLink);
+const referralCallout = document.getElementById("referralCallout");
+const referralCodeText = document.getElementById("referralCodeText");
+
+if(referralCode){
+  referralCodeText.textContent = referralCode;
+  referralCallout.classList.remove("hidden");
+}
 
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
