@@ -46,24 +46,20 @@
   word-break:break-all;
 }
 
-    .referralCallout{
-  position:absolute;
-  top:535px;
-  left:-70px;
-  right:-70px;
-  text-align:center;
-  font-size:24px;
-  line-height:1.18;
+    .referralBonus{
+  margin-top:34px;
+  font-size:34px;
+  line-height:1.22;
   font-weight:800;
   color:#0b1220;
 }
 
-.referralCallout .credit{
+.referralBonus .credit{
   color:var(--green);
   font-weight:900;
 }
 
-.referralCallout.hidden{
+.referralBonus.hidden{
   display:none;
 }
 
@@ -271,18 +267,18 @@
   <div id="qrFallback" class="qrFallback">QR WILL APPEAR HERE</div>
   <div class="url" id="urlText">movethatcouch.com</div>
 
-  <div class="referralCallout hidden" id="referralCallout">
-    Referral code: <span id="referralCodeText"></span><br>
-    Enter code at signup.<br>
-    <span class="credit">$10 MTC Credit</span> after your first service.
-  </div>
 </div>
 
 <div class="cta">
-            <div class="scanTo">SCAN TO</div>
-            <div class="startDriving">BOOK DELIVERY</div>
-            <div class="meta">Quick signup • Competing quotes</div>
-          </div>
+  <div class="scanTo">SCAN TO</div>
+  <div class="startDriving">BOOK DELIVERY</div>
+  <div class="meta">Quick signup • Competing quotes</div>
+
+  <div class="referralBonus hidden" id="referralCallout">
+    Use code <strong id="referralCodeText"></strong> at signup<br>
+    <span class="credit">$10 MTC Credit</span> after your first service
+  </div>
+</div>
         </div>
       </div>
 
