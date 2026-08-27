@@ -1,300 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Favicon (browser tab icon) -->
-<link rel="icon" type="image/png" href="/mtc_couch_appicon_white_1024_adjusted.png">
-
-<!-- Nice-to-have: supports some browsers that prefer an explicit size -->
-<link rel="icon" type="image/png" sizes="32x32" href="/mtc_couch_appicon_white_1024_adjusted.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/mtc_couch_appicon_white_1024_adjusted.png">
-
-<!-- Nice-to-have: iOS home screen icon -->
-<link rel="apple-touch-icon" href="/mtc_couch_appicon_white_1024_adjusted.png">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact • MOVE THAT COUCH!</title>
-
-  <meta name="description" content="Contact MOVE THAT COUCH! Support and general inquiries." />
-
-  <style>
-    :root{
-      --bg: #f7f7f7;
-      --ink: #111;
-
-      --green: #22c55e;
-      --blue: #2563eb;
-      --slate: #475569;
-
-      /* Mobile-first spacing knobs (match Home) */
-      --pad: clamp(16px, 4.5vw, 28px);
-      --contentMax: 680px;
-
-      --radius: 14px;
-      --gap: clamp(10px, 2.8vw, 14px);
-
-      --line: rgba(0,0,0,0.10);
-      --card: #fff;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      text-align: center;
-    }
-
-    /* Center content nicely and respect iPhone safe areas (match Home) */
-    main {
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding:
-        calc(var(--pad) + env(safe-area-inset-top))
-        calc(var(--pad) + env(safe-area-inset-right))
-        calc(var(--pad) + env(safe-area-inset-bottom))
-        calc(var(--pad) + env(safe-area-inset-left));
-    }
-
-    .container{
-      width: 100%;
-      max-width: var(--contentMax);
-      margin: 0 auto;
-    }
-
-    .logo-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: clamp(18px, 4vw, 28px);
-    }
-
-    .logo-link { display: inline-block; }
-
-    /* EXACT logo sizing from Home */
-    .logo {
-      width: min(300px, 70vw);
-      height: auto;
-      display: block;
-    }
-
-    .card{
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      padding: clamp(16px, 4.2vw, 22px);
-      text-align: left; /* readable for paragraphs */
-    }
-
-    h1{
-      margin: 0 0 10px;
-      font-size: clamp(22px, 5.2vw, 28px);
-      letter-spacing: 0.2px;
-      text-align: left;
-    }
-
-    h2{
-      margin: 18px 0 8px;
-      font-size: clamp(16px, 4.2vw, 18px);
-      text-align: left;
-    }
-
-    p{
-      margin: 10px 0;
-      line-height: 1.55;
-      font-size: clamp(15px, 4.0vw, 16px);
-      text-align: left;
-    }
-
-    ul{
-      margin: 10px 0 0 18px;
-      padding: 0;
-      text-align: left;
-    }
-    li{
-      margin: 8px 0;
-      line-height: 1.5;
-      font-size: clamp(15px, 4.0vw, 16px);
-    }
-
-    .muted{ color: #555; }
-
-    .box{
-      margin: 14px 0;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(0,0,0,0.02);
-      text-align: left;
-    }
-
-    .box p{ margin: 8px 0; }
-
-    a{
-      color: var(--green);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    a:hover{ text-decoration: underline; }
-
-    .fineprint{
-      margin-top: 10px;
-      color: #555;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .divider{
-      margin-top: 16px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-    }
-
-    footer {
-      margin-top: clamp(22px, 5vw, 40px);
-      font-size: 14px;
-      color: #555;
-      text-align: center;
-    }
-
-    /* Footer link layout (match Home) */
-    .footer-links{
-      display:flex;
-      flex-wrap: wrap;
-      justify-content:center;
-      align-items:center;
-      gap: 12px;
-    }
-
-    .footer-sep{
-      color:#9ca3af;
-    }
-
-    footer a {
-      color: var(--blue);
-      text-decoration: none;
-      white-space: nowrap;
-      font-weight: 500;
-    }
-
-    footer a:hover{ text-decoration: underline; }
-
-    .footer-copy{
-      margin-top: 10px;
-      font-size: 13px;
-      color:#6b7280;
-      text-align:center;
-    }
-
-    /* Mobile: stack footer links for safe tap targets */
-    @media (max-width: 420px) {
-      .footer-links{
-        flex-direction: column;
-        gap: 10px;
-      }
-      .footer-sep{
-        display:none;
-      }
-      footer a{
-        padding: 6px 0;
-      }
-    }
-
-    /* Slightly tighter on very small phones (match Home pattern) */
-    @media (max-width: 360px){
-      .logo { width: min(280px, 74vw); }
-      footer { font-size: 13px; }
-      .card { padding: 14px; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact MOVE THAT COUCH! | Marketplace Support</title>
+  <meta name="description" content="Contact MOVE THAT COUCH! for customer and provider support, service requests, partnerships, and marketplace questions.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://movethatcouch.com/contact">
+  <meta property="og:title" content="Contact MOVE THAT COUCH!">
+  <meta property="og:description" content="Get help with your MOVE THAT COUCH! account, request, booking, or marketplace question.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://movethatcouch.com/contact">
+  <meta property="og:site_name" content="MOVE THAT COUCH!">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Contact MOVE THAT COUCH!">
+  <meta name="twitter:description" content="Get help with your MOVE THAT COUCH! account, request, booking, or marketplace question.">
+  <link rel="icon" type="image/png" href="/contact-assets/contact-logo.png">
+  <link rel="stylesheet" href="/contact-assets/contact.css">
 </head>
-
 <body>
-  <main>
-    <div class="container">
-      <div class="logo-container">
-        <!-- Contact page: logo clicks back to Home -->
-        <a class="logo-link" href="/" aria-label="Back to MOVE THAT COUCH! Home">
-          <img src="/logo.png" alt="MOVE THAT COUCH!" class="logo" />
-        </a>
-      </div>
+  <header class="contact-public-header">
+    <a class="contact-public-brand" href="https://movethatcouch.com/" aria-label="MOVE THAT COUCH! home">
+      <img src="/contact-assets/contact-logo.png" alt="">
+      <span>MOVE THAT COUCH!</span>
+    </a>
+    <a class="contact-public-home" href="https://movethatcouch.com/">Home</a>
+  </header>
 
-      <div class="card" role="main" aria-label="Contact information">
-        <h1>Contact</h1>
+  <main class="contact-public-main">
+    <section class="contact-hero" aria-labelledby="contact-title">
+      <p class="contact-eyebrow">Local help, right here</p>
+      <h1 id="contact-title">Contact<br><em>MOVE THAT COUCH!</em></h1>
+      <p class="contact-intro">Questions, feedback, or need help with your account or a service request? We’re here to help.</p>
+    </section>
 
-        <p class="muted">
-          Need help or have a question? Email us and we’ll get back to you as soon as we can.
-        </p>
-
-        <div class="box" aria-label="Contact emails">
-          <p><strong>Support:</strong> <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a></p>
-          <p><strong>All other inquiries:</strong> <a href="mailto:hello@movethatcouch.com">hello@movethatcouch.com</a></p>
+    <section class="contact-options" aria-label="Contact options">
+      <article class="contact-option contact-option--support">
+        <div class="contact-option-number" aria-hidden="true">01</div>
+        <div class="contact-option-content">
+          <p class="contact-kicker">The marketplace team</p>
+          <h2>Customer &amp; Provider Support</h2>
+          <p>For help with your account, requests, quotes, bookings, payments, or another issue using MOVE THAT COUCH!</p>
+          <a class="contact-email" href="mailto:support@movethatcouch.com">support@movethatcouch.com <span aria-hidden="true">↗</span></a>
         </div>
+      </article>
 
-        <p class="muted"><strong>Note:</strong> We do not offer phone support at this time.</p>
-
-        <h2>Before you email us</h2>
-        <div class="box">
-          <p>
-            <strong>MOVE THAT COUCH!</strong> is a platform that connects customers with nearby
-            <strong>independent drivers</strong>.
-          </p>
-          <ul>
-            <li>Drivers are independent service providers — we don’t employ them and we don’t supervise their work.</li>
-            <li>Drivers set their own prices, availability, and service details — we do not set or guarantee pricing.</li>
-            <li>We do not guarantee pickup or delivery times, driver availability, or outcomes.</li>
-            <li>We are not responsible for a driver’s performance, conduct, or any damage, loss, or issues that occur during service.</li>
-            <li>Any remaining balance is paid directly to the driver outside the app, and we cannot enforce or guarantee payment between customers and drivers.</li>
-          </ul>
-          <p class="fineprint">
-            This is a summary for convenience only. Please refer to our Terms of Service for the full legal terms and conditions.
-          </p>
+      <article class="contact-option contact-option--hello">
+        <div class="contact-option-number" aria-hidden="true">02</div>
+        <div class="contact-option-content">
+          <p class="contact-kicker">Outside the day-to-day</p>
+          <h2>General &amp; Business Inquiries</h2>
+          <p>For partnerships, press, business inquiries, feedback, or anything else.</p>
+          <a class="contact-email" href="mailto:hello@movethatcouch.com">hello@movethatcouch.com <span aria-hidden="true">↗</span></a>
         </div>
+      </article>
+    </section>
 
-        <h2>If you need support</h2>
-        <p>
-          Please include as much information as possible so we can identify the user and delivery.
-          <strong>User ID</strong> and <strong>Delivery ID</strong> are ideal.
-        </p>
-
-        <div class="box">
-          <ul>
-            <li><strong>User ID</strong> (ideal)</li>
-            <li><strong>Delivery ID</strong> (ideal)</li>
-            <li>Pickup city/state and delivery city/state</li>
-            <li>The requested date/time window</li>
-            <li>Screenshots (if relevant)</li>
-          </ul>
+    <section class="contact-guidance" aria-label="Before you write">
+      <article class="contact-guidance-card">
+        <span class="contact-guidance-mark" aria-hidden="true">+</span>
+        <div>
+          <h2>Need help with a specific request?</h2>
+          <p>To help us find it quickly, include your <strong>User ID</strong> and <strong>Request ID</strong> if available, along with any relevant screenshots or details.</p>
         </div>
-
-        <div class="divider">
-          <h2>Urgent / safety issues</h2>
-          <p class="muted">
-            If you feel unsafe or there is an immediate emergency, contact local authorities first. After you’re safe, email
-            <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a> with details so we can review the account activity.
-          </p>
+      </article>
+      <article class="contact-guidance-card contact-guidance-card--urgent">
+        <span class="contact-guidance-mark" aria-hidden="true">!</span>
+        <div>
+          <h2>Urgent or safety issue?</h2>
+          <p>If there is an immediate emergency or you feel unsafe, contact local emergency services first. Once you're safe, contact <a href="mailto:support@movethatcouch.com">support@movethatcouch.com</a> so we can review the account or activity involved.</p>
         </div>
-      </div>
+      </article>
+    </section>
 
-      <footer>
-        <div class="footer-links">
-          <a href="/">Home</a>
-          <span class="footer-sep">|</span>
-          <a href="https://legal.movethatcouch.com/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-          <span class="footer-sep">|</span>
-          <a href="https://legal.movethatcouch.com/tos.html" target="_blank" rel="noopener">Terms of Service</a>
-        </div>
-
-        <div class="footer-copy">
-          © 2026 ZM Platforms LLC. All rights reserved.
-        </div>
-      </footer>
-    </div>
+    <p class="contact-availability">Email support is currently available. We do not offer phone support at this time.</p>
   </main>
+
+  <footer class="contact-public-footer">
+    <nav aria-label="Footer navigation">
+      <a href="https://movethatcouch.com/">Home</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://pages.movethatcouch.com/">Service Areas</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://legal.movethatcouch.com/privacy.html">Privacy</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://legal.movethatcouch.com/tos.html">Terms</a>
+    </nav>
+    <span>© 2026 ZM Platforms LLC. All rights reserved.</span>
+  </footer>
 </body>
 </html>
