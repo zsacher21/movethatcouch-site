@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MOVE THAT COUCH! Campus</title>
+
+  <link rel="canonical" href="https://app.movethatcouch.com/campus">
+
+  <meta http-equiv="refresh" content="0; url=https://app.movethatcouch.com/campus">
+
+  <script>
+    const destination =
+      "https://app.movethatcouch.com/campus" +
+      window.location.search +
+      window.location.hash;
+
+    window.location.replace(destination);
+  </script>
+</head>
+<body>
+  <p>
+    Redirecting to
+    <a id="campus-link" href="https://app.movethatcouch.com/campus">
+      MOVE THAT COUCH! Campus
+    </a>…
+  </p>
+
+  <script>
+    document.getElementById("campus-link").href =
+      "https://app.movethatcouch.com/campus" +
+      window.location.search +
+      window.location.hash;
+  </script>
+</body>
+</html>
