@@ -22,3 +22,30 @@
 .micro .service-pair{display:inline-flex;align-items:center;white-space:nowrap}.micro .service-pair b{font-weight:400;margin:0 .72em}.micro .service-pair+.service-pair:before{content:"•";display:inline-block;margin:0 .72em}@media(max-width:520px){.micro{row-gap:2px}.micro .service-pair{flex-basis:100%;justify-content:center}.micro .service-pair+.service-pair:before{display:none}}
 @media(max-width:800px){.providers .provider-copy{order:1}.providers .provider-art{order:2}}
 @media(max-width:520px){.footer-grid>div{align-items:center;text-align:center}.footer-grid>div:last-child{grid-column:1/-1}.copyright{text-align:center}.footer-grid .brand{text-align:left}}
+
+/* Temporary typography-only homepage pass. Remove the opt-in body class to restore all three images/layouts. */
+body.home-text-only .hero-visual,
+body.home-text-only .service-collage,
+body.home-text-only .provider-art{display:none}
+body.home-text-only .hero,
+body.home-text-only .audience-grid,
+body.home-text-only .providers{grid-template-columns:minmax(0,1fr)}
+body.home-text-only .hero{padding:90px 0 115px}
+body.home-text-only .hero-copy{max-width:850px}
+body.home-text-only .hero .lede{max-width:610px}
+body.home-text-only .hero .micro{width:max-content;max-width:100%;justify-content:flex-start;text-align:left}
+body.home-text-only .audience-grid>div:first-child{max-width:800px}
+body.home-text-only .audiences .body-copy{max-width:580px}
+body.home-text-only .provider-copy{max-width:820px}
+body.home-text-only .provider-copy>p:not(.kicker){max-width:580px}
+@media(max-width:800px){
+  body.home-text-only .hero{padding:55px 0 80px}
+  body.home-text-only .hero-copy,
+  body.home-text-only .audience-grid>div:first-child,
+  body.home-text-only .provider-copy{max-width:100%}
+  body.home-text-only .providers{gap:0}
+}
+@media(max-width:520px){
+  body.home-text-only .hero{padding:50px 0 75px}
+  body.home-text-only .hero .micro{width:100%;justify-content:center;text-align:center}
+}
