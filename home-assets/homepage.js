@@ -1,4 +1,16 @@
 (() => {
+  // Use the existing PNG only if the small hero asset fails. One attempt, no loop.
+  document.querySelectorAll('.hero-phone-screen img[data-fallback-src]').forEach((image) => {
+    const useFallback = () => {
+      const fallback = image.dataset.fallbackSrc;
+      if (!fallback) return;
+      delete image.dataset.fallbackSrc;
+      image.src = fallback;
+    };
+    image.addEventListener('error', useFallback, { once: true });
+    // An eager request may already have failed before this footer script runs.
+    if (image.complete && image.naturalWidth === 0) useFallback();
+  });
   const APPLE_APP_ID = '6759010744';
   const ANDROID_PACKAGE = 'com.zmplatforms.movethatcouch';
   const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.zmplatforms.movethatcouch';
@@ -83,5 +95,6 @@
       .catch(() => {});
   }
   const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add('in-view'); }), { threshold: .12 });
-  document.querySelectorAll('section, article').forEach((el) => observer.observe(el));
+  // The above-the-fold phones should never depend on an entry animation to paint.
+  document.querySelectorAll('section:not(.hero), article').forEach((el) => observer.observe(el));
 })();
